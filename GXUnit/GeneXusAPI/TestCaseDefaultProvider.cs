@@ -43,7 +43,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
         private Procedimiento contruirProcedimientoMaestro()
         {
-            string objectToTest = ManejadorContexto.ObjectToTest;
+            string objectToTest = ContextHandler.ObjectToTest;
 
             Procedimiento testcase = ManejadorDTTestCase.GetInstance().GetDTTestCase(objectToTest);
 
@@ -70,12 +70,12 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     if (objectToTest == "")
                     {
                         objectselected = testcase.selectObjectToTest();
-                        objectToTest = ManejadorContexto.ObjectToTest;
+                        objectToTest = ContextHandler.ObjectToTest;
                     }
                     else
                     {
                         objectselected = true;
-                        ManejadorContexto.ObjectToTest = objectToTest;
+                        ContextHandler.ObjectToTest = objectToTest;
                     }
                     
                     if (objectselected)
@@ -87,7 +87,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         {
                             string source = proc.GetSource();
 
-                            foreach (Parametro p in proc.GetVariablesRules())
+                            foreach (KBParameterHandler p in proc.GetVariablesRules())
                             {
                                 string nombre = getNombre(p.GetVariable().Name, testcase);
 
@@ -107,12 +107,12 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                                 if (type.DataType == (int)eDBType.GX_SDT)
                                 {
                                     StructureTypeReference strRef = StructureTypeReference.Deserialize(type);
-                                    string sdtLevelFullName = StructureInfoProvider.GetName(ManejadorContexto.Model, strRef);
-                                    DataType.ParseInto(ManejadorContexto.Model, sdtLevelFullName, var);
+                                    string sdtLevelFullName = StructureInfoProvider.GetName(ContextHandler.Model, strRef);
+                                    DataType.ParseInto(ContextHandler.Model, sdtLevelFullName, var);
                                 }
 
                                 if (p.GetNomTipoComplejo() != null)
-                                    DataType.ParseInto(ManejadorContexto.Model, p.GetNomTipoComplejo(), var);
+                                    DataType.ParseInto(ContextHandler.Model, p.GetNomTipoComplejo(), var);
                                 testcase.Variables.Variables.Add(var);
                             }
 
@@ -120,7 +120,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         }
                         else
                         {
-                            parameters.Properties.Add("Source", "// " + ManejadorContexto.Message);
+                            parameters.Properties.Add("Source", "// " + ContextHandler.Message);
                         }
                     }
                     else
@@ -137,7 +137,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         List<TreeNode> listaSuites = GXUnitMainWindow.getInstance().getListaSuites();
                         SelectSuite selSuite = new SelectSuite(listaSuites);
                         parentName = selSuite.selectedSuite;
-                        testcase.Parent = (new ManejadorFolder()).GetFolder(parentName);
+                        testcase.Parent = (new KBFolderHandler()).GetFolder(parentName);
                     }
                     GXUnitMainWindow.getInstance().agregarTestCase(testcase, parentName);
             		AddParameters(target, parameters);

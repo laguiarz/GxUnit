@@ -14,7 +14,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             TestSuiteName = suiteName;
 
             // Creating Suite Directory
-            ManejadorFolder mf = new ManejadorFolder();
+            KBFolderHandler mf = new KBFolderHandler();
             Folder f = mf.GetFolder(suiteName);
             if (f != null)
                 throw new Exception("Unable to create the suite '" + suiteName + "', directory already exists.");

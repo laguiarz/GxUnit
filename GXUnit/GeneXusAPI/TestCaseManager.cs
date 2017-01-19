@@ -18,7 +18,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
         private TestCaseManager()
         {
-            model = ManejadorContexto.Model;
+            model = ContextHandler.Model;
         }
 
         public static TestCaseManager GetInstance()
@@ -30,7 +30,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         {
             LinkedList<DTTestCase> Tests = new LinkedList<DTTestCase>();
             IKBService kbserv = UIServices.KB;
-            model = ManejadorContexto.Model;
+            model = ContextHandler.Model;
             try
             {
                 foreach (KBObject pr in model.Objects.GetAll())
@@ -54,7 +54,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         public DTTestCase GetTestCase(String nombre)
         {
             DTTestCase test = null;
-            Procedure tc = ManejadorProcedimiento.GetProcedureObject(model, nombre);
+            Procedure tc = KBProcedureHandler.GetProcedureObject(model, nombre);
             if (tc != null)
             {
                 String objectToTest = tc.GetPropertyValueString("ObjectToTest");
@@ -62,7 +62,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 DTVariable variable;
                 foreach (Variable var in tc.Variables.Variables)
                 {
-                    Constantes.Tipo tipo = FuncionesAuxiliares.GetTipoInterno(var.Type);
+                    Constantes.Tipo tipo = GxHelper.GetInternalType(var.Type);
                     if (tipo != Constantes.Tipo.NUMERIC && tipo != Constantes.Tipo.CHARACTER && tipo != Constantes.Tipo.VARCHAR && tipo != Constantes.Tipo.LONGVARCHAR)
                         variable = new DTVariable(var.Name, tipo);
                     else
@@ -74,11 +74,11 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             return test;
         }
 
-        public bool ModificarTestCase(DTTestCase test, LinkedList<Parametro> vars)
+        public bool ModificarTestCase(DTTestCase test, LinkedList<KBParameterHandler> vars)
         {
             String msgoutput;
 
-            Procedure tc = ManejadorProcedimiento.GetProcedureObject(model, test.GetNombre());
+            Procedure tc = KBProcedureHandler.GetProcedureObject(model, test.GetNombre());
             if (tc != null)
             {
                 tc.ProcedurePart.Source = test.GetSource();
@@ -86,7 +86,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             else
             {
                 msgoutput = "Procedure Object " + test.GetNombre() + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return false;
             }
 
@@ -97,7 +97,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 lista.AddFirst(v.Name);
             }
 
-            foreach (Parametro var in vars)
+            foreach (KBParameterHandler var in vars)
             {
                 if (!lista.Contains(var.GetVariable().Name))
                     AgregarVariable(tc, var.GetVariable());
@@ -107,7 +107,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             tc.Save();
 
             msgoutput = "Procedure Object " + test.GetNombre() + " modified!";
-            FuncionesAuxiliares.EscribirOutput(msgoutput);
+            GxHelper.WriteOutput(msgoutput);
             return true;
         }
 
@@ -115,18 +115,18 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         {
             String msgoutput;
 
-            Procedure test = ManejadorProcedimiento.GetProcedureObject(model, testCase.GetNombre());
+            Procedure test = KBProcedureHandler.GetProcedureObject(model, testCase.GetNombre());
             if (test != null)
             {
                 test.Delete();
                 msgoutput = "TestCase Object " + testCase.GetNombre() + " deleted!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return true;
             }
             else
             {
                 msgoutput = "TestCase Object " + testCase.GetNombre() + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return false;
             }
         }
@@ -156,7 +156,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 }
                 else
                 {
-                    var.Type = FuncionesAuxiliares.GetTipoGX(var1.GetTipo());
+                    var.Type = GxHelper.GetGXType(var1.GetTipo());
                     var.Length = var1.GetLongitud();
                     var.Decimals = var1.GetDecimales();
                     test.Variables.Variables.Add(var);

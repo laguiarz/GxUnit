@@ -22,6 +22,7 @@ using Artech.Genexus.Common.Parts;
 using System.Xml.XPath;
 using Artech.Common.Diagnostics;
 using Artech.Genexus.Common.Entities;
+using System.IO;
 
 namespace PGGXUnit.Packages.GXUnit
 {
@@ -47,8 +48,6 @@ namespace PGGXUnit.Packages.GXUnit
             LoadCategories();
             LoadCommandTargets();
             LoadObjectTypes();
-            //LoadPartTypes();
-            //LoadEditors();
         }
 
 
@@ -86,19 +85,8 @@ namespace PGGXUnit.Packages.GXUnit
 
         private void LoadObjectTypes()
         {
-           // this.AddObjectType<Resultado>();
             this.AddObjectType<TestCase>();
         }
-
-        //private void LoadPartTypes()
-        //{
-        //    this.AddPart<ResultadoPart>();
-        //}
-
-        //private void LoadEditors()
-        //{
-        //    this.AddEditor<MyEditor>(typeof(ResultadoPart).GUID);
-        //}
 
         private void LoadCommandTargets()
         {
@@ -110,20 +98,20 @@ namespace PGGXUnit.Packages.GXUnit
         {
             base.OnAfterOpenKB(sender, args);
 
-            ManejadorContexto.Model = KBManager.getModel(args.KnowledgeBase);
-            ManejadorContexto.KBName = args.KnowledgeBase.Name;
-            ManejadorContexto.ObjectToTest = "";
+            ContextHandler.Model = KBManager.getModel(args.KnowledgeBase);
+            ContextHandler.KBName = args.KnowledgeBase.Name;
+            ContextHandler.ObjectToTest = "";
 
-            ManejadorFolder mf = new ManejadorFolder();
+            KBFolderHandler mf = new KBFolderHandler();
             Folder folder = mf.GetFolder("GXUnit");
             if (folder != null)
             {
-                ManejadorContexto.GXUnitInicializado = true;
+                ContextHandler.GXUnitInitialized = true;
                 GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().cargarNodosTest();
             }
             else
             {
-                ManejadorContexto.GXUnitInicializado = false;
+                ContextHandler.GXUnitInitialized = false;
             }
         }
 
@@ -138,7 +126,7 @@ namespace PGGXUnit.Packages.GXUnit
         {
             if (args.KBObject.GetPropertyValue("TestCase") != null && (bool)args.KBObject.GetPropertyValue("TestCase"))
             {
-                if (!string.IsNullOrEmpty(ManejadorContexto.ObjectToTest))
+                if (!string.IsNullOrEmpty(ContextHandler.ObjectToTest))
                 {
                     IEnumerator<KBObjectPart> enumerator = args.KBObject.Parts.GetEnumerator();
                     KBObjectPart part = null;
@@ -158,84 +146,43 @@ namespace PGGXUnit.Packages.GXUnit
                         }
                         catch (Exception e)
                         {
-                            FuncionesAuxiliares.EscribirOutput(e.Message);
+                            GxHelper.WriteOutput(e.Message);
                         }
                     }
                 }
             }
 
-            ManejadorContexto.ObjectToTest = "";
+            ContextHandler.ObjectToTest = "";
         }
 
-        //[EventSubscription(UIEvents.BeforeOpenKBObject)]
-        //public void OnAfterOpenKBObject(object sender, KBObjectEventArgs args)
-        //{
-        //    if (args.KBObject.GetPropertyValue("TestCase") != null && (bool)args.KBObject.GetPropertyValue("TestCase"))
-        //    {
-        //        IEnumerator<KBObjectPart> enumerator = args.KBObject.Parts.GetEnumerator();
-                
-        //        KBObjectPart part = null;
-        //        string source = null;
-        //        while (enumerator.MoveNext())
-        //        {
-        //            part = enumerator.Current;
-        //            try
-        //            {
-        //                source = ((ProcedurePart)(part)).Source;
-        //                if (source != null)
-        //                {
-        //                    break;
-        //                }
-
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                FuncionesAuxiliares.EscribirOutput(e.Message);
-        //            }
-        //        }
-        //    }
-        //}
-
-        //public override void ReadPart(KBObjectPart part, XPathNavigator partData, ImportOptions options, IReferenceResolver resolver, OutputMessages output)
-        //{
-        //    XPathNavigator partProps = partData.SelectSingleNode("ArchivoResultado");
-        //    if (partProps != null)
-        //    {
-        //        if (part is ResultadoPart)
-        //        {
-        //            ResultadoPart myPart = part as ResultadoPart;
-        //            myPart.ArchivoResultado = partProps.TypedValue.ToString();
-        //        }
-        //    }
-        //}
-
+ 
         [EventSubscription(GXEvents.AfterBuild)]
         public void OnAfterBuild(object sender, EventArgs args)
         {
             //FuncionesAuxiliares.EscribirOutput("AfterBuild");
             ManejadorRunner mr = ManejadorRunner.GetInstance();
 
-            ManejadorLenguaje.SetLenguajeModelo();
-            if (ManejadorLenguaje.Lenguaje == GeneratorType.CSharpWeb)
+            KBLanguageHandler.SetLenguajeModelo();
+            if (KBLanguageHandler.Lenguaje == GeneratorType.CSharpWeb)
             {
-                if (!ManejadorContexto.ForceEjecutarRunner)
+                if (!ContextHandler.ForceExecuteRunner)
                 {
-                    if (ManejadorContexto.Ejecutar)
+                    if (ContextHandler.Execute)
                     {
-                        ManejadorContexto.ForceEjecutarRunner = true;
+                        ContextHandler.ForceExecuteRunner = true;
                         mr.EjecutarRunner();
                     }
                 }
                 else
                 {
-                    ManejadorContexto.ForceEjecutarRunner = false;
-                    if (ManejadorContexto.Ejecutar)
+                    ContextHandler.ForceExecuteRunner = false;
+                    if (ContextHandler.Execute)
                     {
-                        ManejadorContexto.Ejecutar = false;
+                        ContextHandler.Execute = false;
                         bool error = false;
                         try
                         {
-                            crearResultado();
+                            createTestOutputFile();
                         }
                         catch (Exception ex)
                         {
@@ -245,20 +192,20 @@ namespace PGGXUnit.Packages.GXUnit
                         if (error)
                         {
                             Thread.Sleep(1000);
-                            crearResultado();
+                            createTestOutputFile();
                         }
                     }
                 }
             }
-            else if (ManejadorLenguaje.Lenguaje == GeneratorType.JavaWeb)
+            else if (KBLanguageHandler.Lenguaje == GeneratorType.JavaWeb)
             {
-                if (ManejadorContexto.Ejecutar)
+                if (ContextHandler.Execute)
                 {
-                    ManejadorContexto.Ejecutar = false;
+                    ContextHandler.Execute = false;
                     bool error = false;
                     try
                     {
-                        crearResultado();
+                        createTestOutputFile();
                     }
                     catch (Exception ex)
                     {
@@ -268,21 +215,44 @@ namespace PGGXUnit.Packages.GXUnit
                     if (error)
                     {
                         Thread.Sleep(1000);
-                        crearResultado();
+                        createTestOutputFile();
                     }
                 }
             }
         }
 
-        private void crearResultado()
+        private void createTestOutputFile()
         {
-            string LastXMLName = ManejadorContexto.LastXMLName;
+            string LastXMLName = ContextHandler.LastXMLName;
 
-            ManejadorResultado mr = ManejadorResultado.GetInstance();
-            string outputPath = mr.CreateResult(LastXMLName);
-            FuncionesAuxiliares.EscribirOutput("GXUnit_OnAfterBuild- Results located at " + outputPath);
-            ManejadorProcedimiento mp = new ManejadorProcedimiento();
+            string outputPath = MoveTestOutputToGXUnitStorage(LastXMLName);
+            GxHelper.WriteOutput("GXUnit_OnAfterBuild- Results located at " + outputPath);
+            KBProcedureHandler mp = new KBProcedureHandler();
             mp.EliminarProcedimiento(Constantes.RUNNER_PROC);
+        }
+
+
+        public string MoveTestOutputToGXUnitStorage(String fileName)
+        {
+            try
+            {
+                string kbPath = KBManager.getTargetPath();
+                string resultPath = kbPath.Trim() + Constantes.RESULT_PATH;
+
+                DirectoryInfo di = Directory.CreateDirectory(resultPath);
+
+                string sourcePath = Path.Combine(kbPath, fileName);
+                string targetPath = Path.Combine(resultPath, fileName);
+                File.Copy(sourcePath, targetPath);
+                File.Delete(sourcePath);
+
+                return targetPath;
+            }
+            catch (Exception e)
+            {
+                GxHelper.WriteOutput("Exception: " + e.Message);
+                return "";
+            }
         }
 
         [EventSubscription(ArchitectureEvents.AfterKBObjectImport)]
@@ -295,7 +265,7 @@ namespace PGGXUnit.Packages.GXUnit
         public void OnAfterCloseKB(object sender, EventArgs args)
         {
             GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().limpiarNodosTest();
-            ManejadorContexto.GXUnitInicializado = false;
+            ContextHandler.GXUnitInitialized = false;
         }
 
         public override IToolWindow CreateToolWindow(System.Guid toolWindowId)

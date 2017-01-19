@@ -2,7 +2,7 @@
 
 namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 {
-    public class ManejadorContexto
+    public class ContextHandler
     {
         private static KBModel model = null;
         public static KBModel Model
@@ -56,42 +56,42 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             }
         }
 
-        private static bool ejecutar = false;
-        public static bool Ejecutar
+        private static bool execute = false;
+        public static bool Execute
         {
             get
             {
-                return ejecutar;
+                return execute;
             }
             set
             {
-                ejecutar = value;
+                execute = value;
             }
         }
 
-        private static bool forceEjecutarRunner = false;
-        public static bool ForceEjecutarRunner
+        private static bool forceExecuteRunner = false;
+        public static bool ForceExecuteRunner
         {
             get
             {
-                return forceEjecutarRunner;
+                return forceExecuteRunner;
             }
             set
             {
-                forceEjecutarRunner = value;
+                forceExecuteRunner = value;
             }
         }
 
-        private static bool gxUnitInicializado = false;
-        public static bool GXUnitInicializado
+        private static bool gxUnitInitialized = false;
+        public static bool GXUnitInitialized
         {
             get
             {
-                return gxUnitInicializado;
+                return gxUnitInitialized;
             }
             set
             {
-                gxUnitInicializado = value;
+                gxUnitInitialized = value;
             }
         }
 

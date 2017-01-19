@@ -5,7 +5,7 @@ using System;
 
 namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 {
-    public class ManejadorLenguaje
+    public class KBLanguageHandler
     {
         private static GeneratorType lenguaje;
         public static GeneratorType Lenguaje

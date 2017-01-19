@@ -4,7 +4,7 @@ using System;
 
 namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 {
-    public class Parametro
+    public class KBParameterHandler
     {
         private Variable variable;
 
@@ -21,12 +21,12 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         private String nomTipoComplejo;
 
         //Variable basada en Tipo complejo (BC o SDT)
-        public Parametro(String varName, String Name, String t, Constantes.Estructurado objeto, bool isColl, bool estaEnSig)
+        public KBParameterHandler(String varName, String Name, String t, Constantes.Estructurado objeto, bool isColl, bool estaEnSig)
         {
             if (objeto == Constantes.Estructurado.BC)
-                this.variable = ManejadorTransaccion.GetInstance().GetBCVariable(varName, Name, isColl);
+                this.variable = KBTransactionHandler.GetInstance().GetBCVariable(varName, Name, isColl);
             else
-                this.variable = (new ManejadorSDT()).GetSDTVariable(varName, Name, isColl);
+                this.variable = (new KBSDTHandler()).GetSDTVariable(varName, Name, isColl);
             this.varName = variable.Name;
             this.varType = variable.Type;
             this.tipo = t;
@@ -35,9 +35,9 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         }
 
         //Variable basada en Atributo
-        public Parametro(String trnName, String attName, String t, bool clv, bool soloLectura)
+        public KBParameterHandler(String trnName, String attName, String t, bool clv, bool soloLectura)
         {
-            variable = ManejadorTransaccion.GetInstance().GetVariable(trnName, attName);
+            variable = KBTransactionHandler.GetInstance().GetVariable(trnName, attName);
             varName = variable.Name;
             varType = variable.Type;
             tipo = t;
@@ -47,9 +47,9 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         }
 
         //Variable a partir de VariableGX
-        public Parametro(Variable var, String t, bool estaEnSig)
+        public KBParameterHandler(Variable var, String t, bool estaEnSig)
         {
-            if (estaEnSig && FuncionesAuxiliares.isStandardVar(var.Name))
+            if (estaEnSig && GxHelper.isStandardVar(var.Name))
                 var.Name = var.Name + "1";
             variable = var;
             varName = variable.Name;
@@ -59,7 +59,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         }
 
         //Variable simple
-        public Parametro(String name, eDBType type)
+        public KBParameterHandler(String name, eDBType type)
         {
             varName = name;
             varType = type;
@@ -77,27 +77,27 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
         public bool isNumeric()
         {
-            return FuncionesAuxiliares.isNumeric(varType);
+            return GxHelper.isNumeric(varType);
         }
 
         public bool isString()
         {
-            return FuncionesAuxiliares.isString(varType);
+            return GxHelper.isString(varType);
         }
 
         public bool isBoolean()
         {
-            return FuncionesAuxiliares.isBoolean(varType);
+            return GxHelper.isBoolean(varType);
         }
 
         public bool isDate()
         {
-            return FuncionesAuxiliares.isDate(varType);
+            return GxHelper.isDate(varType);
         }
 
         public bool isSimple()
         {
-            return FuncionesAuxiliares.isSimple(varType);
+            return GxHelper.isSimple(varType);
         }
 
         public bool isSDT()

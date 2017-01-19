@@ -42,13 +42,13 @@ namespace PGGXUnit.Packages.GXUnit
         // NOT HANDLED (CFBP)
 		public bool TestAll(CommandData commandData)
 		{
-            if (!ManejadorContexto.GXUnitInicializado)
+            if (!ContextHandler.GXUnitInitialized)
             {
                 if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     GXUnitInicializador i = GXUnitInicializador.GetInstance();
                     i.InicializarGXUnit();
-                    ManejadorContexto.GXUnitInicializado = true;
+                    ContextHandler.GXUnitInitialized = true;
                     Test();
                 }
             }
@@ -74,7 +74,7 @@ namespace PGGXUnit.Packages.GXUnit
                 if (MessageBox.Show("Do you want to delete all GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     //Eliminar Runner
-                    ManejadorProcedimiento mp = new ManejadorProcedimiento();
+                    KBProcedureHandler mp = new KBProcedureHandler();
                     ManejadorRunner mr = ManejadorRunner.GetInstance();
                     mp.EliminarProcedimiento(mr.GetNombre());
 
@@ -98,7 +98,7 @@ namespace PGGXUnit.Packages.GXUnit
                     mp.EliminarProcedimiento("RESTInvoker");
 
                     //Eliminar SDTs
-                    ManejadorSDT msdt = new ManejadorSDT();
+                    KBSDTHandler msdt = new KBSDTHandler();
                     SDTipo sdt = new SDTipo("GXUnitSuite");
                     msdt.EliminarSDT(sdt);
                     sdt = new SDTipo("GXUnitTestCase");
@@ -107,11 +107,11 @@ namespace PGGXUnit.Packages.GXUnit
                     msdt.EliminarSDT(sdt);
 
                     //Eliminar Carpetas
-                    ManejadorFolder mf = new ManejadorFolder();
+                    KBFolderHandler mf = new KBFolderHandler();
                     DTFolder folder = new DTFolder(Constantes.carpetaSuites, "");
-                    mf.EliminarFolder(folder);
+                    mf.DeleteFolder(folder);
 
-                    ManejadorContexto.GXUnitInicializado = false;
+                    ContextHandler.GXUnitInitialized = false;
                 }
                 GXUnitMainWindow.getInstance().cargarNodosTest();
                 return true;
@@ -129,7 +129,7 @@ namespace PGGXUnit.Packages.GXUnit
             {
                 GXUnitInicializador i = GXUnitInicializador.GetInstance();
                 i.InicializarGXUnit();
-                ManejadorContexto.GXUnitInicializado = true;
+                ContextHandler.GXUnitInitialized = true;
                 return true;
             }
             else

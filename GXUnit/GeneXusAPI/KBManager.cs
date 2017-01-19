@@ -48,8 +48,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 #endif
         }
 
-        //Obtiene la url para ejecutar el objeto "nombre", segun lenguaje que se este generando
-        public static String GetUrlEjecutar(String nombre)
+        public static String GetUrlToRun(String objName)
         {
             GxModel gxModel = getModel();
 
@@ -58,11 +57,11 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 switch ((GeneratorType)gxModel.Environment.Generator)
                 {
                     case GeneratorType.JavaWeb:
-                        return PropertyAccessor.GetValueString(gxModel.Environment, Properties.JAVA.WebRoot) + "a" + nombre;
+                        return PropertyAccessor.GetValueString(gxModel.Environment, Properties.JAVA.WebRoot) + "a" + objName;
                     case GeneratorType.CSharpWeb:
-                        return PropertyAccessor.GetValueString(gxModel.Environment, Properties.CSHARP.WebRoot) + "a" + nombre + ".aspx";
+                        return PropertyAccessor.GetValueString(gxModel.Environment, Properties.CSHARP.WebRoot) + "a" + objName + ".aspx";
                     case GeneratorType.RubyWeb:
-                        return PropertyAccessor.GetValueString(gxModel.Environment, Properties.RUBY.WebRoot) + nombre.ToLower() + ".rb";
+                        return PropertyAccessor.GetValueString(gxModel.Environment, Properties.RUBY.WebRoot) + objName.ToLower() + ".rb";
                     default:
                         return null;
 
@@ -107,17 +106,17 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
         public static string getTargetPath()
         {
-            GxModel modelo = KBManager.getTargetModel();
+            GxModel model = KBManager.getTargetModel();
 
             string targetPath;
 
-            if ((bool)modelo.Environment.Properties.GetPropertyValue("IS_WEB_GEN") == true)
+            if ((bool)model.Environment.Properties.GetPropertyValue("IS_WEB_GEN") == true)
             {
-                targetPath = modelo.WebTargetFullPath;
+                targetPath = model.WebTargetFullPath;
             }
             else
             {
-                targetPath = modelo.TargetFullPath;
+                targetPath = model.TargetFullPath;
             }
 
             return targetPath;

@@ -18,7 +18,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
         public String GenerateSourceFromObjectToTest(String nombre)
         {
-            ManejadorObjeto mo = ManejadorObjeto.GetInstance();
+            KBObjectHandler mo = KBObjectHandler.GetInstance();
             DTObjeto objectToTest = mo.GetDTObjeto(nombre);
             
             String source = "";
@@ -28,7 +28,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
                 source = GetSource(objectToTest);
             }
             else
-                FuncionesAuxiliares.EscribirOutput("Object to test does not exists!");
+                GxHelper.WriteOutput("Object to test does not exists!");
             return source;
         }
 
@@ -54,7 +54,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         {
             String source = "/* Setup */\r\n\r\n";
             source += "/* Parameters definition */\r\n";
-            foreach (Parametro parm in objectToTest.GetVariablesRules())
+            foreach (KBParameterHandler parm in objectToTest.GetVariablesRules())
             {
                 if (parm.GetTipo() != Constantes.PARM_OUT) // Si no es out
                 {
@@ -62,7 +62,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
                         source += "&" + parm.GetVariable().Name + " = " + parm.defaultValue() + "\r\n";
                     else if (parm.isSDT())
                     {
-                        ManejadorSDT mSDT = new ManejadorSDT();
+                        KBSDTHandler mSDT = new KBSDTHandler();
                         source += mSDT.getSDTTSourceForProcedure(parm.GetVariable(), "");
                     }
                     else
@@ -73,7 +73,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             source += "/* Object call */\r\n";
             source += objectToTest.GetNombre() + ".Call(";
             bool tieneParm = false;
-            foreach (Parametro parm in objectToTest.GetVariablesRules())
+            foreach (KBParameterHandler parm in objectToTest.GetVariablesRules())
             {
                 source += "&" + parm.GetVariable().Name + ",";
                 tieneParm = true;
@@ -83,17 +83,17 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             source += ")\r\n";
             source += "\r\n";
             source += "/* Expected values definition */\r\n";
-            foreach (Parametro parm in objectToTest.GetVariablesRules())
+            foreach (KBParameterHandler parm in objectToTest.GetVariablesRules())
             {
                 if (parm.isSDT() && parm.GetTipo() == Constantes.PARM_OUT)
                 {
-                    ManejadorSDT mSDT = new ManejadorSDT();
+                    KBSDTHandler mSDT = new KBSDTHandler();
                     source += mSDT.getSDTTSourceForProcedure(parm.GetVariable(), Constantes.VALOR_ESPERADO);
                 }
             }
             source += "\r\n";
             source += "/* Assertions */\r\n";
-            foreach (Parametro parm in objectToTest.GetVariablesRules())
+            foreach (KBParameterHandler parm in objectToTest.GetVariablesRules())
             {
                 if (parm.GetTipo() != Constantes.PARM_IN)
                 {
@@ -122,7 +122,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         {
             String source = "/* Setup */\r\n\r\n";
             source += "/* Attributes definition */\r\n";
-            foreach (Parametro parm in objectToTest.GetAttTrn())
+            foreach (KBParameterHandler parm in objectToTest.GetAttTrn())
             {
                 if (!parm.GetEsSoloLectura())
                 {
@@ -144,7 +144,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             source += "\t&" + objectToTest.GetNombre() + ".Load(";
             bool hasKey = false;
-            foreach (Parametro parm in objectToTest.GetAttTrn())
+            foreach (KBParameterHandler parm in objectToTest.GetAttTrn())
             {
                 if (parm.GetEsClave())
                 {
@@ -154,14 +154,14 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             }
             source = hasKey ? source.Substring(0, source.Length - 2) : source;
             source += ")\r\n";
-            foreach (Parametro parm in objectToTest.GetAttTrn())
+            foreach (KBParameterHandler parm in objectToTest.GetAttTrn())
             {
                 source += "\t&" + parm.GetVariable().Name + " = ";
                 source += "&" + objectToTest.GetNombre() + "." + parm.GetVariable().Name + "\r\n";
             }
             source += "\r\n";
             
-            foreach (Parametro parm in objectToTest.GetAttTrn())
+            foreach (KBParameterHandler parm in objectToTest.GetAttTrn())
             {
                 if (parm.isNumeric())
                 {
@@ -184,7 +184,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         {
             String source = "/* Setup */\r\n\r\n";
             source += "/* Parameters definition */\r\n";
-            foreach (Parametro parm in objectToTest.GetParametros())
+            foreach (KBParameterHandler parm in objectToTest.GetParametros())
             {
                 if (parm.GetTipo() != Constantes.PARM_OUT) // Si no es out
                 {
@@ -197,7 +197,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             source += "\r\n";
             source += "/* Object call */\r\n";
             source += objectToTest.GetNombre() + ".Call(";
-            foreach (Parametro parm in objectToTest.GetParametros())
+            foreach (KBParameterHandler parm in objectToTest.GetParametros())
             {
                 if (parm.GetEstaEnSignature())
                     source += "&" + parm.GetVariable().Name + ",";
@@ -207,7 +207,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             source += "\r\n";
             source += "/* Expected values definition */\r\n";
-            foreach (Parametro parm in ManejadorObjeto.GetInstance().GetAtt(objectToTest.GetOutput(), objectToTest.GetTipoOutput()))
+            foreach (KBParameterHandler parm in KBObjectHandler.GetInstance().GetAtt(objectToTest.GetOutput(), objectToTest.GetTipoOutput()))
             {
                 String outputVar = objectToTest.GetOutput();
                 if (objectToTest.GetIsCollSDT())

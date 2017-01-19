@@ -75,7 +75,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             
             Procedimiento p = new Procedimiento(nombre,procSource,procRules,"GXUnit",variables,propiedades);
-            ManejadorProcedimiento m = new ManejadorProcedimiento();
+            KBProcedureHandler m = new KBProcedureHandler();
             m.CrearProcedimiento(p,true);
 
             return true;
@@ -137,7 +137,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
             
-            ManejadorProcedimiento m = new ManejadorProcedimiento();
+            KBProcedureHandler m = new KBProcedureHandler();
             m.CrearProcedimiento(p,true);
             
             return true;
@@ -171,7 +171,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
 
-            ManejadorProcedimiento m = new ManejadorProcedimiento();
+            KBProcedureHandler m = new KBProcedureHandler();
             m.CrearProcedimiento(p, true);
 
             return true;
@@ -208,7 +208,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
 
-            ManejadorProcedimiento m = new ManejadorProcedimiento();
+            KBProcedureHandler m = new KBProcedureHandler();
             m.CrearProcedimiento(p, true);
 
             return true;
@@ -232,7 +232,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             prop.AddFirst(p);
             SDTipo sdt = new SDTipo("GXUnitAssert", "GXUnit", niveles, root,prop);
             
-            ManejadorSDT m = new ManejadorSDT();
+            KBSDTHandler m = new KBSDTHandler();
             m.CrearSDT(sdt, true);
             return true;
         }
@@ -258,7 +258,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             prop.AddFirst(p);
             SDTipo sdt = new SDTipo("GXUnitTestCase", "GXUnit", niveles, root,prop);
 
-            ManejadorSDT m = new ManejadorSDT();
+            KBSDTHandler m = new KBSDTHandler();
             m.CrearSDT(sdt, true);
 
             return true;
@@ -289,7 +289,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             prop.AddFirst(p);
             SDTipo sdt = new SDTipo("GXUnitSuite", "GXUnit", niveles, root,prop);
 
-            ManejadorSDT m = new ManejadorSDT();
+            KBSDTHandler m = new KBSDTHandler();
             m.CrearSDT(sdt, true);
 
             return true;
@@ -298,7 +298,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         private bool CrearCarpetasGXUnit()
         {
             DTFolder folder1 = new DTFolder(Constantes.carpetaGXUnit, "");
-            ManejadorFolder mf = new ManejadorFolder();
+            KBFolderHandler mf = new KBFolderHandler();
             mf.CrearFolder(folder1, true);
 
             DTFolder GXUnitSuites = new DTFolder(Constantes.carpetaSuites, Constantes.carpetaGXUnit);
@@ -380,7 +380,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
 
             Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
-            ManejadorProcedimiento m = new ManejadorProcedimiento();
+            KBProcedureHandler m = new KBProcedureHandler();
             m.CrearProcedimiento(p, true);
 
             return true;

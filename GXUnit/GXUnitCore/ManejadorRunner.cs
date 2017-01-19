@@ -9,7 +9,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
     public class ManejadorRunner
     {
         private static ManejadorRunner instance = new ManejadorRunner();
-        private const String Nombre = "RunnerProcedure";
+        private const String procName = Constantes.RUNNER_PROC;
         private const String Folder = "GXUnit";
 
         private ManejadorRunner()
@@ -23,7 +23,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
         public String GetNombre()
         {
-            return Nombre;
+            return procName;
         }
 
         public bool CrearGenerarRunner(LinkedList<DTTestCase> lista)
@@ -37,7 +37,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             }
             else
             {
-                FuncionesAuxiliares.EscribirOutput("Can´t Test while building");
+                GxHelper.WriteOutput("Can´t Test while building");
             }
             return ret;
         }
@@ -48,7 +48,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
 
             XMLName = System.DateTime.Now.ToString("R_yyyyMMdd_HHmmss") + ".xml";
-            ManejadorContexto.LastXMLName = XMLName;
+            ContextHandler.LastXMLName = XMLName;
 
             //Check if the file already exists and delete it
             try
@@ -62,7 +62,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             }
             catch (Exception e)
             {
-                FuncionesAuxiliares.EscribirOutput("Exception: " + e.Message);
+                GxHelper.WriteOutput("Exception: " + e.Message);
             }
 
 
@@ -177,8 +177,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&xmlWriter.WriteRawText(&SDTSuite.ToXml())\r\n";
             procSource += "&xmlWriter.Close()\r\n";
 
-            Procedimiento proc = new Procedimiento(Nombre, procSource, procRules, Folder, variables, propiedades);
-            ManejadorProcedimiento m = new ManejadorProcedimiento();
+            Procedimiento proc = new Procedimiento(procName, procSource, procRules, Folder, variables, propiedades);
+            KBProcedureHandler m = new KBProcedureHandler();
             m.CrearProcedimiento(proc, true);
 
             return true;
@@ -188,23 +188,23 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
         public bool EliminarRunner()
         {
-            ManejadorProcedimiento m = new ManejadorProcedimiento();
-            return m.EliminarProcedimiento(Nombre);
+            KBProcedureHandler m = new KBProcedureHandler();
+            return m.EliminarProcedimiento(procName);
 
         }
         public bool EjecutarRunner()
         {
-            ManejadorProcedimiento m = new ManejadorProcedimiento();
-            m.RunProcedimiento(Nombre);
-            ManejadorContexto.Ejecutar = true;
+            KBProcedureHandler m = new KBProcedureHandler();
+            m.RunProcedimiento(procName);
+            ContextHandler.Execute = true;
             return true;
         }
 
         public bool GeneraRunner()
         {
-            ManejadorProcedimiento m = new ManejadorProcedimiento();
-            m.GenerarProcedimiento(Nombre);
-            ManejadorContexto.Ejecutar = true;
+            KBProcedureHandler m = new KBProcedureHandler();
+            m.GenerarProcedimiento(procName);
+            ContextHandler.Execute = true;
             return true;
         }
 

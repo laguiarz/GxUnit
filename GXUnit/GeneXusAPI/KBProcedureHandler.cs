@@ -14,13 +14,13 @@ using Artech.Genexus.Common.Services;
 
 namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 {
-    class ManejadorProcedimiento
+    class KBProcedureHandler
     {
         private KBModel model;
 
-        public ManejadorProcedimiento()
+        public KBProcedureHandler()
         {
-            this.model = ManejadorContexto.Model;
+            this.model = ContextHandler.Model;
         }
 
         public KBModel GetModel()
@@ -42,7 +42,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             {
                 
                 msgoutput = "Procedure Object " + procedimiento.GetNombre() + " already exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return false;
             }
             else
@@ -53,11 +53,11 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 proc.Name = procedimiento.GetNombre();
                 proc.ProcedurePart.Source = procedimiento.GetSource();
                 proc.Rules.Source = procedimiento.GetRules();
-                Folder foldPadre = ManejadorFolder.GetFolderObject(this.model, procedimiento.GetFolder());
+                Folder foldPadre = KBFolderHandler.GetFolderObject(this.model, procedimiento.GetFolder());
                 if (foldPadre != null)
                     proc.Parent = foldPadre;
                 else
-                    proc.Parent = ManejadorFolder.GetRootFolder(model);
+                    proc.Parent = KBFolderHandler.GetRootFolder(model);
             }
 
             //Agrego Variables
@@ -94,7 +94,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             else
             {
                 msgoutput = "Procedure Object " + procedimiento.GetNombre() + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return false;
             }
 
@@ -113,7 +113,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             proc.Save();
 
             msgoutput = "Procedure Object " + procedimiento.GetNombre() + " modified!";
-            FuncionesAuxiliares.EscribirOutput(msgoutput);
+            GxHelper.WriteOutput(msgoutput);
             return true;
         }
 
@@ -126,20 +126,20 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             {
                 proc.Delete();
                 msgoutput = "Procedure Object " + nombre + " deleted!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return true;
             }
             else
             {
                 msgoutput = "Procedure Object " + nombre + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return false;
             }
         }
 
-        public LinkedList<Parametro> GetSignatureProcedimiento(String nombre)
+        public LinkedList<KBParameterHandler> GetSignatureProcedimiento(String nombre)
         {
-            LinkedList<Parametro> variablesrule = new LinkedList<Parametro>();
+            LinkedList<KBParameterHandler> variablesrule = new LinkedList<KBParameterHandler>();
             Procedure pr = GetProcedureObject(model, nombre);
             if (pr != null)
             {
@@ -149,12 +149,12 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     {
                         if (!parm.IsAttribute)
                         {
-                            Parametro p = new Parametro((Variable)parm.Object, parm.Accessor.ToString(), true);
+                            KBParameterHandler p = new KBParameterHandler((Variable)parm.Object, parm.Accessor.ToString(), true);
                             variablesrule.AddLast(p);
                         }
                         else
                         {
-                            Parametro p = new Parametro(ManejadorTransaccion.GetInstance().GetTrnName(parm.Object.Name), parm.Object.Name, parm.Accessor.ToString(), true, true);
+                            KBParameterHandler p = new KBParameterHandler(KBTransactionHandler.GetInstance().GetTrnName(parm.Object.Name), parm.Object.Name, parm.Accessor.ToString(), true, true);
                             variablesrule.AddLast(p);
                         }
                         
@@ -175,7 +175,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 DTVariable variable;
                 foreach (Variable var in proc.Variables.Variables)
                 {
-                    Constantes.Tipo tipo = FuncionesAuxiliares.GetTipoInterno(var.Type);
+                    Constantes.Tipo tipo = GxHelper.GetInternalType(var.Type);
                     if (tipo != Constantes.Tipo.NUMERIC && tipo != Constantes.Tipo.CHARACTER && tipo != Constantes.Tipo.VARCHAR && tipo != Constantes.Tipo.LONGVARCHAR)
                         variable = new DTVariable(var.Name, tipo);
                     else
@@ -190,13 +190,13 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     propiedades.AddFirst(propiedad);
                 }
                 //obtengo variables de la regla parm//en un futuro se modifica para variables del CORE
-                LinkedList<Parametro> variablesrule = GetSignatureProcedimiento(nombre);
+                LinkedList<KBParameterHandler> variablesrule = GetSignatureProcedimiento(nombre);
                 p = new Procedimiento(nombre, proc.ProcedurePart.Source, proc.Rules.Source, "Objects", variables, propiedades, variablesrule);
             }
             else
             {
                 String msgoutput = "Procedure " + nombre + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
             }
             return p;
         }
@@ -223,7 +223,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 }
                 else
                 {
-                    var.Type = FuncionesAuxiliares.GetTipoGX(var1.GetTipo());
+                    var.Type = GxHelper.GetGXType(var1.GetTipo());
                     var.Length = var1.GetLongitud();
                     var.Decimals = var1.GetDecimales();
                     RemoveVariable(proc, var);
@@ -248,7 +248,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
         private String GetUrlEjecutar(String nombre)
         {
-            string retorno = KBManager.GetUrlEjecutar(nombre);
+            string retorno = KBManager.GetUrlToRun(nombre);
             //FuncionesAuxiliares.EscribirOutput(retorno);
             return retorno;
         }
@@ -289,17 +289,17 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
         public Variable GetVariable(String nombre, DTVariable var)
         {
-            Procedure pr = GetProcedureObject(ManejadorContexto.Model, nombre);
+            Procedure pr = GetProcedureObject(ContextHandler.Model, nombre);
             Variable realVar = new Variable(pr.Variables);
             realVar.Name = var.GetNombre();
             if (var.GetNombreTipoCompuesto() != null)
             {
-                DataType.ParseInto(ManejadorContexto.Model, var.GetNombreTipoCompuesto(), realVar);
+                DataType.ParseInto(ContextHandler.Model, var.GetNombreTipoCompuesto(), realVar);
                 realVar.IsCollection = false;
             }
             else
             {
-                realVar.Type = FuncionesAuxiliares.GetTipoGX(var.GetTipo());
+                realVar.Type = GxHelper.GetGXType(var.GetTipo());
                 realVar.Length = var.GetLongitud();
                 realVar.Decimals = var.GetDecimales();
             }

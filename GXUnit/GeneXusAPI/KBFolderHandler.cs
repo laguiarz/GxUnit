@@ -4,14 +4,14 @@ using System;
 
 namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 {
-    class ManejadorFolder
+    class KBFolderHandler
     {
         private KBModel model;
         //private static ManejadorFolder instance = new ManejadorFolder();
 
-        public ManejadorFolder()
+        public KBFolderHandler()
         {
-            this.model = ManejadorContexto.Model;
+            this.model = ContextHandler.Model;
         }
 
         public KBModel GetModel()
@@ -27,7 +27,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             if (fold != null && !force)
             {
                 msgoutput = "Folder " + folder.GetNombre() + " already exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return false;
             }
             else
@@ -45,38 +45,38 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             fold.Save();
 
             msgoutput = "Folder " + folder.GetNombre() + " created!";
-            FuncionesAuxiliares.EscribirOutput(msgoutput);
+            GxHelper.WriteOutput(msgoutput);
             return true;
         }
 
-        public bool EliminarFolder(DTFolder folder)
+        public bool DeleteFolder(DTFolder folder)
         {
             String msgoutput;
             Folder fold = GetFolderObject(this.model, folder.GetNombre());
             if (fold != null)
             {
-                EliminarHijos(folder.GetNombre());
+                DeleteChildren(folder.GetNombre());
                 fold.Delete();
                 msgoutput = "Folder " + folder.GetNombre() + " deleted!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return true;
             }
             else
             {
                 msgoutput = "Folder " + folder.GetNombre() + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return false;
             }
         }
 
-        public void EliminarHijos(String folder)
+        public void DeleteChildren(String folder)
         {
             foreach (KBObject pr in model.Objects.GetAll())
             {
                 if (pr is Folder)
                 {
                     if ((((Folder)pr).Parent != null) && (((Folder)pr).Parent.Name == folder))
-                        EliminarFolder(GetDTFolder((Folder)pr));
+                        DeleteFolder(GetDTFolder((Folder)pr));
                 }
             }
         }
