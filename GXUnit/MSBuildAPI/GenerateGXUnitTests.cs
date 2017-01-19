@@ -35,7 +35,7 @@ namespace PGGXUnit.Packages.GXUnit.MSBuildAPI
             else
             {
                 LinkedList<DTTestCase> testCaseList = new LinkedList<DTTestCase>();
-                Folder GXUnitSuitesFolder = ManejadorFolder.GetFolderObject(KB.DesignModel, "GXUnitSuites");
+                Folder GXUnitSuitesFolder = KBFolderHandler.GetFolderObject(KB.DesignModel, "GXUnitSuites");
                 foreach (KBObject suite in GXUnitSuitesFolder.Objects)
                 {
                     if (suite is Folder)
@@ -51,18 +51,18 @@ namespace PGGXUnit.Packages.GXUnit.MSBuildAPI
                     }
                 }
 
-                ManejadorContexto.Model = KB.DesignModel;
+                ContextHandler.Model = KB.DesignModel;
 
                 ManejadorRunner mr = ManejadorRunner.GetInstance();
                 if (testsSelected(testCaseList))
                 {
                     mr.CrearRunner(testCaseList, out xmlName);
 
-                    Procedure runner = ManejadorProcedimiento.GetProcedureObject(KB.DesignModel, "RunnerProcedure");
+                    Procedure runner = KBProcedureHandler.GetProcedureObject(KB.DesignModel, Constantes.RUNNER_PROC);
 
                     if (runner == null)
                     {
-                        CommonServices.Output.AddErrorLine("RunnerProcedure can not be created");
+                        CommonServices.Output.AddErrorLine(Constantes.RUNNER_PROC + " cannot be created");
                         isSuccsess = false;
                     }
                 }
