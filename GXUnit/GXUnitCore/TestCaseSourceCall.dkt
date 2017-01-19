@@ -1,0 +1,15 @@
+<%@ Template Language="C#" TargetLanguage="GX" Description="Generates the source code for a Procedure that calls other procedures"%>
+  <%@ Assembly Name="Artech.Genexus.Common" %>
+    <%@ Import Namespace="Artech.Genexus.Common" %>
+      <%@ Import Namespace="Artech.Genexus.Common.Objects" %>
+        <%@ Property Name="Object" Type="KBObject" %>
+            <%@ Property Name="Part" Type="KBObjectPart" %>
+                <%@ Property Name="Source" Type="string" %>
+
+                <Part type="<%=PartType.Procedure%>">
+                    <Source>
+                    
+                    <![CDATA[<%=Source%>]]>
+
+                    </Source>
+                </Part>

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Package xmlns='http://schemas.genexus.com/addin/v1.0'
+			id='c3fa0379-b89e-4e07-b680-c9d50508ee8d'
+			name='GXUnit'>
+  <!--
+	Resources may contain images and strings.
+	Commands are translated using strings in the resources when
+	there is a resource string with the same name as a command id
+	-->
+  <Resources>
+    <Resource type="strings" name="PGGXUnit.Packages.GXUnit.Items"/>
+    <Resource type="images" name="PGGXUnit.Packages.GXUnit.Items"/>
+  </Resources>
+
+  <!-- These are locally defined commands -->
+  <Commands>
+    <!--<CommandDefinition id="TestAll" image="MenuImages" imageIndex="4"/>-->
+
+    <CommandDefinition id="EliminarGXUnit" image="MenuImages" imageIndex="10"/>
+
+    <CommandDefinition id="IniciarGXUnit" image="MenuImages" imageIndex="6"/>
+
+    <!--<CommandDefinition id="AutoGenerate" image="MenuImages" imageIndex="1"/>-->
+
+    <CommandDefinition id="About" />
+    
+    <CommandDefinition id="GXUnitWindow" image="gxunit"/>
+
+  </Commands>
+
+  <!-- You can group commands and then reference them by the group id-->
+  <Groups>
+    <Group id="GrupoReinicio">
+      <Command refid="EliminarGXUnit"/>
+      <Command refid="IniciarGXUnit"/>
+    </Group>
+  </Groups>
+
+  <Menus>
+    <Menu type="menubar">
+      <Popup name="GXUnit" insertBefore="Help" >
+        <!-- You can reference groups -->
+        <Group refid="GrupoReinicio" />
+        <Command refid="GXUnitWindow"/>
+        <Command refid="About"/>
+      </Popup>
+    </Menu>
+
+    <!--<Menu id='GXUnit' type="toolbar" name="GXUnit" row="3" column="1">
+      --><!-- You can reference groups --><!--
+      --><!-- Group refid="GrupoTest" / --><!--
+      <Group refid="GrupoReinicio" />
+
+      --><!-- Command refid="AutoGenerate"/ --><!--
+    </Menu>-->
+
+  </Menus>
+  
+  <ToolWindows>
+    <ToolWindow id='CC753F38-8B9F-49B8-95D0-4BDF6D9CDB4D' title='GXUnit' location='right'/>
+  </ToolWindows>
+  
+</Package>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Projects>
+	<Project Name="GXUnit" Location=".">
+
+		<!--
+		The Package assembly needs to be copied to the Packages
+		folder below the base execution path.
+		-->
+		<File Name="GXUnit.dll" Target="Packages" />
+		<File Name="GXUnit.dll" Target="" />
+
+		<!--
+		Any other dependency (i.e.: other assemblies on which
+		this package depends) needs to be copied to the
+		base execution path.
+		-->
+    <!--<File Name="TestCaseSourceCall.dkt" Location="." Target="Packages\GXUnitCore\Templates" />-->
+    <File Name="TestCaseSourceCall.dkt" Location="GXUnitCore" Target="Templates" />
+    <!-- 
+		<File Name="Dependency2.dll" Target="." />
+		-->
+	</Project>
+</Projects>
