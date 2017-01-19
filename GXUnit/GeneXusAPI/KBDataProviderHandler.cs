@@ -10,67 +10,67 @@ using System.Collections.Generic;
 
 namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 {
-    class ManejadorDataProvider
+    class KBDataProviderHandler
     {
-        private static ManejadorDataProvider instance = new ManejadorDataProvider();
+        private static KBDataProviderHandler instance = new KBDataProviderHandler();
 
-        public ManejadorDataProvider()
+        public KBDataProviderHandler()
         {
         }
 
-        public static ManejadorDataProvider GetInstance()
+        public static KBDataProviderHandler GetInstance()
         {
             return instance;
         }
 
-        public DTDataProvider GetDTDataProvider(String nombre)
+        public DTDataProvider GetDTDataProvider(String objName)
         {
             DTDataProvider dp = null;
-            DataProvider dataP = GetDataProviderObject(ManejadorContexto.Model, nombre);
+            DataProvider dataP = GetDataProviderObject(ContextHandler.Model, objName);
             if (dataP != null)
             {
                 //obtengo variables de la regla parm//en un futuro se modifica para variables del CORE
-                LinkedList<Parametro> variablesrule = GetSignature(nombre);
+                LinkedList<KBParameterHandler> variablesrule = GetSignature(objName);
 
                 //Agregar las cosas del output
                 DataProviderOutputReference dpOutput = dataP.GetPropertyValue<DataProviderOutputReference>(Properties.DPRV.Output);
                 string collectionName = dataP.GetPropertyValue<string>(Properties.DPRV.CollectionName);
                 bool isCollOutput = dataP.GetPropertyValue<bool>(Properties.DPRV.Collection);
 
-                KBObject ob = KBObject.Get(ManejadorContexto.Model, dpOutput.EntityKey);
+                KBObject obj = KBObject.Get(ContextHandler.Model, dpOutput.EntityKey);
 
                 bool isCollSDT = false;
                 String SDTItem = "";
-                Constantes.Estructurado tipo;
-                if (ob is Transaction)
-                    tipo = Constantes.Estructurado.BC;
+                Constantes.Estructurado objType;
+                if (obj is Transaction)
+                    objType = Constantes.Estructurado.BC;
                 else
                 {
-                    tipo = Constantes.Estructurado.SDT;
-                    if (ob is SDT)
+                    objType = Constantes.Estructurado.SDT;
+                    if (obj is SDT)
                     {
-                        SDTLevel n = ((SDT)ob).SDTStructure.Root;
+                        SDTLevel n = ((SDT)obj).SDTStructure.Root;
                         isCollSDT = n.IsCollection;
                         SDTItem = n.Name + "." + n.CollectionItemName;
                     }
                 }
 
-                String nombretipo = ob.Name;
+                String nombretipo = obj.Name;
 
-                dp = new DTDataProvider(nombre, nombretipo, tipo, isCollOutput, collectionName, isCollSDT, SDTItem, variablesrule);
+                dp = new DTDataProvider(objName, nombretipo, objType, isCollOutput, collectionName, isCollSDT, SDTItem, variablesrule);
             }
             else
             {
-                String msgoutput = "DataProvider " + nombre + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                String msgoutput = "DataProvider " + objName + " does not exists!";
+                GxHelper.WriteOutput(msgoutput);
             }
             return dp;
         }
 
-        public LinkedList<Parametro> GetSignature(String nombre)
+        public LinkedList<KBParameterHandler> GetSignature(String objName)
         {
-            LinkedList<Parametro> variablesrule = new LinkedList<Parametro>();
-            DataProvider pr = GetDataProviderObject(ManejadorContexto.Model, nombre);
+            LinkedList<KBParameterHandler> variablesrule = new LinkedList<KBParameterHandler>();
+            DataProvider pr = GetDataProviderObject(ContextHandler.Model, objName);
             if (pr != null)
             {
                 foreach (Signature sign in pr.GetSignatures())
@@ -79,7 +79,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     {
                         if (!parm.IsAttribute && parm.Object != null)
                         {
-                            Parametro p = new Parametro((Variable)parm.Object, parm.Accessor.ToString(), true);
+                            KBParameterHandler p = new KBParameterHandler((Variable)parm.Object, parm.Accessor.ToString(), true);
                             variablesrule.AddLast(p);
                         }
 
@@ -90,19 +90,19 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             return variablesrule;
         }
 
-        public Variable GetVariable(String nombre, DTVariable var)
+        public Variable GetVariable(String objName, DTVariable var)
         {
-            DataProvider pr = GetDataProviderObject(ManejadorContexto.Model, nombre);
+            DataProvider pr = GetDataProviderObject(ContextHandler.Model, objName);
             Variable realVar = new Variable(pr.Variables);
             realVar.Name = var.GetNombre();
             if (var.GetNombreTipoCompuesto() != null)
             {
-                DataType.ParseInto(ManejadorContexto.Model, var.GetNombreTipoCompuesto(), realVar);
+                DataType.ParseInto(ContextHandler.Model, var.GetNombreTipoCompuesto(), realVar);
                 realVar.IsCollection = false;
             }
             else
             {
-                realVar.Type = FuncionesAuxiliares.GetTipoGX(var.GetTipo());
+                realVar.Type = GxHelper.GetGXType(var.GetTipo());
                 realVar.Length = var.GetLongitud();
                 realVar.Decimals = var.GetDecimales();
             }

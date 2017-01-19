@@ -5,117 +5,115 @@ using System;
 
 namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 {
-    public class FuncionesAuxiliares
+    public class GxHelper
     {
 
         /// <summary>
-        /// Escribe un mensaje en el Output de GX
+        /// Writes msg in the GeneXus output
         /// </summary>
-        /// <param name="msg">Mensaje a escribir</param>
+        /// <param name="msg">Message to show in the GeneXus output</param>
         /// <returns>true</returns>
-        public static bool EscribirOutput(String msg)
+        public static bool WriteOutput(String msg)
         {
             IOutputService output = CommonServices.Output;
-            //output.StartSection("LogGXUnit");
             output.AddLine(msg);
-            //output.EndSection("LogGXUnit", true);
             return true;
         }
 
-        public static Constantes.Tipo GetTipoInterno(eDBType type)
+        public static Constantes.Tipo GetInternalType(eDBType type)
         {
-            Constantes.Tipo tipo;
+            Constantes.Tipo internalType;
             switch (type)
             {
                 case eDBType.Boolean:
-                    tipo = Constantes.Tipo.Boolean;
+                    internalType = Constantes.Tipo.Boolean;
                     break;
                 case eDBType.CHARACTER:
-                    tipo = Constantes.Tipo.CHARACTER;
+                    internalType = Constantes.Tipo.CHARACTER;
                     break;
                 case eDBType.DATE:
-                    tipo = Constantes.Tipo.DATE;
+                    internalType = Constantes.Tipo.DATE;
                     break;
                 case eDBType.DATETIME:
-                    tipo = Constantes.Tipo.DATETIME;
+                    internalType = Constantes.Tipo.DATETIME;
                     break;
                 case eDBType.GX_BUSCOMP:
-                    tipo = Constantes.Tipo.BC;
+                    internalType = Constantes.Tipo.BC;
                     break;
                 case eDBType.GX_BUSCOMP_LEVEL:
-                    tipo = Constantes.Tipo.BC_LEVEL;
+                    internalType = Constantes.Tipo.BC_LEVEL;
                     break;
                 case eDBType.GX_EXTERNAL_OBJECT:
-                    tipo = Constantes.Tipo.EXTERNAL_OBJECT;
+                    internalType = Constantes.Tipo.EXTERNAL_OBJECT;
                     break;
                 case eDBType.GX_SDT:
-                    tipo = Constantes.Tipo.SDT;
+                    internalType = Constantes.Tipo.SDT;
                     break;
                 case eDBType.INT:
-                    tipo = Constantes.Tipo.INT;
+                    internalType = Constantes.Tipo.INT;
                     break;
                 case eDBType.LONGVARCHAR:
-                    tipo = Constantes.Tipo.LONGVARCHAR;
+                    internalType = Constantes.Tipo.LONGVARCHAR;
                     break;
                 case eDBType.NUMERIC:
-                    tipo = Constantes.Tipo.NUMERIC;
+                    internalType = Constantes.Tipo.NUMERIC;
                     break;
                 case eDBType.VARCHAR:
-                    tipo = Constantes.Tipo.VARCHAR;
+                    internalType = Constantes.Tipo.VARCHAR;
                     break;
                 default:
-                    tipo = Constantes.Tipo.NUMERIC;
+                    internalType = Constantes.Tipo.NUMERIC;
                     break;
             }
-            return tipo;
+            return internalType;
         }
 
-        public static eDBType GetTipoGX(Constantes.Tipo type)
+        public static eDBType GetGXType(Constantes.Tipo type)
         {
-            eDBType tipo;
+            eDBType dbType;
             switch (type)
             {
                 case Constantes.Tipo.Boolean:
-                    tipo = eDBType.Boolean;
+                    dbType = eDBType.Boolean;
                     break;
                 case Constantes.Tipo.CHARACTER:
-                    tipo = eDBType.CHARACTER;
+                    dbType = eDBType.CHARACTER;
                     break;
                 case Constantes.Tipo.DATE:
-                    tipo = eDBType.DATE;
+                    dbType = eDBType.DATE;
                     break;
                 case Constantes.Tipo.DATETIME:
-                    tipo = eDBType.DATETIME;
+                    dbType = eDBType.DATETIME;
                     break;
                 case Constantes.Tipo.BC:
-                    tipo = eDBType.GX_BUSCOMP;
+                    dbType = eDBType.GX_BUSCOMP;
                     break;
                 case Constantes.Tipo.BC_LEVEL:
-                    tipo = eDBType.GX_BUSCOMP_LEVEL;
+                    dbType = eDBType.GX_BUSCOMP_LEVEL;
                     break;
                 case Constantes.Tipo.EXTERNAL_OBJECT:
-                    tipo = eDBType.GX_EXTERNAL_OBJECT;
+                    dbType = eDBType.GX_EXTERNAL_OBJECT;
                     break;
                 case Constantes.Tipo.SDT:
-                    tipo = eDBType.GX_SDT;
+                    dbType = eDBType.GX_SDT;
                     break;
                 case Constantes.Tipo.INT:
-                    tipo = eDBType.INT;
+                    dbType = eDBType.INT;
                     break;
                 case Constantes.Tipo.LONGVARCHAR:
-                    tipo = eDBType.LONGVARCHAR;
+                    dbType = eDBType.LONGVARCHAR;
                     break;
                 case Constantes.Tipo.NUMERIC:
-                    tipo = eDBType.NUMERIC;
+                    dbType = eDBType.NUMERIC;
                     break;
                 case Constantes.Tipo.VARCHAR:
-                    tipo = eDBType.VARCHAR;
+                    dbType = eDBType.VARCHAR;
                     break;
                 default:
-                    tipo = eDBType.NUMERIC;
+                    dbType = eDBType.NUMERIC;
                     break;
             }
-            return tipo;
+            return dbType;
         }
 
         public static bool isNumeric(eDBType varType)
@@ -140,7 +138,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
         public static bool isSimple(eDBType varType)
         {
-            return FuncionesAuxiliares.isBoolean(varType) || FuncionesAuxiliares.isNumeric(varType) || FuncionesAuxiliares.isString(varType) || FuncionesAuxiliares.isDate(varType);
+            return GxHelper.isBoolean(varType) || GxHelper.isNumeric(varType) || GxHelper.isString(varType) || GxHelper.isDate(varType);
         }
 
         public static String defaultValue(Variable var)

@@ -9,15 +9,15 @@ using System.Collections.Generic;
 
 namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 {
-    class ManejadorTransaccion
+    class KBTransactionHandler
     {
-        private static ManejadorTransaccion instance = new ManejadorTransaccion();
+        private static KBTransactionHandler instance = new KBTransactionHandler();
 
-        public ManejadorTransaccion()
+        public KBTransactionHandler()
         {
         }
 
-        public static ManejadorTransaccion GetInstance()
+        public static KBTransactionHandler GetInstance()
         {
             return instance;
         }
@@ -25,13 +25,13 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         public DTTransaccion GetDTTransaccion(String nombre)
         {
             DTTransaccion t = null;
-            Transaction trn = GetTransactionObject(ManejadorContexto.Model, nombre);
+            Transaction trn = GetTransactionObject(ContextHandler.Model, nombre);
             if (trn != null)
             {
                 if (!trn.IsBusinessComponent)
                 {
                     String msg = "The Transaction must be Business Component";
-                    ManejadorContexto.Message = msg;
+                    ContextHandler.Message = msg;
                     return null;
                 }
 
@@ -40,7 +40,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 {
                     if (att.TableAttribute != null && att.TableAttribute.Table != null /*&& att.TableAttribute.Table.Name.ToLower() == nombre.ToLower()*/)
                     {
-                        Constantes.Tipo tipo = FuncionesAuxiliares.GetTipoInterno(att.Attribute.Type);
+                        Constantes.Tipo tipo = GxHelper.GetInternalType(att.Attribute.Type);
                         atributos.AddLast(new DTAtributo(att.Name, tipo, att.IsKey, att.IsInferred || att.Attribute.Formula != null));
                     }
                 }
@@ -49,14 +49,14 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             else
             {
                 String msgoutput = "Transaction " + nombre + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
             }
             return t;
         }
 
         public Variable GetVariable(String trnName, String attName)
         {
-            Transaction trn = GetTransactionObject(ManejadorContexto.Model, trnName);
+            Transaction trn = GetTransactionObject(ContextHandler.Model, trnName);
             if (trn != null)
             {
                 foreach (TransactionAttribute att in trn.Structure.GetAttributes())
@@ -75,19 +75,19 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     }
                 }
                 String msgoutput = "Attribute " + attName + " does not exists in Transaction " + trnName + "!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
             }
             else
             {
                 String msgoutput = "Transaction " + trnName + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
             }
             return null;
         }
 
         public Variable GetBCVariable(String varName, String trnName, bool isColl)
         {
-            Transaction trn = GetTransactionObject(ManejadorContexto.Model, trnName);
+            Transaction trn = GetTransactionObject(ContextHandler.Model, trnName);
             if (trn != null)
             {
                 
@@ -96,21 +96,21 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 var.Type = eDBType.GX_BUSCOMP;
                 var.IsCollection = isColl;
 
-                DataType.ParseInto(ManejadorContexto.Model, trnName, var);
+                DataType.ParseInto(ContextHandler.Model, trnName, var);
                 return var;
             }
             else
             {
                 String msgoutput = "Transaction " + trnName + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return null;
             }
         }
 
-        public LinkedList<Parametro> GetAtt(String bc)
+        public LinkedList<KBParameterHandler> GetAtt(String bc)
         {
-            LinkedList<Parametro> atributos = new LinkedList<Parametro>();
-            Transaction trn = GetTransactionObject(ManejadorContexto.Model, bc);
+            LinkedList<KBParameterHandler> atributos = new LinkedList<KBParameterHandler>();
+            Transaction trn = GetTransactionObject(ContextHandler.Model, bc);
             if (trn != null)
             {
                 foreach (TransactionAttribute att in trn.Structure.GetAttributes())
@@ -123,14 +123,14 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         var.Length = att.Attribute.Length;
                         var.Decimals = att.Attribute.Decimals;
                         var.Type = att.Attribute.Type;
-                        atributos.AddLast(new Parametro(var, Constantes.PARM_OUT, false));
+                        atributos.AddLast(new KBParameterHandler(var, Constantes.PARM_OUT, false));
                     }
                 }
             }
             else
             {
                 String msgoutput = "Transaction " + bc + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
             }
             return atributos;
         }
@@ -138,7 +138,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         //Retorna el nombre de la TRN que contiene al Atributo
         public String GetTrnName(String attribute)
         {
-            foreach (KBObject trn in ManejadorContexto.Model.Objects.GetAll())
+            foreach (KBObject trn in ContextHandler.Model.Objects.GetAll())
             {
                 if (trn is Transaction)
                 {

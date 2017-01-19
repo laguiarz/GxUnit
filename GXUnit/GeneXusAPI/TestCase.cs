@@ -38,7 +38,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             if (testcase != null)
             {
                 this.ProcedurePart.Source = testcase.GetSource();
-                foreach (Parametro p in testcase.GetVariablesRules())
+                foreach (KBParameterHandler p in testcase.GetVariablesRules())
                 {
                     Variable var = new Variable(p.GetVarName(), this.Variables);
                     var.AttributeBasedOn = p.GetVariable().AttributeBasedOn;
@@ -52,7 +52,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     var.Signed = p.GetVariable().Signed;
                     var.Type = p.GetVariable().Type;
 
-                    DataType.ParseInto(ManejadorContexto.Model, p.GetVarName(), var);
+                    DataType.ParseInto(ContextHandler.Model, p.GetVarName(), var);
                     this.Variables.Variables.Add(var);
                 }
             }
@@ -73,7 +73,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             if (kbObjectSelected != null)
             {
                 objectToTest = kbObjectSelected.Name;
-                ManejadorContexto.ObjectToTest = objectToTest;
+                ContextHandler.ObjectToTest = objectToTest;
             }
             else
             {

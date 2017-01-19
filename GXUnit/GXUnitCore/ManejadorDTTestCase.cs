@@ -24,8 +24,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             TestSourceGenerator tsg = TestSourceGenerator.GetInstance();
             string source = tsg.GenerateSourceFromObjectToTest(objectToTest);
 
-            DTObjeto oToTest = ManejadorObjeto.GetInstance().GetDTObjeto(objectToTest);
-            LinkedList<Parametro> parametros = new LinkedList<Parametro>();
+            DTObjeto oToTest = KBObjectHandler.GetInstance().GetDTObjeto(objectToTest);
+            LinkedList<KBParameterHandler> parametros = new LinkedList<KBParameterHandler>();
 
             if (oToTest != null)
             {
@@ -38,7 +38,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             }
             else
             {
-                string msg = ManejadorContexto.Message;
+                string msg = ContextHandler.Message;
                 if (msg != "")
                 {
                     MessageBox.Show(msg);

@@ -46,7 +46,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 
         public bool OnSelectChange(ISelectionContainer sc)
         {
-            if (!string.IsNullOrEmpty(ManejadorContexto.KBName) && ManejadorContexto.Model != null)
+            if (!string.IsNullOrEmpty(ContextHandler.KBName) && ContextHandler.Model != null)
             {
                 try
                 {
@@ -54,7 +54,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 }
                 catch(Exception e)
                 {
-                    FuncionesAuxiliares.EscribirOutput(e.StackTrace);
+                    GxHelper.WriteOutput(e.StackTrace);
                 }
             }
             return true;
@@ -146,7 +146,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             {
                 try
                 {
-                    KBObject test = ManejadorObjeto.GetInstance().GetKBObjectTest(instance.auxNode.Text);
+                    KBObject test = KBObjectHandler.GetInstance().GetKBObjectTest(instance.auxNode.Text);
                     UIServices.Objects.Open(test, OpenDocumentOptions.CurrentVersionPart(test.Guid, null));
                 }
                 catch { }
@@ -155,7 +155,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 
         private void NuevaSuite()
         {
-            KBModel kbmodel = ManejadorContexto.Model;
+            KBModel kbmodel = ContextHandler.Model;
 
             TreeNode node = instance.auxNode;
             instance.auxNode = null;
@@ -200,13 +200,13 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 
         private void nuevaTestSuiteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!ManejadorContexto.GXUnitInicializado)
+            if (!ContextHandler.GXUnitInitialized)
             {
                 if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     GXUnitInicializador i = GXUnitInicializador.GetInstance();
                     i.InicializarGXUnit();
-                    ManejadorContexto.GXUnitInicializado = true;
+                    ContextHandler.GXUnitInitialized = true;
                     NuevaSuite();
                 }
             }
@@ -218,13 +218,13 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 
         private void nuevoTestCaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (!ManejadorContexto.GXUnitInicializado)
+            if (!ContextHandler.GXUnitInitialized)
             {
                 if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     GXUnitInicializador i = GXUnitInicializador.GetInstance();
                     i.InicializarGXUnit();
-                    ManejadorContexto.GXUnitInicializado = true;
+                    ContextHandler.GXUnitInitialized = true;
                     NuevoTC();
                 }
             }
@@ -236,16 +236,16 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 
         private void NuevoTC()
         {
-            KBModel kbmodel = ManejadorContexto.Model;
+            KBModel kbmodel = ContextHandler.Model;
 
             Folder f = null;
             if (auxNode == null)
             {
-                f = ManejadorFolder.GetFolderObject(kbmodel, "GXUnitSuites");
+                f = KBFolderHandler.GetFolderObject(kbmodel, "GXUnitSuites");
             }
             else
             {
-                f = ManejadorFolder.GetFolderObject(kbmodel, auxNode.Text);
+                f = KBFolderHandler.GetFolderObject(kbmodel, auxNode.Text);
             }
 #if GXTILO
           //  CreateObjectOptions options = new CreateObjectOptions();
@@ -306,11 +306,11 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
         {
             string msgoutput = null;
             // Removing GeneXus Object
-            KBObject o = ManejadorObjeto.GetInstance().GetKBObject(instance.auxNode.Text);
+            KBObject o = KBObjectHandler.GetInstance().GetKBObject(instance.auxNode.Text);
             if (o == null)
             {
                 msgoutput = "Object " + instance.auxNode.Text + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
             }
             else
             {
@@ -431,13 +431,13 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
         {
             if (UIServices.KB.CurrentKB != null)
             {
-                if (!ManejadorContexto.GXUnitInicializado)
+                if (!ContextHandler.GXUnitInitialized)
                 {
                     if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         GXUnitInicializador i = GXUnitInicializador.GetInstance();
                         i.InicializarGXUnit();
-                        ManejadorContexto.GXUnitInicializado = true;
+                        ContextHandler.GXUnitInitialized = true;
                         Test();
                     }
                 }
@@ -463,14 +463,14 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 {
                     string XMLPath;
                     m.CrearRunner(tests, out XMLPath);
-                    ManejadorLenguaje.SetLenguajeModelo();
+                    KBLanguageHandler.SetLenguajeModelo();
 
                     //si hay que forzar la generacion del runner solo lo genero(no lo ejecuto, se ejecuta en el evento after build)
-                    if (ManejadorLenguaje.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.CSharpWeb)
+                    if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.CSharpWeb)
                     {
                         m.GeneraRunner();
                     }
-                    else if (ManejadorLenguaje.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.JavaWeb)
+                    else if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.JavaWeb)
                     {
                         //si no hay que forzar mando ejecutar 
                         m.EjecutarRunner();
@@ -506,7 +506,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             {
                 if (!item.GetSuite())
                 {
-                    Procedure proc = ManejadorProcedimiento.GetProcedureObject(ManejadorContexto.Model, item.GetNombre());
+                    Procedure proc = KBProcedureHandler.GetProcedureObject(ContextHandler.Model, item.GetNombre());
                     if (proc == null)
                     {
                         return false;
@@ -591,7 +591,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             int count = 0;
             TreeNode auxNode = null;
 
-            ManejadorFolder mf = new ManejadorFolder();
+            KBFolderHandler mf = new KBFolderHandler();
             Folder folder = mf.GetFolder("GXUnitSuites");
             if (folder != null)
             {
@@ -716,10 +716,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 {
                     try
                     {
-                        KBModel model = ManejadorContexto.Model;
-                        Folder DestinationFolder = ManejadorFolder.GetFolderObject(model, targetNode.Text);
+                        KBModel model = ContextHandler.Model;
+                        Folder DestinationFolder = KBFolderHandler.GetFolderObject(model, targetNode.Text);
 
-                        KBObject obj = ManejadorObjeto.GetInstance().GetKBObject(draggedNode.Text);
+                        KBObject obj = KBObjectHandler.GetInstance().GetKBObject(draggedNode.Text);
                         obj.Parent = DestinationFolder;
                         obj.Dirty = true;
                         obj.Save();
@@ -739,7 +739,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                     }
                     catch (Exception exc)
                     {
-                        FuncionesAuxiliares.EscribirOutput(exc.Message);
+                        GxHelper.WriteOutput(exc.Message);
                     }
                 }
             }

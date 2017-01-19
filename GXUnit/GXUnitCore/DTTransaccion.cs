@@ -14,22 +14,22 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             this.atributos = atributos;
         }
         
-        public LinkedList<Parametro> GetVariablesTrn()
+        public LinkedList<KBParameterHandler> GetVariablesTrn()
         {
-            LinkedList<Parametro> variables = new LinkedList<Parametro>();
+            LinkedList<KBParameterHandler> variables = new LinkedList<KBParameterHandler>();
             foreach (DTAtributo att in atributos)
-                variables.AddLast(new Parametro(this.GetNombre(), att.GetNombre(), Constantes.PARM_INOUT, att.GetEsClave(), att.GetEsSoloLectura()));
-            variables.AddLast(new Parametro(this.GetNombre(), this.GetNombre(), Constantes.PARM_INOUT, Constantes.Estructurado.BC, false, false));
-            variables.AddLast(new Parametro("Messages", "Messages", Constantes.PARM_INOUT, Constantes.Estructurado.SDT, false, false));
-            variables.AddLast(new Parametro("Message", "Messages.Message", Constantes.PARM_INOUT, Constantes.Estructurado.SDT, false, false));
+                variables.AddLast(new KBParameterHandler(this.GetNombre(), att.GetNombre(), Constantes.PARM_INOUT, att.GetEsClave(), att.GetEsSoloLectura()));
+            variables.AddLast(new KBParameterHandler(this.GetNombre(), this.GetNombre(), Constantes.PARM_INOUT, Constantes.Estructurado.BC, false, false));
+            variables.AddLast(new KBParameterHandler("Messages", "Messages", Constantes.PARM_INOUT, Constantes.Estructurado.SDT, false, false));
+            variables.AddLast(new KBParameterHandler("Message", "Messages.Message", Constantes.PARM_INOUT, Constantes.Estructurado.SDT, false, false));
             return variables;
         }
 
-        public LinkedList<Parametro> GetAttTrn()
+        public LinkedList<KBParameterHandler> GetAttTrn()
         {
-            LinkedList<Parametro> variables = new LinkedList<Parametro>();
+            LinkedList<KBParameterHandler> variables = new LinkedList<KBParameterHandler>();
             foreach (DTAtributo att in atributos)
-                variables.AddLast(new Parametro(this.GetNombre(), att.GetNombre(), Constantes.PARM_INOUT, att.GetEsClave(), att.GetEsSoloLectura()));
+                variables.AddLast(new KBParameterHandler(this.GetNombre(), att.GetNombre(), Constantes.PARM_INOUT, att.GetEsClave(), att.GetEsSoloLectura()));
             return variables;
         }
     }

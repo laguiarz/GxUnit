@@ -111,17 +111,9 @@
     </Compile>
     <Compile Include="CommandKeys.cs" />
     <Compile Include="CommandManager.cs" />
-    <Compile Include="Editor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Editor.designer.cs">
-      <DependentUpon>Editor.cs</DependentUpon>
-    </Compile>
     <Compile Include="GeneXusAPI\KBManager.cs" />
-    <Compile Include="GeneXusAPI\ManejadorDataProvider.cs" />
-    <Compile Include="GeneXusAPI\ManejadorResultado.cs" />
-    <Compile Include="GeneXusAPI\ManejadorTransaccion.cs" />
-    <Compile Include="MSBuildAPI\GenerateGXUnitResults.cs" />
+    <Compile Include="GeneXusAPI\KBDataProviderHandler.cs" />
+    <Compile Include="GeneXusAPI\KBTransactionHandler.cs" />
     <Compile Include="MSBuildAPI\GenerateGXUnitTests.cs" />
     <Compile Include="GeneXusAPI\TestCaseDefaultProvider.cs" />
     <Compile Include="GeneXusAPI\TestSuite.cs" />
@@ -134,18 +126,17 @@
     <Compile Include="GXUnitCore\DTTestSuite.cs" />
     <Compile Include="GXUnitCore\DTTransaccion.cs" />
     <Compile Include="GXUnitCore\DTVariable.cs" />
-    <Compile Include="GeneXusAPI\FuncionesAuxiliares.cs" />
+    <Compile Include="GeneXusAPI\GxHelper.cs" />
     <Compile Include="GXUnitCore\GXUnitInicializador.cs" />
-    <Compile Include="GeneXusAPI\ManejadorContexto.cs" />
-    <Compile Include="GeneXusAPI\ManejadorFile.cs" />
-    <Compile Include="GeneXusAPI\ManejadorFolder.cs" />
-    <Compile Include="GeneXusAPI\ManejadorLenguaje.cs" />
-    <Compile Include="GeneXusAPI\ManejadorObjeto.cs" />
-    <Compile Include="GeneXusAPI\ManejadorProcedimiento.cs" />
+    <Compile Include="GeneXusAPI\ContextHandler.cs" />
+    <Compile Include="GeneXusAPI\KBFolderHandler.cs" />
+    <Compile Include="GeneXusAPI\KBLanguageHandler.cs" />
+    <Compile Include="GeneXusAPI\KBObjectHandler.cs" />
+    <Compile Include="GeneXusAPI\KBProcedureHandler.cs" />
     <Compile Include="GXUnitCore\ManejadorDTTestCase.cs" />
     <Compile Include="GXUnitCore\ManejadorRunner.cs" />
-    <Compile Include="GeneXusAPI\ManejadorSDT.cs" />
-    <Compile Include="GeneXusAPI\Parametro.cs" />
+    <Compile Include="GeneXusAPI\KBSDTHandler.cs" />
+    <Compile Include="GeneXusAPI\KBParameterHandler.cs" />
     <Compile Include="GXUnitCore\Procedimiento.cs" />
     <Compile Include="GXUnitCore\SDTipo.cs" />
     <Compile Include="GXUnitCore\SDTipoNivel.cs" />
@@ -215,10 +206,6 @@
     <None Include="Resources\TreeViewTestSuite.ico" />
     <None Include="Resources\GXUnitIconMini.ico" />
     <None Include="Resources\1297981841_stock_test-mode.ico" />
-    <EmbeddedResource Include="Editor.resx">
-      <DependentUpon>Editor.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Utils\InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>
       <SubType>Designer</SubType>

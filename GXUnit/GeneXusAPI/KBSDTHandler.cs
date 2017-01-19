@@ -13,13 +13,13 @@ using Artech.Genexus.Common.Parts;
 
 namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 {
-    class ManejadorSDT
+    class KBSDTHandler
     {
         private KBModel model;
 
-        public ManejadorSDT()
+        public KBSDTHandler()
         {
-            this.model = ManejadorContexto.Model;
+            this.model = ContextHandler.Model;
         }
 
         public KBModel GetModel()
@@ -48,11 +48,11 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     sdt.SetPropertyValue(p.GetNombre(), p.GetValor());
                 }
 
-                Folder foldPadre = ManejadorFolder.GetFolderObject(this.model, sdtipo.GetPadre());
+                Folder foldPadre = KBFolderHandler.GetFolderObject(this.model, sdtipo.GetPadre());
                 if (foldPadre != null)
                     sdt.Parent = foldPadre;
                 else
-                    sdt.Parent = ManejadorFolder.GetRootFolder(model);
+                    sdt.Parent = KBFolderHandler.GetRootFolder(model);
                 SDTLevel n = sdt.SDTStructure.Root;
                 n.Items.Clear();
                 n.IsCollection = sdtipo.GetRoot().EsColeccion();
@@ -60,7 +60,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 
                 foreach (SDTipoNivelItem i in sdtipo.GetRoot().GetItems())
                 {
-                    eDBType tipo = FuncionesAuxiliares.GetTipoGX(i.GetTipo());
+                    eDBType tipo = GxHelper.GetGXType(i.GetTipo());
                     n.AddItem(i.GetNombre(), tipo, i.GetLongitud());
                 }
 
@@ -75,7 +75,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                                                            
                     foreach (SDTipoNivelItem i in nivel.GetItems())
                     {
-                        eDBType tipo = FuncionesAuxiliares.GetTipoGX(i.GetTipo());
+                        eDBType tipo = GxHelper.GetGXType(i.GetTipo());
                         item = n2.AddItem(i.GetNombre(), tipo, i.GetLongitud());
                         if (i.GetTipo() == Constantes.Tipo.SDT)
                         {
@@ -88,11 +88,11 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 }
                 
                 msgoutput = "SDT Object " + sdtipo.GetNombre() + " created!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return true;
             }
             msgoutput = "SDT Object " + sdtipo.GetNombre() + " already exists!";
-            FuncionesAuxiliares.EscribirOutput(msgoutput);
+            GxHelper.WriteOutput(msgoutput);
             return false;
         }
 
@@ -105,13 +105,13 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             {
                 sdt.Delete();
                 msgoutput = "SDT Object " + sdttipo.GetNombre() + " deleted!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return true;
             }
             else
             {
                 msgoutput = "SDT Object " + sdttipo.GetNombre() + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return false;
             }
         }
@@ -124,12 +124,12 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             {
                 sdtName = sdtName.Substring(0, sdtName.IndexOf("."));
                 QualifiedName qn = new QualifiedName(sdtName);
-                sdt = SDT.Get(ManejadorContexto.Model, qn);
+                sdt = SDT.Get(ContextHandler.Model, qn);
             }
             else
             {
                 QualifiedName qn = new QualifiedName(sdtName);
-                sdt = SDT.Get(ManejadorContexto.Model, qn);
+                sdt = SDT.Get(ContextHandler.Model, qn);
             }
 
             if (sdt != null)
@@ -139,13 +139,13 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 var.Type = eDBType.GX_SDT;
                 var.IsCollection = isColl;
 
-                DataType.ParseInto(ManejadorContexto.Model, sdtName, var);
+                DataType.ParseInto(ContextHandler.Model, sdtName, var);
                 return var;
             }
             else
             {
                 String msgoutput = "SDT " + sdtName + " does not exists!";
-                FuncionesAuxiliares.EscribirOutput(msgoutput);
+                GxHelper.WriteOutput(msgoutput);
                 return null;
             }
 #else
@@ -177,16 +177,16 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 #endif
         }
 
-        public LinkedList<Parametro> GetAtt(String sdtName)
+        public LinkedList<KBParameterHandler> GetAtt(String sdtName)
         {
-            LinkedList<Parametro> campos = new LinkedList<Parametro>();
-            SDT sdt = GetSDTObject(ManejadorContexto.Model, sdtName);
+            LinkedList<KBParameterHandler> campos = new LinkedList<KBParameterHandler>();
+            SDT sdt = GetSDTObject(ContextHandler.Model, sdtName);
             if (sdt != null)
             {
                 foreach (SDTItem item in sdt.SDTStructure.Root.Items)
                 {
-                    if (FuncionesAuxiliares.isSimple(item.Type))
-                        campos.AddLast(new Parametro(item.Name, item.Type));
+                    if (GxHelper.isSimple(item.Type))
+                        campos.AddLast(new KBParameterHandler(item.Name, item.Type));
                     if (item.Type == eDBType.GX_SDT)
                     {
                         AttCustomType type = item.GetPropertyValue<AttCustomType>(Artech.Genexus.Common.Properties.ATT.DataType);
@@ -194,7 +194,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         {
                             StructureTypeReference strRef = StructureTypeReference.Deserialize(type);
                             string sdtLevelFullName = StructureInfoProvider.GetName(model, strRef);
-                            campos.AddLast(new Parametro(item.Name, sdtLevelFullName, Constantes.PARM_INOUT, Constantes.Estructurado.SDT, item.IsCollection, false));
+                            campos.AddLast(new KBParameterHandler(item.Name, sdtLevelFullName, Constantes.PARM_INOUT, Constantes.Estructurado.SDT, item.IsCollection, false));
                         }
                     }
                     /*if (item.Type == eDBType.GX_BUSCOMP)
@@ -222,7 +222,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     collection = true;
                 }
                 string itemString = collection ? "Item" : "";
-                foreach (Parametro parm in GetAtt(sdt.Name))
+                foreach (KBParameterHandler parm in GetAtt(sdt.Name))
                 {
                     if (parm.isSimple())
                         source += "&" + varName + itemString + "." + parm.GetVarName() + " = " + parm.defaultValue() + "\r\n";
