@@ -1,0 +1,274 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C9EAED55-E417-49E6-A961-DB79B15AB70D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PGGXUnit.Packages.GXUnit</RootNamespace>
+    <AssemblyName>GXUnit</AssemblyName>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <PublishUrl>http://localhost/PGGXUnit.Packages.GXUnit/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;GXTILO</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <PlatformTarget>x86</PlatformTarget>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;GXTILO</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Artech.Architecture.BL.Framework">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.Architecture.BL.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.Architecture.Common">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.Architecture.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.Architecture.UI.Framework">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.Architecture.UI.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.Common">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.Common.Framework">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.Common.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.Common.Helpers">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.Common.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.Common.Properties">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.Common.Properties.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.FrameworkDE">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.FrameworkDE.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.Genexus.Common">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.Genexus.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.MsBuild.Common">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.MsBuild.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Artech.Udm.Framework">
+      <HintPath>$(GX_SDK_DIR)\Bin\Artech.Udm.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Connector">
+      <HintPath>$(GX_SDK_DIR)\Bin\Connector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v3.5" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(GX_SDK_DIR)\Src\CommonPackageInfo.cs">
+      <Link>Properties\CommonPackageInfo.cs</Link>
+    </Compile>
+    <Compile Include="CommandKeys.cs" />
+    <Compile Include="CommandManager.cs" />
+    <Compile Include="Editor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Editor.designer.cs">
+      <DependentUpon>Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GeneXusAPI\KBManager.cs" />
+    <Compile Include="GeneXusAPI\ManejadorDataProvider.cs" />
+    <Compile Include="GeneXusAPI\ManejadorResultado.cs" />
+    <Compile Include="GeneXusAPI\ManejadorTransaccion.cs" />
+    <Compile Include="MSBuildAPI\GenerateGXUnitResults.cs" />
+    <Compile Include="MSBuildAPI\GenerateGXUnitTests.cs" />
+    <Compile Include="GeneXusAPI\TestCaseDefaultProvider.cs" />
+    <Compile Include="GeneXusAPI\TestSuite.cs" />
+    <Compile Include="GXUnitCore\Constantes.cs" />
+    <Compile Include="GXUnitCore\DTAtributo.cs" />
+    <Compile Include="GXUnitCore\DTDataProvider.cs" />
+    <Compile Include="GXUnitCore\DTFolder.cs" />
+    <Compile Include="GXUnitCore\DTObjeto.cs" />
+    <Compile Include="GXUnitCore\DTPropiedad.cs" />
+    <Compile Include="GXUnitCore\DTTestSuite.cs" />
+    <Compile Include="GXUnitCore\DTTransaccion.cs" />
+    <Compile Include="GXUnitCore\DTVariable.cs" />
+    <Compile Include="GeneXusAPI\FuncionesAuxiliares.cs" />
+    <Compile Include="GXUnitCore\GXUnitInicializador.cs" />
+    <Compile Include="GeneXusAPI\ManejadorContexto.cs" />
+    <Compile Include="GeneXusAPI\ManejadorFile.cs" />
+    <Compile Include="GeneXusAPI\ManejadorFolder.cs" />
+    <Compile Include="GeneXusAPI\ManejadorLenguaje.cs" />
+    <Compile Include="GeneXusAPI\ManejadorObjeto.cs" />
+    <Compile Include="GeneXusAPI\ManejadorProcedimiento.cs" />
+    <Compile Include="GXUnitCore\ManejadorDTTestCase.cs" />
+    <Compile Include="GXUnitCore\ManejadorRunner.cs" />
+    <Compile Include="GeneXusAPI\ManejadorSDT.cs" />
+    <Compile Include="GeneXusAPI\Parametro.cs" />
+    <Compile Include="GXUnitCore\Procedimiento.cs" />
+    <Compile Include="GXUnitCore\SDTipo.cs" />
+    <Compile Include="GXUnitCore\SDTipoNivel.cs" />
+    <Compile Include="GXUnitCore\SDTipoNivelItem.cs" />
+    <Compile Include="GXUnitCore\DTTestCase.cs" />
+    <Compile Include="GeneXusAPI\TestCaseManager.cs" />
+    <Compile Include="GXUnitCore\TestSourceGenerator.cs" />
+    <Compile Include="GXUnitUI\SelectSuite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GXUnitUI\SelectSuite.Designer.cs">
+      <DependentUpon>SelectSuite.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Package.cs" />
+    <Compile Include="GeneXusAPI\TestCase.cs" />
+    <Compile Include="Part.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Items.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Items.resx</DependentUpon>
+    </Compile>
+    <Compile Include="GXUnitUI\GXUnitMainWindow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GXUnitUI\GXUnitMainWindow.designer.cs">
+      <DependentUpon>GXUnitMainWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Resultado.cs" />
+    <Compile Include="Utils\AboutBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utils\AboutBox.Designer.cs">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Utils\InputBox.designer.cs">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Catalog.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <None Include="GXUnitCore\TestCaseSourceCall.dkt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Resources\1309738812_adept_update.png" />
+    <Content Include="Resources\gxunit.ico" />
+    <Content Include="Resources\gxunit.png" />
+    <Content Include="Resources\Update.ico" />
+    <EmbeddedResource Include="GXUnitUI\GXUnitMainWindow.resx">
+      <DependentUpon>GXUnitMainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GXUnitUI\SelectSuite.resx">
+      <DependentUpon>SelectSuite.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\SelectSuite.resx" />
+    <EmbeddedResource Include="Utils\AboutBox.resx">
+      <DependentUpon>AboutBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Resources\TestSuite.ico" />
+    <None Include="Resources\TreeViewTestSuite.ico" />
+    <None Include="Resources\GXUnitIconMini.ico" />
+    <None Include="Resources\1297981841_stock_test-mode.ico" />
+    <EmbeddedResource Include="Editor.resx">
+      <DependentUpon>Editor.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utils\InputBox.resx">
+      <DependentUpon>InputBox.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Resources\MenuImages.bmp" />
+    <EmbeddedResource Include="GeneXusPackage.package">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Resources\Object.ico" />
+    <None Include="Resources\Folder.ico" />
+    <None Include="Resources\document.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Items.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Items.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PostBuildEvent>xcopy "$(TargetDir)$(TargetFileName)" "$(GX_PROGRAM_DIR)\Packages" /q /Y
+if exist "$(TargetDir)$(TargetName).pdb" xcopy "$(TargetDir)$(TargetName).pdb" 
+"$(GX_SDK_DIR)\Tools\Updater" "$(ProjectDir)Catalog.xml" $(ProjectDir) "$(GX_PROGRAM_DIR)"\ $(Configuration)
+"$(GX_PROGRAM_DIR)\Packages" /q /Y
+"$(GX_PROGRAM_DIR)"\Genexus /install
+copy "$(SolutionDir)GXUnit\GXUnitCore\TestCaseSourceCall.dkt" "$(GX_PROGRAM_DIR)\Templates\"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
