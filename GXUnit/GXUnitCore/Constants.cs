@@ -2,7 +2,7 @@
 
 namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 {
-    public static class Constantes
+    public static class Constants
     {
         public const String PARM_INOUT  = "PARM_INOUT";
         public const String PARM_IN     = "PARM_IN";
@@ -16,14 +16,15 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         public const String VALOR_ESPERADO = "Expected";
         public const String ITEM = "Item";
 
-        public const String carpetaGXUnit = "GXUnit";
-        public const String carpetaSuites = "GXUnitSuites";
-        public const String carpetaResults = "GXUnitResults";
+        public const String GXUNIT_FOLDER = "GXUnit";
+        public const String SUITES_FOLDER = "GXUnitSuites";
+     //   public const String carpetaResults = "GXUnitResults";
 
-        public const String About = "Proyecto GXUnit\r\nNicolás Carro\r\nMarcos Olivera\r\nJuan Pablo Goyení\r\n2010 - 2011";
+        public const String ABOUT = "Proyecto GXUnit\r\nNicolás Carro\r\nMarcos Olivera\r\nJuan Pablo Goyení\r\n2010 - 2011\r\n" +
+                                    "Resumed by Laura Aguiar 2017\r\n";
 
         public const String RESULT_PATH = "\\GXUnitResults\\";
 
-        public const String RUNNER_PROC = "RunnerProcedure";
+        public const String RUNNER_PROC = "GXUnit_RunTests";
     }
 }

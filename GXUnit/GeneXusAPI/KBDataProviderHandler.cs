@@ -41,12 +41,12 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
                 bool isCollSDT = false;
                 String SDTItem = "";
-                Constantes.Estructurado objType;
+                Constants.Estructurado objType;
                 if (obj is Transaction)
-                    objType = Constantes.Estructurado.BC;
+                    objType = Constants.Estructurado.BC;
                 else
                 {
-                    objType = Constantes.Estructurado.SDT;
+                    objType = Constants.Estructurado.SDT;
                     if (obj is SDT)
                     {
                         SDTLevel n = ((SDT)obj).SDTStructure.Root;

@@ -48,11 +48,11 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
                 if (param.isSDT())
                 {
                     KBSDTHandler msdt = new KBSDTHandler();
-                    if (param.GetTipo() == Constantes.PARM_IN)
+                    if (param.GetTipo() == Constants.PARM_IN)
                     {
                         if (msdt.isColl(param.GetVariable()))
                         {
-                            this.variablesrule.AddLast(new KBParameterHandler(param.GetVarName() + Constantes.ITEM, msdt.getItemType(param.GetVariable()), param.GetTipo(), Constantes.Estructurado.SDT, false, false));
+                            this.variablesrule.AddLast(new KBParameterHandler(param.GetVarName() + Constants.ITEM, msdt.getItemType(param.GetVariable()), param.GetTipo(), Constants.Estructurado.SDT, false, false));
                         }
                     }
                     else
@@ -60,15 +60,15 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
                         try
                         {
                             KBProcedureHandler mp = new KBProcedureHandler();
-                            DTVariable var = new DTVariable(Constantes.RESULTADO, Constantes.Tipo.VARCHAR, 999, 0);
-                            this.variablesrule.AddLast(new KBParameterHandler(mp.GetVariable(Nombre, var), Constantes.PARM_OUT, false));
-                            DTVariable var2 = new DTVariable(Constantes.VALOR_ESPERADO, Constantes.Tipo.VARCHAR, 999, 0);
-                            this.variablesrule.AddLast(new KBParameterHandler(mp.GetVariable(Nombre, var2), Constantes.PARM_OUT, false));
+                            DTVariable var = new DTVariable(Constants.RESULTADO, Constants.Tipo.VARCHAR, 999, 0);
+                            this.variablesrule.AddLast(new KBParameterHandler(mp.GetVariable(Nombre, var), Constants.PARM_OUT, false));
+                            DTVariable var2 = new DTVariable(Constants.VALOR_ESPERADO, Constants.Tipo.VARCHAR, 999, 0);
+                            this.variablesrule.AddLast(new KBParameterHandler(mp.GetVariable(Nombre, var2), Constants.PARM_OUT, false));
 
-                            this.variablesrule.AddLast(new KBParameterHandler(param.GetVarName() + Constantes.VALOR_ESPERADO, msdt.getSDTType(param.GetVariable()), param.GetTipo(), Constantes.Estructurado.SDT, false, false));
+                            this.variablesrule.AddLast(new KBParameterHandler(param.GetVarName() + Constants.VALOR_ESPERADO, msdt.getSDTType(param.GetVariable()), param.GetTipo(), Constants.Estructurado.SDT, false, false));
                             if (msdt.isColl(param.GetVariable()))
                             {
-                                this.variablesrule.AddLast(new KBParameterHandler(param.GetVarName() + Constantes.VALOR_ESPERADO + Constantes.ITEM, msdt.getItemType(param.GetVariable()), param.GetTipo(), Constantes.Estructurado.SDT, false, false));
+                                this.variablesrule.AddLast(new KBParameterHandler(param.GetVarName() + Constants.VALOR_ESPERADO + Constants.ITEM, msdt.getItemType(param.GetVariable()), param.GetTipo(), Constants.Estructurado.SDT, false, false));
                             }
                         }
                         catch

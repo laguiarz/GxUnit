@@ -40,7 +40,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 {
                     if (att.TableAttribute != null && att.TableAttribute.Table != null /*&& att.TableAttribute.Table.Name.ToLower() == nombre.ToLower()*/)
                     {
-                        Constantes.Tipo tipo = GxHelper.GetInternalType(att.Attribute.Type);
+                        Constants.Tipo tipo = GxHelper.GetInternalType(att.Attribute.Type);
                         atributos.AddLast(new DTAtributo(att.Name, tipo, att.IsKey, att.IsInferred || att.Attribute.Formula != null));
                     }
                 }
@@ -123,7 +123,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         var.Length = att.Attribute.Length;
                         var.Decimals = att.Attribute.Decimals;
                         var.Type = att.Attribute.Type;
-                        atributos.AddLast(new KBParameterHandler(var, Constantes.PARM_OUT, false));
+                        atributos.AddLast(new KBParameterHandler(var, Constants.PARM_OUT, false));
                     }
                 }
             }

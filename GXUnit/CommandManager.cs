@@ -27,7 +27,7 @@ namespace PGGXUnit.Packages.GXUnit
 		public CommandManager()
 		{
             // Elimina los objetos de GXUnit
-            AddCommand(CommandKeys.EliminarGXUnit, new ExecHandler(ExecEliminarGXUnit));
+            AddCommand(CommandKeys.EliminarGXUnit, new ExecHandler(DeleteGXUnitObjects));
 
             // Inicia GXUnit
             AddCommand(CommandKeys.IniciarGXUnit, new ExecHandler(ExecIniciarGXUnit));
@@ -46,8 +46,8 @@ namespace PGGXUnit.Packages.GXUnit
             {
                 if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    GXUnitInicializador i = GXUnitInicializador.GetInstance();
-                    i.InicializarGXUnit();
+                    GXUnitInialize i = GXUnitInialize.GetInstance();
+                    i.InitializeGXUnit();
                     ContextHandler.GXUnitInitialized = true;
                     Test();
                 }
@@ -61,43 +61,47 @@ namespace PGGXUnit.Packages.GXUnit
 
         private void Test()
         {
-            ManejadorRunner m = ManejadorRunner.GetInstance();
+            RunnerHandler m = RunnerHandler.GetInstance();
             TestCaseManager tc = TestCaseManager.GetInstance();
-            m.CrearGenerarRunner(tc.ListarTestCases());
-            m.EjecutarRunner();
+            m.RegenerateAndBuildRunner(tc.ListarTestCases());
+            m.ExecuteRunnerProc();
         }
 
-        public bool ExecEliminarGXUnit(CommandData commandData)
+        public bool DeleteGXUnitObjects(CommandData commandData)
 		{
             if (UIServices.KB.CurrentKB != null)
             {
-                if (MessageBox.Show("Do you want to delete all GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Do you want to delete all GXUnit Objects (You might need to delete all your test cases for this to work)?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     //Eliminar Runner
                     KBProcedureHandler mp = new KBProcedureHandler();
-                    ManejadorRunner mr = ManejadorRunner.GetInstance();
-                    mp.EliminarProcedimiento(mr.GetNombre());
 
-                    //Eliminar Todos los TestCases
-                    TestCaseManager mtc = TestCaseManager.GetInstance();
-                    LinkedList<DTTestCase> testCases = mtc.ListarTestCases();
-                    foreach (DTTestCase tc in testCases)
-                    {
-                        mtc.EliminarTestCase(tc);
-                    }
+                    ////Eliminar Todos los TestCases
+                    //TestCaseManager mtc = TestCaseManager.GetInstance();
+                    //LinkedList<DTTestCase> testCases = mtc.ListarTestCases();
+                    //foreach (DTTestCase tc in testCases)
+                    //{
+                    //    mtc.EliminarTestCase(tc);
+                    //}
 
-                    //Eliminar Asserts
+                    //Delete Tools
+                    mp.EliminarProcedimiento("GXUnit_RunTests");
+                    mp.EliminarProcedimiento("GXUnit_LoadTests");
+                    mp.EliminarProcedimiento("GXUnit_GetCurrentMillisecs");
+                    mp.EliminarProcedimiento("GXUnit_GetElapsedMilliseconds");
+
+                    //Delete Asserts
                     mp.EliminarProcedimiento("AssertStringEquals");
                     mp.EliminarProcedimiento("AssertNumericEquals");
 
-                    //Eliminar Manejadores de sesión
+                    //Delete Session Handling
                     mp.EliminarProcedimiento("GetGXUnitSession");
                     mp.EliminarProcedimiento("SetGXUnitSession");
 
-                    //Eliminar RESTInvoker
+                    //Delete RESTInvoker
                     mp.EliminarProcedimiento("RESTInvoker");
 
-                    //Eliminar SDTs
+                    //Delete SDTs
                     KBSDTHandler msdt = new KBSDTHandler();
                     SDTipo sdt = new SDTipo("GXUnitSuite");
                     msdt.EliminarSDT(sdt);
@@ -106,14 +110,14 @@ namespace PGGXUnit.Packages.GXUnit
                     sdt = new SDTipo("GXUnitAssert");
                     msdt.EliminarSDT(sdt);
 
-                    //Eliminar Carpetas
+                    //Delete Folders
                     KBFolderHandler mf = new KBFolderHandler();
-                    DTFolder folder = new DTFolder(Constantes.carpetaSuites, "");
+                    DTFolder folder = new DTFolder(Constants.SUITES_FOLDER, "");
                     mf.DeleteFolder(folder);
 
                     ContextHandler.GXUnitInitialized = false;
                 }
-                GXUnitMainWindow.getInstance().cargarNodosTest();
+                GXUnitMainWindow.getInstance().LoadTestTrees();
                 return true;
             }
             else
@@ -127,8 +131,8 @@ namespace PGGXUnit.Packages.GXUnit
         {
             if (UIServices.KB.CurrentKB != null)
             {
-                GXUnitInicializador i = GXUnitInicializador.GetInstance();
-                i.InicializarGXUnit();
+                GXUnitInialize i = GXUnitInialize.GetInstance();
+                i.InitializeGXUnit();
                 ContextHandler.GXUnitInitialized = true;
                 return true;
             }

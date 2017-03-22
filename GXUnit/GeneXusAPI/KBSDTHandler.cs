@@ -77,7 +77,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     {
                         eDBType tipo = GxHelper.GetGXType(i.GetTipo());
                         item = n2.AddItem(i.GetNombre(), tipo, i.GetLongitud());
-                        if (i.GetTipo() == Constantes.Tipo.SDT)
+                        if (i.GetTipo() == Constants.Tipo.SDT)
                         {
                             DataType.ParseInto(model, i.GetTipoCompuesto(), item);
                         }
@@ -103,9 +103,20 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             SDT sdt = GetSDTObject(this.model, sdttipo.GetNombre());
             if (sdt != null)
             {
-                sdt.Delete();
-                msgoutput = "SDT Object " + sdttipo.GetNombre() + " deleted!";
-                GxHelper.WriteOutput(msgoutput);
+                try
+                {
+                    sdt.Delete();
+                    msgoutput = "SDT Object " + sdttipo.GetNombre() + " deleted!";
+                    GxHelper.WriteOutput(msgoutput);
+                } catch (Exception e)
+                {
+                    msgoutput = "Failed to delete " + sdttipo.GetNombre() ;
+                    GxHelper.WriteOutput(msgoutput);
+                    msgoutput = e.Message;
+                    GxHelper.WriteOutput(msgoutput);
+
+
+                }
                 return true;
             }
             else
@@ -194,7 +205,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         {
                             StructureTypeReference strRef = StructureTypeReference.Deserialize(type);
                             string sdtLevelFullName = StructureInfoProvider.GetName(model, strRef);
-                            campos.AddLast(new KBParameterHandler(item.Name, sdtLevelFullName, Constantes.PARM_INOUT, Constantes.Estructurado.SDT, item.IsCollection, false));
+                            campos.AddLast(new KBParameterHandler(item.Name, sdtLevelFullName, Constants.PARM_INOUT, Constants.Estructurado.SDT, item.IsCollection, false));
                         }
                     }
                     /*if (item.Type == eDBType.GX_BUSCOMP)

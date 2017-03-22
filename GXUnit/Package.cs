@@ -107,7 +107,7 @@ namespace PGGXUnit.Packages.GXUnit
             if (folder != null)
             {
                 ContextHandler.GXUnitInitialized = true;
-                GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().cargarNodosTest();
+               // GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().LoadTestTrees();
             }
             else
             {
@@ -118,7 +118,7 @@ namespace PGGXUnit.Packages.GXUnit
         [EventSubscription(UIEvents.AfterDeleteKBObject)]
         public void OnAfterDeleteKBObject(object sender, KBObjectEventArgs args)
         {
-            GXUnitMainWindow.getInstance().cargarNodosTest();
+            GXUnitMainWindow.getInstance().LoadTestTrees();
         }
  
         [EventSubscription(UIEvents.AfterCreateKBObject)]
@@ -160,7 +160,7 @@ namespace PGGXUnit.Packages.GXUnit
         public void OnAfterBuild(object sender, EventArgs args)
         {
             //FuncionesAuxiliares.EscribirOutput("AfterBuild");
-            ManejadorRunner mr = ManejadorRunner.GetInstance();
+            RunnerHandler mr = RunnerHandler.GetInstance();
 
             KBLanguageHandler.SetLenguajeModelo();
             if (KBLanguageHandler.Lenguaje == GeneratorType.CSharpWeb)
@@ -170,7 +170,7 @@ namespace PGGXUnit.Packages.GXUnit
                     if (ContextHandler.Execute)
                     {
                         ContextHandler.ForceExecuteRunner = true;
-                        mr.EjecutarRunner();
+                        mr.ExecuteRunnerProc();
                     }
                 }
                 else
@@ -227,8 +227,6 @@ namespace PGGXUnit.Packages.GXUnit
 
             string outputPath = MoveTestOutputToGXUnitStorage(LastXMLName);
             GxHelper.WriteOutput("GXUnit_OnAfterBuild- Results located at " + outputPath);
-            KBProcedureHandler mp = new KBProcedureHandler();
-            mp.EliminarProcedimiento(Constantes.RUNNER_PROC);
         }
 
 
@@ -237,7 +235,7 @@ namespace PGGXUnit.Packages.GXUnit
             try
             {
                 string kbPath = KBManager.getTargetPath();
-                string resultPath = kbPath.Trim() + Constantes.RESULT_PATH;
+                string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
 
                 DirectoryInfo di = Directory.CreateDirectory(resultPath);
 
@@ -258,7 +256,7 @@ namespace PGGXUnit.Packages.GXUnit
         [EventSubscription(ArchitectureEvents.AfterKBObjectImport)]
         public void OnAfterImport(object sender, EventArgs args)
         {
-            GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().cargarNodosTest();
+            GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().LoadTestTrees();
         }
         
         [EventSubscription(ArchitectureEvents.AfterCloseKB)]

@@ -117,7 +117,7 @@
     <Compile Include="MSBuildAPI\GenerateGXUnitTests.cs" />
     <Compile Include="GeneXusAPI\TestCaseDefaultProvider.cs" />
     <Compile Include="GeneXusAPI\TestSuite.cs" />
-    <Compile Include="GXUnitCore\Constantes.cs" />
+    <Compile Include="GXUnitCore\Constants.cs" />
     <Compile Include="GXUnitCore\DTAtributo.cs" />
     <Compile Include="GXUnitCore\DTDataProvider.cs" />
     <Compile Include="GXUnitCore\DTFolder.cs" />
@@ -127,14 +127,14 @@
     <Compile Include="GXUnitCore\DTTransaccion.cs" />
     <Compile Include="GXUnitCore\DTVariable.cs" />
     <Compile Include="GeneXusAPI\GxHelper.cs" />
-    <Compile Include="GXUnitCore\GXUnitInicializador.cs" />
+    <Compile Include="GXUnitCore\GXUnitInialize.cs" />
     <Compile Include="GeneXusAPI\ContextHandler.cs" />
     <Compile Include="GeneXusAPI\KBFolderHandler.cs" />
     <Compile Include="GeneXusAPI\KBLanguageHandler.cs" />
     <Compile Include="GeneXusAPI\KBObjectHandler.cs" />
     <Compile Include="GeneXusAPI\KBProcedureHandler.cs" />
     <Compile Include="GXUnitCore\ManejadorDTTestCase.cs" />
-    <Compile Include="GXUnitCore\ManejadorRunner.cs" />
+    <Compile Include="GXUnitCore\RunnerHandler.cs" />
     <Compile Include="GeneXusAPI\KBSDTHandler.cs" />
     <Compile Include="GeneXusAPI\KBParameterHandler.cs" />
     <Compile Include="GXUnitCore\Procedimiento.cs" />

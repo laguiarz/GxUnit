@@ -56,7 +56,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             source += "/* Parameters definition */\r\n";
             foreach (KBParameterHandler parm in objectToTest.GetVariablesRules())
             {
-                if (parm.GetTipo() != Constantes.PARM_OUT) // Si no es out
+                if (parm.GetTipo() != Constants.PARM_OUT) // Si no es out
                 {
                     if (parm.isSimple())
                         source += "&" + parm.GetVariable().Name + " = " + parm.defaultValue() + "\r\n";
@@ -85,17 +85,17 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             source += "/* Expected values definition */\r\n";
             foreach (KBParameterHandler parm in objectToTest.GetVariablesRules())
             {
-                if (parm.isSDT() && parm.GetTipo() == Constantes.PARM_OUT)
+                if (parm.isSDT() && parm.GetTipo() == Constants.PARM_OUT)
                 {
                     KBSDTHandler mSDT = new KBSDTHandler();
-                    source += mSDT.getSDTTSourceForProcedure(parm.GetVariable(), Constantes.VALOR_ESPERADO);
+                    source += mSDT.getSDTTSourceForProcedure(parm.GetVariable(), Constants.VALOR_ESPERADO);
                 }
             }
             source += "\r\n";
             source += "/* Assertions */\r\n";
             foreach (KBParameterHandler parm in objectToTest.GetVariablesRules())
             {
-                if (parm.GetTipo() != Constantes.PARM_IN)
+                if (parm.GetTipo() != Constants.PARM_IN)
                 {
                     if (parm.isNumeric())
                     {
@@ -107,9 +107,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
                     }
                     else if (parm.isSDT())
                     {
-                        source += "&" + Constantes.RESULTADO + " = &" + parm.GetVariable().Name + ".ToXML()\r\n";
-                        source += "&" + Constantes.VALOR_ESPERADO + " = &" + parm.GetVariable().Name + Constantes.VALOR_ESPERADO + ".ToXML()\r\n";
-                        source += "AssertStringEquals.Call(&" + Constantes.RESULTADO + ", &" + Constantes.VALOR_ESPERADO + ")\r\n";
+                        source += "&" + Constants.RESULTADO + " = &" + parm.GetVariable().Name + ".ToXML()\r\n";
+                        source += "&" + Constants.VALOR_ESPERADO + " = &" + parm.GetVariable().Name + Constants.VALOR_ESPERADO + ".ToXML()\r\n";
+                        source += "AssertStringEquals.Call(&" + Constants.RESULTADO + ", &" + Constants.VALOR_ESPERADO + ")\r\n";
                     }
 
                 }
@@ -186,7 +186,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             source += "/* Parameters definition */\r\n";
             foreach (KBParameterHandler parm in objectToTest.GetParametros())
             {
-                if (parm.GetTipo() != Constantes.PARM_OUT) // Si no es out
+                if (parm.GetTipo() != Constants.PARM_OUT) // Si no es out
                 {
                     if (parm.isSimple())
                         source += "&" + parm.GetVariable().Name + " = " + parm.defaultValue() + "\r\n";
@@ -211,9 +211,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             {
                 String outputVar = objectToTest.GetOutput();
                 if (objectToTest.GetIsCollSDT())
-                    outputVar += Constantes.ITEM;
+                    outputVar += Constants.ITEM;
                 if (!objectToTest.GetIsCollOutput() && !objectToTest.GetIsCollSDT())
-                    outputVar += Constantes.VALOR_ESPERADO;
+                    outputVar += Constants.VALOR_ESPERADO;
                 if (parm.isSimple())
                     source += "&" + outputVar + "." + parm.GetVarName() + " = " + parm.defaultValue() + "\r\n";
                 else
@@ -223,19 +223,19 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             {
                 String nombre = objectToTest.GetOutput();
                 if (!objectToTest.GetIsCollOutput())
-                    nombre += Constantes.VALOR_ESPERADO;
-                source += "&" + nombre + ".Add(&" + objectToTest.GetOutput() + Constantes.ITEM + ")\r\n";
+                    nombre += Constants.VALOR_ESPERADO;
+                source += "&" + nombre + ".Add(&" + objectToTest.GetOutput() + Constants.ITEM + ")\r\n";
             }
             if (objectToTest.GetIsCollOutput())
             {
-                source += "&" + objectToTest.GetOutput() + Constantes.VALOR_ESPERADO + ".Add(&" + objectToTest.GetOutput() + ")\r\n";
+                source += "&" + objectToTest.GetOutput() + Constants.VALOR_ESPERADO + ".Add(&" + objectToTest.GetOutput() + ")\r\n";
             }
 
             source += "\r\n";
             source += "/* Assertions */\r\n";
-            source += "&" + Constantes.RESULTADO + " = &" + objectToTest.GetOutput() + Constantes.RESULTADO + ".ToXML()\r\n";
-            source += "&" + Constantes.VALOR_ESPERADO + " = &" + objectToTest.GetOutput() + Constantes.VALOR_ESPERADO + ".ToXML()\r\n";
-            source += "AssertStringEquals.Call(&" + Constantes.RESULTADO + ", &" + Constantes.VALOR_ESPERADO + ")\r\n";
+            source += "&" + Constants.RESULTADO + " = &" + objectToTest.GetOutput() + Constants.RESULTADO + ".ToXML()\r\n";
+            source += "&" + Constants.VALOR_ESPERADO + " = &" + objectToTest.GetOutput() + Constants.VALOR_ESPERADO + ".ToXML()\r\n";
+            source += "AssertStringEquals.Call(&" + Constants.RESULTADO + ", &" + Constants.VALOR_ESPERADO + ")\r\n";
             source += "\r\n/* Teardown */\r\n";
             return source;
         }

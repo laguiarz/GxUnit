@@ -20,93 +20,93 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             return true;
         }
 
-        public static Constantes.Tipo GetInternalType(eDBType type)
+        public static Constants.Tipo GetInternalType(eDBType type)
         {
-            Constantes.Tipo internalType;
+            Constants.Tipo internalType;
             switch (type)
             {
                 case eDBType.Boolean:
-                    internalType = Constantes.Tipo.Boolean;
+                    internalType = Constants.Tipo.Boolean;
                     break;
                 case eDBType.CHARACTER:
-                    internalType = Constantes.Tipo.CHARACTER;
+                    internalType = Constants.Tipo.CHARACTER;
                     break;
                 case eDBType.DATE:
-                    internalType = Constantes.Tipo.DATE;
+                    internalType = Constants.Tipo.DATE;
                     break;
                 case eDBType.DATETIME:
-                    internalType = Constantes.Tipo.DATETIME;
+                    internalType = Constants.Tipo.DATETIME;
                     break;
                 case eDBType.GX_BUSCOMP:
-                    internalType = Constantes.Tipo.BC;
+                    internalType = Constants.Tipo.BC;
                     break;
                 case eDBType.GX_BUSCOMP_LEVEL:
-                    internalType = Constantes.Tipo.BC_LEVEL;
+                    internalType = Constants.Tipo.BC_LEVEL;
                     break;
                 case eDBType.GX_EXTERNAL_OBJECT:
-                    internalType = Constantes.Tipo.EXTERNAL_OBJECT;
+                    internalType = Constants.Tipo.EXTERNAL_OBJECT;
                     break;
                 case eDBType.GX_SDT:
-                    internalType = Constantes.Tipo.SDT;
+                    internalType = Constants.Tipo.SDT;
                     break;
                 case eDBType.INT:
-                    internalType = Constantes.Tipo.INT;
+                    internalType = Constants.Tipo.INT;
                     break;
                 case eDBType.LONGVARCHAR:
-                    internalType = Constantes.Tipo.LONGVARCHAR;
+                    internalType = Constants.Tipo.LONGVARCHAR;
                     break;
                 case eDBType.NUMERIC:
-                    internalType = Constantes.Tipo.NUMERIC;
+                    internalType = Constants.Tipo.NUMERIC;
                     break;
                 case eDBType.VARCHAR:
-                    internalType = Constantes.Tipo.VARCHAR;
+                    internalType = Constants.Tipo.VARCHAR;
                     break;
                 default:
-                    internalType = Constantes.Tipo.NUMERIC;
+                    internalType = Constants.Tipo.NUMERIC;
                     break;
             }
             return internalType;
         }
 
-        public static eDBType GetGXType(Constantes.Tipo type)
+        public static eDBType GetGXType(Constants.Tipo type)
         {
             eDBType dbType;
             switch (type)
             {
-                case Constantes.Tipo.Boolean:
+                case Constants.Tipo.Boolean:
                     dbType = eDBType.Boolean;
                     break;
-                case Constantes.Tipo.CHARACTER:
+                case Constants.Tipo.CHARACTER:
                     dbType = eDBType.CHARACTER;
                     break;
-                case Constantes.Tipo.DATE:
+                case Constants.Tipo.DATE:
                     dbType = eDBType.DATE;
                     break;
-                case Constantes.Tipo.DATETIME:
+                case Constants.Tipo.DATETIME:
                     dbType = eDBType.DATETIME;
                     break;
-                case Constantes.Tipo.BC:
+                case Constants.Tipo.BC:
                     dbType = eDBType.GX_BUSCOMP;
                     break;
-                case Constantes.Tipo.BC_LEVEL:
+                case Constants.Tipo.BC_LEVEL:
                     dbType = eDBType.GX_BUSCOMP_LEVEL;
                     break;
-                case Constantes.Tipo.EXTERNAL_OBJECT:
+                case Constants.Tipo.EXTERNAL_OBJECT:
                     dbType = eDBType.GX_EXTERNAL_OBJECT;
                     break;
-                case Constantes.Tipo.SDT:
+                case Constants.Tipo.SDT:
                     dbType = eDBType.GX_SDT;
                     break;
-                case Constantes.Tipo.INT:
+                case Constants.Tipo.INT:
                     dbType = eDBType.INT;
                     break;
-                case Constantes.Tipo.LONGVARCHAR:
+                case Constants.Tipo.LONGVARCHAR:
                     dbType = eDBType.LONGVARCHAR;
                     break;
-                case Constantes.Tipo.NUMERIC:
+                case Constants.Tipo.NUMERIC:
                     dbType = eDBType.NUMERIC;
                     break;
-                case Constantes.Tipo.VARCHAR:
+                case Constants.Tipo.VARCHAR:
                     dbType = eDBType.VARCHAR;
                     break;
                 default:

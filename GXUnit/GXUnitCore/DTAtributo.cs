@@ -5,11 +5,11 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
     class DTAtributo
     {
         private String nombre;
-        private Constantes.Tipo tipo;
+        private Constants.Tipo tipo;
         private bool esClave;
         private bool esSoloLectura;
 
-        public DTAtributo(String nombre, Constantes.Tipo tipo, bool esClave, bool esSoloLectura)
+        public DTAtributo(String nombre, Constants.Tipo tipo, bool esClave, bool esSoloLectura)
         {
             this.nombre = nombre;
             this.tipo = tipo;
@@ -22,7 +22,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return this.nombre;
         }
 
-        public Constantes.Tipo GetTipo()
+        public Constants.Tipo GetTipo()
         {
             return this.tipo;
         }

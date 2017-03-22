@@ -5,7 +5,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
     class SDTipoNivelItem
     {
         private String nombre;
-        private Constantes.Tipo tipo;
+        private Constants.Tipo tipo;
         private String tipocompuesto;
         private int longitud;
 
@@ -13,14 +13,14 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         { 
         }
 
-        public SDTipoNivelItem(String nombre, Constantes.Tipo tipo, int longitud)
+        public SDTipoNivelItem(String nombre, Constants.Tipo tipo, int longitud)
         {
             this.nombre     = nombre;
             this.tipo       = tipo;
             this.longitud   = longitud;
         }
 
-        public SDTipoNivelItem(String nombre, Constantes.Tipo tipo, String tipocompuesto)
+        public SDTipoNivelItem(String nombre, Constants.Tipo tipo, String tipocompuesto)
         {
             this.nombre = nombre;
             this.tipo = tipo;
@@ -32,7 +32,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return this.nombre;
         }
 
-        public Constantes.Tipo GetTipo()
+        public Constants.Tipo GetTipo()
         {
             return this.tipo;
         }

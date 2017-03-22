@@ -21,9 +21,9 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         private String nomTipoComplejo;
 
         //Variable basada en Tipo complejo (BC o SDT)
-        public KBParameterHandler(String varName, String Name, String t, Constantes.Estructurado objeto, bool isColl, bool estaEnSig)
+        public KBParameterHandler(String varName, String Name, String t, Constants.Estructurado objeto, bool isColl, bool estaEnSig)
         {
-            if (objeto == Constantes.Estructurado.BC)
+            if (objeto == Constants.Estructurado.BC)
                 this.variable = KBTransactionHandler.GetInstance().GetBCVariable(varName, Name, isColl);
             else
                 this.variable = (new KBSDTHandler()).GetSDTVariable(varName, Name, isColl);

@@ -62,8 +62,8 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 DTVariable variable;
                 foreach (Variable var in tc.Variables.Variables)
                 {
-                    Constantes.Tipo tipo = GxHelper.GetInternalType(var.Type);
-                    if (tipo != Constantes.Tipo.NUMERIC && tipo != Constantes.Tipo.CHARACTER && tipo != Constantes.Tipo.VARCHAR && tipo != Constantes.Tipo.LONGVARCHAR)
+                    Constants.Tipo tipo = GxHelper.GetInternalType(var.Type);
+                    if (tipo != Constants.Tipo.NUMERIC && tipo != Constants.Tipo.CHARACTER && tipo != Constants.Tipo.VARCHAR && tipo != Constants.Tipo.LONGVARCHAR)
                         variable = new DTVariable(var.Name, tipo);
                     else
                         variable = new DTVariable(var.Name, tipo, var.Length, var.Decimals);
@@ -140,7 +140,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         {
             Variable var = new Variable(test.Variables);
             var.Name = var1.GetNombre();
-            if (var1.GetTipo() == Constantes.Tipo.SDT)
+            if (var1.GetTipo() == Constants.Tipo.SDT)
             {
                 DataType.ParseInto(model, var1.GetNombreTipoCompuesto(), var);
                 var.IsCollection = false;

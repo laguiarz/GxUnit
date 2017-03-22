@@ -76,6 +76,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             proc.Save();
 
             msgoutput = "Procedure Object " + procedimiento.GetNombre() + " created!";
+            GxHelper.WriteOutput(msgoutput);
             //FuncionesAuxiliares.EscribirOutput(msgoutput);
             return true;
         }
@@ -124,9 +125,19 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             Procedure proc = GetProcedureObject(this.model, nombre);
             if (proc != null)
             {
-                proc.Delete();
-                msgoutput = "Procedure Object " + nombre + " deleted!";
-                GxHelper.WriteOutput(msgoutput);
+                try
+                {
+                    proc.Delete();
+                    msgoutput = "Procedure Object " + nombre + " deleted!";
+                    GxHelper.WriteOutput(msgoutput);
+                }
+                catch (Exception e)
+                {
+                    msgoutput = "Failed to delete " + nombre;
+                    GxHelper.WriteOutput(msgoutput);
+                    msgoutput = e.Message;
+                    GxHelper.WriteOutput(msgoutput);
+                }
                 return true;
             }
             else
@@ -175,8 +186,8 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 DTVariable variable;
                 foreach (Variable var in proc.Variables.Variables)
                 {
-                    Constantes.Tipo tipo = GxHelper.GetInternalType(var.Type);
-                    if (tipo != Constantes.Tipo.NUMERIC && tipo != Constantes.Tipo.CHARACTER && tipo != Constantes.Tipo.VARCHAR && tipo != Constantes.Tipo.LONGVARCHAR)
+                    Constants.Tipo tipo = GxHelper.GetInternalType(var.Type);
+                    if (tipo != Constants.Tipo.NUMERIC && tipo != Constants.Tipo.CHARACTER && tipo != Constants.Tipo.VARCHAR && tipo != Constants.Tipo.LONGVARCHAR)
                         variable = new DTVariable(var.Name, tipo);
                     else
                         variable = new DTVariable(var.Name, tipo, var.Length, var.Decimals);
@@ -205,10 +216,10 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         {
             Variable var = new Variable(proc.Variables);
             var.Name = var1.GetNombre();
-            if (var1.GetTipo() == Constantes.Tipo.SDT || var1.GetTipo() == Constantes.Tipo.BC)
+            if (var1.GetTipo() == Constants.Tipo.SDT || var1.GetTipo() == Constants.Tipo.BC)
             {
                 DataType.ParseInto(model, var1.GetNombreTipoCompuesto(), var);
-                var.IsCollection = false;
+                var.IsCollection = var1.GetIsCollection();
                 RemoveVariable(proc, var);
                 proc.Variables.Variables.Add(var);
             }
@@ -217,7 +228,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 if (var1.GetNombreTipoCompuesto() != null)
                 {
                     DataType.ParseInto(model, var1.GetNombreTipoCompuesto(), var);
-                    var.IsCollection = false;
+                    var.IsCollection = var1.GetIsCollection();
                     RemoveVariable(proc, var);
                     proc.Variables.Variables.Add(var);
                 }
