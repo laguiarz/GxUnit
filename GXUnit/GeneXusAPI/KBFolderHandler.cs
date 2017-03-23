@@ -55,10 +55,21 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             Folder fold = GetFolderObject(this.model, folder.GetNombre());
             if (fold != null)
             {
-                DeleteChildren(folder.GetNombre());
-                fold.Delete();
-                msgoutput = "Folder " + folder.GetNombre() + " deleted!";
-                GxHelper.WriteOutput(msgoutput);
+                try
+                {
+                    DeleteChildren(folder.GetNombre());
+                    fold.Delete();
+                    msgoutput = "Folder " + folder.GetNombre() + " deleted!";
+                    GxHelper.WriteOutput(msgoutput);
+                }
+                catch (Exception e)
+                {
+                    msgoutput = "Failed to delete Folder " + folder.GetNombre() ;
+                    GxHelper.WriteOutput(msgoutput);
+                    msgoutput = e.Message;
+                    GxHelper.WriteOutput(msgoutput);
+
+                }
                 return true;
             }
             else

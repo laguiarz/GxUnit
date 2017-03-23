@@ -6,24 +6,24 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
     {
 
         private String nombre;
-        private Constantes.Tipo tipo;
+        private Constants.Tipo tipo;
         private String nombretipocompuesto = null;
         private int longitud;
         private int decimales;
-
+        private bool isCollection;
 
         public DTVariable()
         {
         }
 
-        public DTVariable(String nombre, Constantes.Tipo tipo)
+        public DTVariable(String nombre, Constants.Tipo tipo)
         {
             this.nombre = nombre;
             this.tipo = tipo;
         }
 
 
-        public DTVariable(String nombre, Constantes.Tipo tipo, int longitud, int decimales)
+        public DTVariable(String nombre, Constants.Tipo tipo, int longitud, int decimales)
         {
             this.nombre     = nombre;
             this.tipo       = tipo;
@@ -32,7 +32,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             
         }
 
-        public DTVariable(String nombre, Constantes.Tipo tipo, String nombretipo)
+        public DTVariable(String nombre, Constants.Tipo tipo, String nombretipo)
         {
             this.nombre = nombre;
             this.tipo = tipo;
@@ -47,7 +47,15 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
         }
 
-        public DTVariable(String nombre, Constantes.Tipo tipo, String nombretipo, int longitud, int decimales)
+        public DTVariable(String nombre, String nombretipo, bool isCollection)
+        {
+            this.nombre = nombre;
+            this.nombretipocompuesto = nombretipo;
+            this.isCollection = isCollection;
+
+        }
+
+        public DTVariable(String nombre, Constants.Tipo tipo, String nombretipo, int longitud, int decimales)
         {
             this.nombre = nombre;
             this.tipo = tipo;
@@ -62,7 +70,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return this.nombre;
         }
 
-        public Constantes.Tipo GetTipo()
+        public Constants.Tipo GetTipo()
         {
             return this.tipo;
         }
@@ -80,6 +88,11 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         public int GetDecimales()
         {
             return this.decimales;
+        }
+
+        public bool GetIsCollection()
+        {
+            return this.isCollection;
         }
     }
 }

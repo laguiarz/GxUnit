@@ -53,16 +53,16 @@ namespace PGGXUnit.Packages.GXUnit.MSBuildAPI
 
                 ContextHandler.Model = KB.DesignModel;
 
-                ManejadorRunner mr = ManejadorRunner.GetInstance();
+                RunnerHandler mr = RunnerHandler.GetInstance();
                 if (testsSelected(testCaseList))
                 {
-                    mr.CrearRunner(testCaseList, out xmlName);
+                    mr.RegenerateTestLoaderProcedure(testCaseList, out xmlName);
 
-                    Procedure runner = KBProcedureHandler.GetProcedureObject(KB.DesignModel, Constantes.RUNNER_PROC);
+                    Procedure runner = KBProcedureHandler.GetProcedureObject(KB.DesignModel, Constants.RUNNER_PROC);
 
                     if (runner == null)
                     {
-                        CommonServices.Output.AddErrorLine(Constantes.RUNNER_PROC + " cannot be created");
+                        CommonServices.Output.AddErrorLine(Constants.RUNNER_PROC + " cannot be created");
                         isSuccsess = false;
                     }
                 }

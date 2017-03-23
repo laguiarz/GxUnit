@@ -8,27 +8,27 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
     {
         private LinkedList<KBParameterHandler> variables;
         private String output;
-        private Constantes.Estructurado tipoOutput;
+        private Constants.Estructurado tipoOutput;
         private bool isCollOutput;
         private String collectionName;
         private bool isCollSDT;
         private String SDTItem;
 
-        public DTDataProvider(String nombre, String output, Constantes.Estructurado tipoOutput, bool isCollOutput, String collectionName, bool isCollSDT, String SDTItem, LinkedList<KBParameterHandler> variables)
+        public DTDataProvider(String nombre, String output, Constants.Estructurado tipoOutput, bool isCollOutput, String collectionName, bool isCollSDT, String SDTItem, LinkedList<KBParameterHandler> variables)
             : base (nombre)
         {
             LinkedList<KBParameterHandler> variablesAux = variables;
             if (isCollOutput)
-                variablesAux.AddLast(new KBParameterHandler(output, output, Constantes.PARM_OUT, tipoOutput, false, false));
+                variablesAux.AddLast(new KBParameterHandler(output, output, Constants.PARM_OUT, tipoOutput, false, false));
             if (isCollSDT)
-                variables.AddLast(new KBParameterHandler(output + Constantes.ITEM, SDTItem, Constantes.PARM_OUT, Constantes.Estructurado.SDT, false, false));
-            variablesAux.AddLast(new KBParameterHandler(output + Constantes.RESULTADO, output, Constantes.PARM_OUT, tipoOutput, isCollOutput, true));
-            variablesAux.AddLast(new KBParameterHandler(output + Constantes.VALOR_ESPERADO, output, Constantes.PARM_OUT, tipoOutput, isCollOutput, false));
+                variables.AddLast(new KBParameterHandler(output + Constants.ITEM, SDTItem, Constants.PARM_OUT, Constants.Estructurado.SDT, false, false));
+            variablesAux.AddLast(new KBParameterHandler(output + Constants.RESULTADO, output, Constants.PARM_OUT, tipoOutput, isCollOutput, true));
+            variablesAux.AddLast(new KBParameterHandler(output + Constants.VALOR_ESPERADO, output, Constants.PARM_OUT, tipoOutput, isCollOutput, false));
             KBDataProviderHandler mdp = KBDataProviderHandler.GetInstance();
-            DTVariable var = new DTVariable(Constantes.RESULTADO, Constantes.Tipo.VARCHAR, 999, 0);
-            variablesAux.AddLast(new KBParameterHandler(mdp.GetVariable(nombre, var), Constantes.PARM_OUT, false));
-            DTVariable var2 = new DTVariable(Constantes.VALOR_ESPERADO, Constantes.Tipo.VARCHAR, 999, 0);
-            variablesAux.AddLast(new KBParameterHandler(mdp.GetVariable(nombre, var2), Constantes.PARM_OUT, false));
+            DTVariable var = new DTVariable(Constants.RESULTADO, Constants.Tipo.VARCHAR, 999, 0);
+            variablesAux.AddLast(new KBParameterHandler(mdp.GetVariable(nombre, var), Constants.PARM_OUT, false));
+            DTVariable var2 = new DTVariable(Constants.VALOR_ESPERADO, Constants.Tipo.VARCHAR, 999, 0);
+            variablesAux.AddLast(new KBParameterHandler(mdp.GetVariable(nombre, var2), Constants.PARM_OUT, false));
             this.variables = variablesAux;
             this.output = output;
             this.tipoOutput = tipoOutput;
@@ -38,9 +38,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             this.SDTItem = SDTItem;
         }
 
-        public void AddVariable(String varName, String structName, Constantes.Estructurado Struct, bool isCollection)
+        public void AddVariable(String varName, String structName, Constants.Estructurado Struct, bool isCollection)
         {
-            variables.AddLast(new KBParameterHandler(varName, structName, Constantes.PARM_OUT, Struct, isCollection, false));
+            variables.AddLast(new KBParameterHandler(varName, structName, Constants.PARM_OUT, Struct, isCollection, false));
         }
 
         public LinkedList<KBParameterHandler> GetParametros()
@@ -53,7 +53,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return output;
         }
 
-        public Constantes.Estructurado GetTipoOutput()
+        public Constants.Estructurado GetTipoOutput()
         {
             return tipoOutput;
         }

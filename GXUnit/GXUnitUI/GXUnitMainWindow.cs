@@ -10,6 +10,7 @@ using PGGXUnit.Packages.GXUnit.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -50,7 +51,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             {
                 try
                 {
-                    this.cargarNodosTest();
+                    this.LoadTestTrees();
                 }
                 catch(Exception e)
                 {
@@ -204,8 +205,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             {
                 if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    GXUnitInicializador i = GXUnitInicializador.GetInstance();
-                    i.InicializarGXUnit();
+                    GXUnitInialize i = GXUnitInialize.GetInstance();
+                    i.InitializeGXUnit();
                     ContextHandler.GXUnitInitialized = true;
                     NuevaSuite();
                 }
@@ -222,8 +223,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             {
                 if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    GXUnitInicializador i = GXUnitInicializador.GetInstance();
-                    i.InicializarGXUnit();
+                    GXUnitInialize i = GXUnitInialize.GetInstance();
+                    i.InitializeGXUnit();
                     ContextHandler.GXUnitInitialized = true;
                     NuevoTC();
                 }
@@ -338,7 +339,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
         {
             if (UIServices.KB.CurrentKB != null)
             {
-                cargarNodosTest();
+                LoadTestTrees();
                 this.SuitesTree.ExpandAll();
             }
         }
@@ -435,8 +436,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 {
                     if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        GXUnitInicializador i = GXUnitInicializador.GetInstance();
-                        i.InicializarGXUnit();
+                        GXUnitInialize i = GXUnitInialize.GetInstance();
+                        i.InitializeGXUnit();
                         ContextHandler.GXUnitInitialized = true;
                         Test();
                     }
@@ -455,27 +456,38 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 
         private void Test()
         {
-            ManejadorRunner m = ManejadorRunner.GetInstance();
+            //Make Sure Folder for Output Exists
+            string kbPath = KBManager.getTargetPath();
+            string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
+            DirectoryInfo di = Directory.CreateDirectory(resultPath);
+
+            RunnerHandler runnherHandler = RunnerHandler.GetInstance();
             LinkedList<DTTestCase> tests = generarTestsSeleccionados();
             if (testsSelected(tests))
             {
                 if (testsSaved(tests))
                 {
                     string XMLPath;
-                    m.CrearRunner(tests, out XMLPath);
-                    KBLanguageHandler.SetLenguajeModelo();
 
-                    //si hay que forzar la generacion del runner solo lo genero(no lo ejecuto, se ejecuta en el evento after build)
-                    if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.CSharpWeb)
-                    {
-                        m.GeneraRunner();
-                    }
-                    else if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.JavaWeb)
-                    {
-                        //si no hay que forzar mando ejecutar 
-                        m.EjecutarRunner();
-                    }
+                    runnherHandler.RegenerateTestLoaderProcedure(tests, out XMLPath);
+                     KBLanguageHandler.SetLenguajeModelo();
+
+                    ////si hay que forzar la generacion del runner solo lo genero(no lo ejecuto, se ejecuta en el evento after build)
+                    //if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.CSharpWeb)
+                    //{
+                    //    GxHelper.WriteOutput("Build GXUnit-Test-Runner...");
+                    //    runnherHandler.RebuildRunner();
+                    //}
+                    //else if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.JavaWeb)
+                    //{
+                    //    //si no hay que forzar mando ejecutar 
+                    //    GxHelper.WriteOutput("Execute GXUnit-Test-Runner...");
+                        runnherHandler.ExecuteRunnerProc();
+                        GxHelper.WriteOutput("Completed GXUnit-Test-Runner. Results located at folder " + resultPath);
+                        //createTestOutputFile();
+                   // }
                 }
+
                 else
                 {
                     MessageBox.Show("Please save the test case before continuing", "GXUnit");
@@ -486,6 +498,37 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 MessageBox.Show("Select at least one test case", "GXUnit");
             }
         }
+
+        //private void createTestOutputFile()
+        //{
+        //    string LastXMLName = ContextHandler.LastXMLName;
+
+        //    string outputPath = MoveTestOutputToGXUnitStorage(LastXMLName);
+        //    GxHelper.WriteOutput("Completed GXUnit-Test-Runner. Results located at " + outputPath);
+        //}
+
+        //public string MoveTestOutputToGXUnitStorage(String fileName)
+        //{
+        //    try
+        //    {
+        //        string kbPath = KBManager.getTargetPath();
+        //        string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
+
+        //        DirectoryInfo di = Directory.CreateDirectory(resultPath);
+
+        //        string sourcePath = Path.Combine(kbPath, fileName);
+        //        string targetPath = Path.Combine(resultPath, fileName);
+        //        File.Copy(sourcePath, targetPath);
+        //        File.Delete(sourcePath);
+
+        //        return targetPath;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        GxHelper.WriteOutput("Exception: " + e.Message);
+        //        return "";
+        //    }
+        //}
 
         private bool testsSelected(LinkedList<DTTestCase> tests)
         {
@@ -585,33 +628,39 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             this.SuitesTree.Nodes.Clear();
         }
 
-        public void cargarNodosTest()
+        public void LoadTestTrees()
         {
-            this.SuitesTree.Nodes.Clear();
-            int count = 0;
-            TreeNode auxNode = null;
-
-            KBFolderHandler mf = new KBFolderHandler();
-            Folder folder = mf.GetFolder("GXUnitSuites");
-            if (folder != null)
+            try
             {
-                foreach (Folder f in folder.SubFolders)
+                this.SuitesTree.Nodes.Clear();
+                int count = 0;
+                TreeNode auxNode = null;
+
+                KBFolderHandler mf = new KBFolderHandler();
+                Folder folder = mf.GetFolder("GXUnitSuites");
+                if (folder != null)
                 {
-                    auxNode = new TreeNode();
-                    auxNode.Name = f.Name;
-                    auxNode.Text = f.Name;
-                    auxNode.Tag = "TestSuite";
-                    auxNode.ImageIndex = 1;
-                    auxNode.SelectedImageIndex = 1;
-                    this.SuitesTree.Nodes.Insert(count, auxNode);
-                    cargarFolder(auxNode, f);
-                    count++;
+                    foreach (Folder f in folder.SubFolders)
+                    {
+                        auxNode = new TreeNode();
+                        auxNode.Name = f.Name;
+                        auxNode.Text = f.Name;
+                        auxNode.Tag = "TestSuite";
+                        auxNode.ImageIndex = 1;
+                        auxNode.SelectedImageIndex = 1;
+                        this.SuitesTree.Nodes.Insert(count, auxNode);
+                        cargarFolder(auxNode, f);
+                        count++;
+                    }
                 }
+
+                this.SuitesTree.Sort();
+
+                this.checkSelectAll.Checked = false;
+            } catch (Exception exc)
+            {
+                GxHelper.WriteOutput(exc.Message);
             }
-
-            this.SuitesTree.Sort();
-
-            this.checkSelectAll.Checked = false;
         }
 
         public void cargarFolder(TreeNode node, Folder folder)

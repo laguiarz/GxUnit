@@ -72,10 +72,10 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             return (obj is Procedure) || (obj is Transaction) || (obj is DataProvider);
         }
 
-        public LinkedList<KBParameterHandler> GetAtt(String objeto, Constantes.Estructurado Struct)
+        public LinkedList<KBParameterHandler> GetAtt(String objeto, Constants.Estructurado Struct)
         {
             KBSDTHandler msdt;
-            if (Struct == Constantes.Estructurado.BC)
+            if (Struct == Constants.Estructurado.BC)
                 return KBTransactionHandler.GetInstance().GetAtt(objeto);
             else
                 msdt = new KBSDTHandler();

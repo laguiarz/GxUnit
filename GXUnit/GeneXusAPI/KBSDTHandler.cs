@@ -35,6 +35,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         public bool CrearSDT(SDTipo sdtipo, bool force)
         {
             String msgoutput;
+
             SDT sdt = GetSDTObject(model, sdtipo.GetNombre());
             if (sdt == null || force)
             {
@@ -53,39 +54,62 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                     sdt.Parent = foldPadre;
                 else
                     sdt.Parent = KBFolderHandler.GetRootFolder(model);
-                SDTLevel n = sdt.SDTStructure.Root;
-                n.Items.Clear();
-                n.IsCollection = sdtipo.GetRoot().EsColeccion();
-                n.CollectionItemName = sdtipo.GetRoot().GetNombre();
+
+                Artech.Genexus.Common.Parts.SDT.SDTLevel root = sdt.SDTStructure.Root;
+
+                root.Items.Clear();
+                root.IsCollection = sdtipo.GetRoot().GetIsCollection();
+              
+                root.CollectionItemName = sdtipo.GetRoot().GetName();
                 
-                foreach (SDTipoNivelItem i in sdtipo.GetRoot().GetItems())
+                foreach (gxuSDTItem i in sdtipo.GetRoot().GetItems())
                 {
                     eDBType tipo = GxHelper.GetGXType(i.GetTipo());
-                    n.AddItem(i.GetNombre(), tipo, i.GetLongitud());
+                    root.AddItem(i.GetNombre(), tipo, i.GetLongitud());
+                    root.IsCollection = i.GetIsCollection();
+
                 }
 
-                SDTLevel n2;
+                //Add Collection-Items to Root
                 SDTItem item;
-                //Agrego Niveles
-                foreach (SDTipoNivel nivel in sdtipo.GetNiveles())
+                foreach (gxuSDTColItem colItem in sdtipo.GetRoot().GetCollectionItems())
                 {
-                    n2 = n.AddLevel(nivel.GetNombre() + 's', nivel.GetNombre());
-                    n2.IsCollection = nivel.EsColeccion();
-                    n2.Items.Clear();
-                                                           
-                    foreach (SDTipoNivelItem i in nivel.GetItems())
+                    eDBType tipo = GxHelper.GetGXType(colItem.GetTipo());
+                    item = root.AddItem(colItem.GetNombre() + "s", tipo, colItem.GetLongitud());
+                    item.IsCollection = true;
+                    item.CollectionItemName = colItem.GetNombre();
+                    if (colItem.GetTipo() == Constants.Tipo.SDT)
                     {
-                        eDBType tipo = GxHelper.GetGXType(i.GetTipo());
-                        item = n2.AddItem(i.GetNombre(), tipo, i.GetLongitud());
-                        if (i.GetTipo() == Constantes.Tipo.SDT)
-                        {
-                            DataType.ParseInto(model, i.GetTipoCompuesto(), item);
-                        }
-                        sdt.SDTStructure.Dirty = true;
-
+                        DataType.ParseInto(model, colItem.GetTipoCompuesto(), item);
                     }
+
                     sdt.Save();
                 }
+
+                Artech.Genexus.Common.Parts.SDT.SDTLevel n2;
+                //Agrego Niveles
+                foreach (GXUnitCore.GxuSDTLevel nivel in sdtipo.GetNiveles())
+                {
+
+                        n2 = root.AddLevel(nivel.GetName() + 's', nivel.GetName());
+                        n2.IsCollection = nivel.GetIsCollection();
+                        n2.Items.Clear();
+
+                        foreach (gxuSDTItem i in nivel.GetItems())
+                        {
+                            eDBType tipo = GxHelper.GetGXType(i.GetTipo());
+                            item = n2.AddItem(i.GetNombre(), tipo, i.GetLongitud());
+                            if (i.GetTipo() == Constants.Tipo.SDT)
+                            {
+                                DataType.ParseInto(model, i.GetTipoCompuesto(), item);
+                            }
+                            sdt.SDTStructure.Dirty = true;
+
+                        }
+                    
+                    sdt.Save();
+                }
+
                 
                 msgoutput = "SDT Object " + sdtipo.GetNombre() + " created!";
                 GxHelper.WriteOutput(msgoutput);
@@ -103,9 +127,20 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             SDT sdt = GetSDTObject(this.model, sdttipo.GetNombre());
             if (sdt != null)
             {
-                sdt.Delete();
-                msgoutput = "SDT Object " + sdttipo.GetNombre() + " deleted!";
-                GxHelper.WriteOutput(msgoutput);
+                try
+                {
+                    sdt.Delete();
+                    msgoutput = "SDT Object " + sdttipo.GetNombre() + " deleted!";
+                    GxHelper.WriteOutput(msgoutput);
+                } catch (Exception e)
+                {
+                    msgoutput = "Failed to delete " + sdttipo.GetNombre() ;
+                    GxHelper.WriteOutput(msgoutput);
+                    msgoutput = e.Message;
+                    GxHelper.WriteOutput(msgoutput);
+
+
+                }
                 return true;
             }
             else
@@ -194,7 +229,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         {
                             StructureTypeReference strRef = StructureTypeReference.Deserialize(type);
                             string sdtLevelFullName = StructureInfoProvider.GetName(model, strRef);
-                            campos.AddLast(new KBParameterHandler(item.Name, sdtLevelFullName, Constantes.PARM_INOUT, Constantes.Estructurado.SDT, item.IsCollection, false));
+                            campos.AddLast(new KBParameterHandler(item.Name, sdtLevelFullName, Constants.PARM_INOUT, Constants.Estructurado.SDT, item.IsCollection, false));
                         }
                     }
                     /*if (item.Type == eDBType.GX_BUSCOMP)
@@ -277,6 +312,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             return StructureInfoProvider.GetName(model, strRef);
         }
 
+        
         public static SDT GetSDTObject(KBModel model, string name)
         {
             // Esto depende de la version de la BL de GeneXus.

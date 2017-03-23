@@ -1,4 +1,7 @@
-﻿using PGGXUnit.Packages.GXUnit.GeneXusAPI;
+﻿using Artech.Architecture.UI.Framework.Services;
+using PGGXUnit.Packages.GXUnit.GeneXusAPI;
+using System;
+
 namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 {
     partial class GXUnitMainWindow
@@ -20,6 +23,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             }
             base.Dispose(disposing);
         }
+
 
         #region Component Designer generated code
 
@@ -138,6 +142,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             this.ResumeLayout(false);
             this.PerformLayout();
 
+           
         }
 
         #endregion
