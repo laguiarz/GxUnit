@@ -5,10 +5,12 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 {
     class SDTipo
     {
+
         String nombre;
         String padre;
-        LinkedList<SDTipoNivel> niveles;
-        SDTipoNivel root;
+
+        GxuSDTLevel root;
+        LinkedList<GxuSDTLevel> niveles;
         private LinkedList<DTPropiedad> propiedades;
 
         public SDTipo(String nombre)
@@ -16,7 +18,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             this.nombre = nombre;
         }
 
-        public SDTipo(String nombre, String padre, LinkedList<SDTipoNivel> niveles, SDTipoNivel root, LinkedList<DTPropiedad> prop)
+        public SDTipo(String nombre, String padre, LinkedList<GxuSDTLevel> niveles, GxuSDTLevel root, LinkedList<DTPropiedad> prop)
         {
             this.nombre     = nombre;
             this.padre      = padre;
@@ -35,12 +37,16 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return this.padre;
         }
 
-        public LinkedList<SDTipoNivel> GetNiveles()
+        public LinkedList<GxuSDTLevel> GetNiveles()
         {
+            if (this.niveles == null)
+                return this.root.GetSubLevels();
+             else
             return this.niveles;
         }
 
-        public SDTipoNivel GetRoot()
+
+        public GxuSDTLevel GetRoot()
         {
             return this.root;
         }

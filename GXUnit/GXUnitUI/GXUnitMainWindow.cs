@@ -10,6 +10,7 @@ using PGGXUnit.Packages.GXUnit.Utils;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -455,27 +456,38 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 
         private void Test()
         {
-            RunnerHandler m = RunnerHandler.GetInstance();
+            //Make Sure Folder for Output Exists
+            string kbPath = KBManager.getTargetPath();
+            string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
+            DirectoryInfo di = Directory.CreateDirectory(resultPath);
+
+            RunnerHandler runnherHandler = RunnerHandler.GetInstance();
             LinkedList<DTTestCase> tests = generarTestsSeleccionados();
             if (testsSelected(tests))
             {
                 if (testsSaved(tests))
                 {
                     string XMLPath;
-                    m.RegenerateTestLoaderProcedure(tests, out XMLPath);
-                    KBLanguageHandler.SetLenguajeModelo();
 
-                    //si hay que forzar la generacion del runner solo lo genero(no lo ejecuto, se ejecuta en el evento after build)
-                    if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.CSharpWeb)
-                    {
-                        m.RebuildRunner();
-                    }
-                    else if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.JavaWeb)
-                    {
-                        //si no hay que forzar mando ejecutar 
-                        m.ExecuteRunnerProc();
-                    }
+                    runnherHandler.RegenerateTestLoaderProcedure(tests, out XMLPath);
+                     KBLanguageHandler.SetLenguajeModelo();
+
+                    ////si hay que forzar la generacion del runner solo lo genero(no lo ejecuto, se ejecuta en el evento after build)
+                    //if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.CSharpWeb)
+                    //{
+                    //    GxHelper.WriteOutput("Build GXUnit-Test-Runner...");
+                    //    runnherHandler.RebuildRunner();
+                    //}
+                    //else if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.JavaWeb)
+                    //{
+                    //    //si no hay que forzar mando ejecutar 
+                    //    GxHelper.WriteOutput("Execute GXUnit-Test-Runner...");
+                        runnherHandler.ExecuteRunnerProc();
+                        GxHelper.WriteOutput("Completed GXUnit-Test-Runner. Results located at folder " + resultPath);
+                        //createTestOutputFile();
+                   // }
                 }
+
                 else
                 {
                     MessageBox.Show("Please save the test case before continuing", "GXUnit");
@@ -486,6 +498,37 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 MessageBox.Show("Select at least one test case", "GXUnit");
             }
         }
+
+        //private void createTestOutputFile()
+        //{
+        //    string LastXMLName = ContextHandler.LastXMLName;
+
+        //    string outputPath = MoveTestOutputToGXUnitStorage(LastXMLName);
+        //    GxHelper.WriteOutput("Completed GXUnit-Test-Runner. Results located at " + outputPath);
+        //}
+
+        //public string MoveTestOutputToGXUnitStorage(String fileName)
+        //{
+        //    try
+        //    {
+        //        string kbPath = KBManager.getTargetPath();
+        //        string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
+
+        //        DirectoryInfo di = Directory.CreateDirectory(resultPath);
+
+        //        string sourcePath = Path.Combine(kbPath, fileName);
+        //        string targetPath = Path.Combine(resultPath, fileName);
+        //        File.Copy(sourcePath, targetPath);
+        //        File.Delete(sourcePath);
+
+        //        return targetPath;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        GxHelper.WriteOutput("Exception: " + e.Message);
+        //        return "";
+        //    }
+        //}
 
         private bool testsSelected(LinkedList<DTTestCase> tests)
         {

@@ -19,18 +19,18 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         
         public static void SetLenguajeModelo()
         {
-            GxModel gxModel = KBManager.getModel();
-    
+            //We want the generator for the model we are generating right now
+            GxModel gxModel = KBManager.getTargetModel();
+
             if (gxModel != null)
             {
                 lenguaje = (GeneratorType)gxModel.Environment.Generator;   
-                //FuncionesAuxiliares.EscribirOutput("Generando " + Lenguaje.ToString());
             }
         }
 
         public static String GetWebRoot()
         {
-            GxModel gxModel = KBManager.getModel();
+            GxModel gxModel = KBManager.getTargetModel();
             if (gxModel != null)
             {
                 switch ((GeneratorType)gxModel.Environment.Generator)

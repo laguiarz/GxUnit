@@ -37,47 +37,55 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         {
             String msgoutput;
 
-            Procedure proc = GetProcedureObject(this.model, procedimiento.GetNombre());
-            if (proc != null && !force)
+            try
             {
-                
-                msgoutput = "Procedure Object " + procedimiento.GetNombre() + " already exists!";
-                GxHelper.WriteOutput(msgoutput);
-                return false;
-            }
-            else
-            {
-                if (proc == null)
-                    proc = new Procedure(model);
+                Procedure proc = GetProcedureObject(this.model, procedimiento.GetNombre());
+                if (proc != null && !force)
+                {
 
-                proc.Name = procedimiento.GetNombre();
-                proc.ProcedurePart.Source = procedimiento.GetSource();
-                proc.Rules.Source = procedimiento.GetRules();
-                Folder foldPadre = KBFolderHandler.GetFolderObject(this.model, procedimiento.GetFolder());
-                if (foldPadre != null)
-                    proc.Parent = foldPadre;
+                    msgoutput = "Procedure Object " + procedimiento.GetNombre() + " already exists!";
+                    GxHelper.WriteOutput(msgoutput);
+                    return false;
+                }
                 else
-                    proc.Parent = KBFolderHandler.GetRootFolder(model);
-            }
+                {
+                    if (proc == null)
+                        proc = new Procedure(model);
 
-            //Agrego Variables
-            foreach (DTVariable var in procedimiento.GetVariables())
+                    proc.Name = procedimiento.GetNombre();
+                    proc.ProcedurePart.Source = procedimiento.GetSource();
+                    proc.Rules.Source = procedimiento.GetRules();
+                    Folder foldPadre = KBFolderHandler.GetFolderObject(this.model, procedimiento.GetFolder());
+                    if (foldPadre != null)
+                        proc.Parent = foldPadre;
+                    else
+                        proc.Parent = KBFolderHandler.GetRootFolder(model);
+                }
+
+                //Agrego Variables
+                foreach (DTVariable var in procedimiento.GetVariables())
+                {
+                    AgregarVariable(proc, var);
+                }
+
+                //Agrego propiedades
+                foreach (DTPropiedad p in procedimiento.GetPropiedades())
+                {
+                    //FuncionesAuxiliares.EscribirOutput(p.GetNombre());
+                    proc.SetPropertyValue(p.GetNombre(), p.GetValor());
+                }
+
+                proc.Save();
+
+                msgoutput = "Procedure Object " + procedimiento.GetNombre() + " created!";
+                GxHelper.WriteOutput(msgoutput);
+                //FuncionesAuxiliares.EscribirOutput(msgoutput);
+            }
+            catch (Exception e)
             {
-                AgregarVariable(proc, var);
+                GxHelper.WriteOutput("Failed to Create " + procedimiento.GetNombre());
+                GxHelper.WriteOutput(e.Message);
             }
-
-            //Agrego propiedades
-            foreach (DTPropiedad p in procedimiento.GetPropiedades())
-            {
-                //FuncionesAuxiliares.EscribirOutput(p.GetNombre());
-                proc.SetPropertyValue(p.GetNombre(), p.GetValor());
-            }
-
-            proc.Save();
-
-            msgoutput = "Procedure Object " + procedimiento.GetNombre() + " created!";
-            GxHelper.WriteOutput(msgoutput);
-            //FuncionesAuxiliares.EscribirOutput(msgoutput);
             return true;
         }
 
@@ -281,7 +289,14 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
         public void GenerarProcedimiento(String nombre)
         {
             Procedure proc = GetProcedureObject(model, nombre);
-            KBManager.GXRebuildObject(proc.Key);
+            if (proc != null)
+            {
+                KBManager.GXRebuildObject(proc.Key);
+            }
+            else
+            {
+                GxHelper.WriteOutput("Failed to obtain procedure from model");
+            }
         }
         
         public void SalvarProcedimiento(String nombre)
@@ -318,12 +333,14 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             return realVar;
         }
 
-        public static Procedure GetProcedureObject(KBModel model, string procName)
+        public static Procedure GetProcedureObject(KBModel kbmodel, string procName)
         {
             // Esto depende de la version de la BL de GeneXus.
 #if GXTILO
             // Para Tilo:
-            return Procedure.Get(model, new QualifiedName(procName));
+
+            return Procedure.Get(kbmodel, new QualifiedName(procName));
+          
 #else
             // Para Ev1 y Ev2:
             return Procedure.Get(model, procName);

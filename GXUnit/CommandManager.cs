@@ -39,34 +39,6 @@ namespace PGGXUnit.Packages.GXUnit
             AddCommand(CommandKeys.About, new ExecHandler(ExecAbout));
 		}
 
-        // NOT HANDLED (CFBP)
-		public bool TestAll(CommandData commandData)
-		{
-            if (!ContextHandler.GXUnitInitialized)
-            {
-                if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                {
-                    GXUnitInialize i = GXUnitInialize.GetInstance();
-                    i.InitializeGXUnit();
-                    ContextHandler.GXUnitInitialized = true;
-                    Test();
-                }
-            }
-            else
-            {
-                Test();
-            }
-			return true;
-		}
-
-        private void Test()
-        {
-            RunnerHandler m = RunnerHandler.GetInstance();
-            TestCaseManager tc = TestCaseManager.GetInstance();
-            m.RegenerateAndBuildRunner(tc.ListarTestCases());
-            m.ExecuteRunnerProc();
-        }
-
         public bool DeleteGXUnitObjects(CommandData commandData)
 		{
             if (UIServices.KB.CurrentKB != null)

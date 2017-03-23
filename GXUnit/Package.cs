@@ -103,7 +103,7 @@ namespace PGGXUnit.Packages.GXUnit
             ContextHandler.ObjectToTest = "";
 
             KBFolderHandler mf = new KBFolderHandler();
-            Folder folder = mf.GetFolder("GXUnit");
+            Folder folder = mf.GetFolder(Constants.GXUNIT_FOLDER);
             if (folder != null)
             {
                 ContextHandler.GXUnitInitialized = true;
@@ -155,103 +155,105 @@ namespace PGGXUnit.Packages.GXUnit
             ContextHandler.ObjectToTest = "";
         }
 
- 
-        [EventSubscription(GXEvents.AfterBuild)]
-        public void OnAfterBuild(object sender, EventArgs args)
-        {
-            //FuncionesAuxiliares.EscribirOutput("AfterBuild");
-            RunnerHandler mr = RunnerHandler.GetInstance();
 
-            KBLanguageHandler.SetLenguajeModelo();
-            if (KBLanguageHandler.Lenguaje == GeneratorType.CSharpWeb)
-            {
-                if (!ContextHandler.ForceExecuteRunner)
-                {
-                    if (ContextHandler.Execute)
-                    {
-                        ContextHandler.ForceExecuteRunner = true;
-                        mr.ExecuteRunnerProc();
-                    }
-                }
-                else
-                {
-                    ContextHandler.ForceExecuteRunner = false;
-                    if (ContextHandler.Execute)
-                    {
-                        ContextHandler.Execute = false;
-                        bool error = false;
-                        try
-                        {
-                            createTestOutputFile();
-                        }
-                        catch (Exception ex)
-                        {
-                            ex.ToString();
-                            error = true;
-                        }
-                        if (error)
-                        {
-                            Thread.Sleep(1000);
-                            createTestOutputFile();
-                        }
-                    }
-                }
-            }
-            else if (KBLanguageHandler.Lenguaje == GeneratorType.JavaWeb)
-            {
-                if (ContextHandler.Execute)
-                {
-                    ContextHandler.Execute = false;
-                    bool error = false;
-                    try
-                    {
-                        createTestOutputFile();
-                    }
-                    catch (Exception ex)
-                    {
-                        ex.ToString();
-                        error = true;
-                    }
-                    if (error)
-                    {
-                        Thread.Sleep(1000);
-                        createTestOutputFile();
-                    }
-                }
-            }
-        }
+        //[EventSubscription(GXEvents.AfterBuild)]
+        //public void OnAfterBuild(object sender, EventArgs args)
+        //{
+        //    RunnerHandler mr = RunnerHandler.GetInstance();
 
-        private void createTestOutputFile()
-        {
-            string LastXMLName = ContextHandler.LastXMLName;
+        //    KBLanguageHandler.SetLenguajeModelo();
+        //    if (KBLanguageHandler.Lenguaje == GeneratorType.CSharpWeb)
+        //    {
+        //        GxHelper.WriteOutput("GXUnit Steps After Build (csharp)");
+        //        if (!ContextHandler.ForceExecuteRunner)
+        //        {
+        //            if (ContextHandler.Execute)
+        //            {
+        //                ContextHandler.ForceExecuteRunner = true;
+        //                mr.ExecuteRunnerProc();
+        //            }
+        //        }
+        //        else
+        //        {
+        //            ContextHandler.ForceExecuteRunner = false;
+        //            if (ContextHandler.Execute)
+        //            {
+        //                ContextHandler.Execute = false;
+        //                bool error = false;
+        //                try
+        //                {
+        //                   // createTestOutputFile();
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    ex.ToString();
+        //                    error = true;
+        //                }
+        //                if (error)
+        //                {
+        //                    Thread.Sleep(1000);
+        //                   // createTestOutputFile();
+        //                }
+        //            }
+        //        }
+        //    }
+        //    else if (KBLanguageHandler.Lenguaje == GeneratorType.JavaWeb)
+        //    {
+        //        GxHelper.WriteOutput("GXUnit Steps After Build (java)");
 
-            string outputPath = MoveTestOutputToGXUnitStorage(LastXMLName);
-            GxHelper.WriteOutput("GXUnit_OnAfterBuild- Results located at " + outputPath);
-        }
+        //        if (ContextHandler.Execute)
+        //        {
+        //            ContextHandler.Execute = false;
+        //            bool error = false;
+        //            try
+        //            {
+        //               // createTestOutputFile();
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                ex.ToString();
+        //                error = true;
+        //            }
+        //            if (error)
+        //            {
+        //                Thread.Sleep(1000);
+        //               // createTestOutputFile();
+        //            }
+        //        }
+        //    }
+        //}
+
+        ////private void createTestOutputFile()
+        ////{
+        ////    string LastXMLName = ContextHandler.LastXMLName;
+
+        ////    string outputPath = MoveTestOutputToGXUnitStorage(LastXMLName);
+        ////    GxHelper.WriteOutput("GXUnit_OnAfterBuild- Results located at " + outputPath);
+        ////}
 
 
-        public string MoveTestOutputToGXUnitStorage(String fileName)
-        {
-            try
-            {
-                string kbPath = KBManager.getTargetPath();
-                string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
+        //public string MoveTestOutputToGXUnitStorage(String fileName)
+        //{
+        //    try
+        //    {
+        //        string kbPath = KBManager.getTargetPath();
+        //        string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
 
-                DirectoryInfo di = Directory.CreateDirectory(resultPath);
+        //        DirectoryInfo di = Directory.CreateDirectory(resultPath);
 
-                string sourcePath = Path.Combine(kbPath, fileName);
-                string targetPath = Path.Combine(resultPath, fileName);
-                File.Copy(sourcePath, targetPath);
-                File.Delete(sourcePath);
+        //        string sourcePath = Path.Combine(kbPath, fileName);
+        //        string targetPath = Path.Combine(resultPath, fileName);
+        //        File.Copy(sourcePath, targetPath);
+        //        File.Delete(sourcePath);
 
-                return targetPath;
-            }
-            catch (Exception e)
-            {
-                GxHelper.WriteOutput("Exception: " + e.Message);
-                return "";
-            }
-        }
+        //        return targetPath;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        GxHelper.WriteOutput("Exception: " + e.Message);
+        //        return "";
+        //    }
+        //}
 
         [EventSubscription(ArchitectureEvents.AfterKBObjectImport)]
         public void OnAfterImport(object sender, EventArgs args)

@@ -114,6 +114,8 @@
     <Compile Include="GeneXusAPI\KBManager.cs" />
     <Compile Include="GeneXusAPI\KBDataProviderHandler.cs" />
     <Compile Include="GeneXusAPI\KBTransactionHandler.cs" />
+    <Compile Include="GXUnitCore\gxuSDTColItem.cs" />
+    <Compile Include="GXUnitCore\gxuSDTItem.cs" />
     <Compile Include="MSBuildAPI\GenerateGXUnitTests.cs" />
     <Compile Include="GeneXusAPI\TestCaseDefaultProvider.cs" />
     <Compile Include="GeneXusAPI\TestSuite.cs" />
@@ -139,8 +141,7 @@
     <Compile Include="GeneXusAPI\KBParameterHandler.cs" />
     <Compile Include="GXUnitCore\Procedimiento.cs" />
     <Compile Include="GXUnitCore\SDTipo.cs" />
-    <Compile Include="GXUnitCore\SDTipoNivel.cs" />
-    <Compile Include="GXUnitCore\SDTipoNivelItem.cs" />
+    <Compile Include="GXUnitCore\GxuSDTLevel.cs" />
     <Compile Include="GXUnitCore\DTTestCase.cs" />
     <Compile Include="GeneXusAPI\TestCaseManager.cs" />
     <Compile Include="GXUnitCore\TestSourceGenerator.cs" />

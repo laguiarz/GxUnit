@@ -2,29 +2,38 @@
 
 namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 {
-    class SDTipoNivelItem
+    class gxuSDTColItem
     {
         private String nombre;
         private Constants.Tipo tipo;
         private String tipocompuesto;
         private int longitud;
+        private bool isCollection;
 
-        public SDTipoNivelItem()
+        public gxuSDTColItem()
         { 
         }
 
-        public SDTipoNivelItem(String nombre, Constants.Tipo tipo, int longitud)
+        public gxuSDTColItem(String nombre, Constants.Tipo tipo, int longitud)
         {
             this.nombre     = nombre;
             this.tipo       = tipo;
             this.longitud   = longitud;
         }
 
-        public SDTipoNivelItem(String nombre, Constants.Tipo tipo, String tipocompuesto)
+        public gxuSDTColItem(String nombre, Constants.Tipo tipo, String tipocompuesto)
         {
             this.nombre = nombre;
             this.tipo = tipo;
             this.tipocompuesto = tipocompuesto;
+        }
+
+        public gxuSDTColItem(String nombre, Constants.Tipo tipo, String tipocompuesto, bool isCollection)
+        {
+            this.nombre = nombre;
+            this.tipo = tipo;
+            this.tipocompuesto = tipocompuesto;
+            this.isCollection = isCollection;
         }
 
         public String GetNombre()
@@ -47,5 +56,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return this.tipocompuesto;
         }
 
+        public bool GetIsCollection()
+        {
+            return this.isCollection;
+        }
+        
     }
 }
