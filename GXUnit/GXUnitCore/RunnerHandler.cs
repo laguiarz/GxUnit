@@ -42,7 +42,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             string kbPath = KBManager.getTargetPath();
             string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
-            XMLName = resultPath + System.DateTime.Now.ToString("GXUnitR_yyyyMMdd_HHmmss") + ".xml";
+            XMLName = resultPath + "GXUnitR_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xml";
 
             //Check if the file already exists and delete it
             try
@@ -90,7 +90,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             string CurrentSuiteName = "";
             string PreviousSuiteName = "";
-            bool firstFlag = false;
+            bool firstFlag = true;
             bool hasContentFlag = false;
 
             foreach (DTTestCase testcase1 in lista)
