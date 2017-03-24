@@ -83,7 +83,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         DataType.ParseInto(model, colItem.GetTipoCompuesto(), item);
                     }
 
-                    sdt.Save();
+                   
                 }
 
                 Artech.Genexus.Common.Parts.SDT.SDTLevel n2;
@@ -107,10 +107,11 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
                         }
                     
-                    sdt.Save();
+                   
                 }
 
-                
+                sdt.Save();
+
                 msgoutput = "SDT Object " + sdtipo.GetNombre() + " created!";
                 GxHelper.WriteOutput(msgoutput);
                 return true;

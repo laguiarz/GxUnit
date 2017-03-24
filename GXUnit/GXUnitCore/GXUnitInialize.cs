@@ -24,11 +24,40 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return instance;
         }
 
+
+        private string AssertProcSource()
+        {
+            String procSource = "";
+
+            procSource += "/*\r\n";
+            procSource += "Compares obtained and expected results\r\n";
+            procSource += "\r\n";
+            procSource += "Created Automatically by GXUnit\r\n";
+            procSource += "*/\r\n";
+            procSource += "\r\n";
+            procSource += "&SDTAssert = new()\r\n";
+            procSource += "&SDTAssert.Variable = &VariableName\r\n";
+            procSource += "&SDTAssert.Expected = trim(&ExpectedValue.ToString())\r\n";
+            procSource += "&SDTAssert.Obtained = trim(&ObtainedValue.ToString())\r\n";
+            procSource += "&SDTAssert.Result   = iif(&ExpectedValue = &ObtainedValue,'OK','FAIL')\r\n";
+            procSource += "\r\n";
+
+            procSource += "//Retrieve the Current-Test Information\r\n";
+            procSource += "GXUnit_GetSession('CurrentTest', &SessionValue)\r\n";
+            procSource += "&GXUnitTestCase.FromXml(&SessionValue)\r\n";
+            procSource += "\r\n";
+
+            procSource += "&GXUnitTestCase.Asserts.Add(&SDTAssert)\r\n";
+            procSource += "GXUnit_SetSession('CurrentTest', &GXUnitTestCase.ToXml() )\r\n";
+            procSource += "\r\n";
+
+            return procSource;
+        }
         private bool CreateAssertNumericEquals()
         {
-            String nombre = "AssertNumericEquals";
+            String nombre = "GXUnit_AssertNumericEquals";
             
-            String procRules = "Parm(in:&ObtainedValue, in:&ExpectedValue);";
+            String procRules = "Parm(in:&VariableName, in:&ObtainedValue, in:&ExpectedValue);";
 
             LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
             DTVariable v = new DTVariable("ObtainedValue", Constants.Tipo.NUMERIC, 18, 4);
@@ -39,46 +68,17 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             variables.AddFirst(v);
             v = new DTVariable("SDTAssert", Constants.Tipo.SDT, "GXUnitAssert");
             variables.AddFirst(v);
-            v = new DTVariable("SDTAssertItem", Constants.Tipo.SDT, "GXUnitAssert.GXUnitAssertInfo");
-            variables.AddFirst(v);
             v = new DTVariable("SDTSuite", Constants.Tipo.SDT, "GXUnitSuite");
             variables.AddFirst(v);
             v = new DTVariable("SessionValue", Constants.Tipo.VARCHAR, 9999, 0);
             variables.AddFirst(v);
+            v = new DTVariable("VariableName", Constants.Tipo.VARCHAR, 80, 0);
+            variables.AddFirst(v);
 
             LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
 
-            String procSource = "";
-
-            procSource += "/*\r\n";
-            procSource += "Compares obtained and expected results\r\n";
-            procSource += "\r\n";
-            procSource += "Created Automatically by GXUnit\r\n";
-            procSource += "*/\r\n";
-            procSource += "\r\n";
-            procSource += "&SDTAssert = new()\r\n";
-            procSource += "if &ExpectedValue = &ObtainedValue\r\n";
-            procSource += "\t&SDTAssert.ObtainedValue = 'OK'\r\n";
-            procSource += "else\r\n";
-            procSource += "\t&SDTAssert.ObtainedValue = 'FAIL'\r\n";
-            procSource += "\r\n";
-            procSource += "\t&SDTAssertItem = new()\r\n";
-            procSource += "\t&SDTAssertItem.Expected = trim(&ExpectedValue.ToString())\r\n";
-            procSource += "\t&SDTAssertItem.Obtained = trim(&ObtainedValue.ToString())\r\n";
-            procSource += "\t&SDTAssert.GXUnitAssertInfos.Add(&SDTAssertItem)\r\n";
-            procSource += "endif\r\n";
-            procSource += "\r\n";
-
-            procSource += "//Retrieve the Current-Test Information\r\n";
-            procSource += "GetGXUnitSession('CurrentTest', &SessionValue)\r\n";
-            procSource += "&GXUnitTestCase.FromXml(&SessionValue)\r\n";
-            procSource += "\r\n";
-
-            procSource += "&GXUnitTestCase.Asserts.Add(&SDTAssert)\r\n";
-            procSource += "SetGXUnitSession('CurrentTest', &GXUnitTestCase.ToXml() )\r\n";
-            procSource += "\r\n";
-
-            
+            String procSource = AssertProcSource();
+           
             Procedimiento p = new Procedimiento(nombre,procSource,procRules,"GXUnit",variables,propiedades);
             KBProcedureHandler m = new KBProcedureHandler();
             m.CrearProcedimiento(p,true);
@@ -88,8 +88,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
         private bool CreateAssertStringEquals()
         {
-            String nombre = "AssertStringEquals";
-            String procRules = "Parm(in:&ObtainedValue, in:&ExpectedValue);";
+            String nombre = "GXUnit_AssertStringEquals";
+            String procRules = "Parm(in:&VariableName, in:&ObtainedValue, in:&ExpectedValue);";
 
             LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
             DTVariable v = new DTVariable("ObtainedValue", Constants.Tipo.VARCHAR, 1024, 4);
@@ -100,43 +100,16 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             variables.AddFirst(v);
             v = new DTVariable("SDTAssert", Constants.Tipo.SDT, "GXUnitAssert");
             variables.AddFirst(v);
-            v = new DTVariable("SDTAssertItem", Constants.Tipo.SDT, "GXUnitAssert.GXUnitAssertInfo");
-            variables.AddFirst(v);
             v = new DTVariable("SDTSuite", Constants.Tipo.SDT, "GXUnitSuite");
             variables.AddFirst(v);
             v = new DTVariable("SessionValue", Constants.Tipo.VARCHAR, 9999, 0);
             variables.AddFirst(v);
+            v = new DTVariable("VariableName", Constants.Tipo.VARCHAR, 80, 0);
+            variables.AddFirst(v);
 
             LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
 
-            String procSource = "";
-            procSource += "/*\r\n";
-            procSource += "Compares obtained and expected results\r\n";
-            procSource += "\r\n";
-            procSource += "Created Automatically by GXUnit\r\n";
-            procSource += "*/\r\n";
-            procSource += "\r\n";
-
-            procSource += "if &ExpectedValue = &ObtainedValue\r\n";
-            procSource += "\t&SDTAssert.ObtainedValue = 'OK'\r\n";
-            procSource += "else\r\n";
-            procSource += "\t&SDTAssert.ObtainedValue = 'FAIL'\r\n";
-            procSource += "\t&SDTAssertItem=new()\r\n";
-            procSource += "\t&SDTAssertItem.Expected = &ExpectedValue\r\n";
-            procSource += "\t&SDTAssertItem.Obtained = &ObtainedValue\r\n";
-            procSource += "\t&SDTAssert.GXUnitAssertInfos.Add(&SDTAssertItem)\r\n";
-            procSource += "endif\r\n";
-            procSource += "\r\n";
-
-            procSource += "//Retrieve the Current-Test Information\r\n";
-            procSource += "GetGXUnitSession('CurrentTest', &SessionValue)\r\n";
-            procSource += "&GXUnitTestCase.FromXml(&SessionValue)\r\n";
-            procSource += "\r\n";
-
-            procSource += "&GXUnitTestCase.Asserts.Add(&SDTAssert)\r\n";
-            procSource += "SetGXUnitSession('CurrentTest', &GXUnitTestCase.ToXml() )\r\n";
-            procSource += "\r\n";
-
+            String procSource = AssertProcSource();
 
             Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
             
@@ -302,6 +275,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             variables.AddFirst(v);
             v = new DTVariable("xmlWriter", "XMLWriter");
             variables.AddFirst(v);
+            v = new DTVariable("FoundFailFlag", Constants.Tipo.Boolean);
+            variables.AddFirst(v);
+            
 
             LinkedList<DTPropiedad> properties = new LinkedList<DTPropiedad>();
             DTPropiedad property = new DTPropiedad("IsMain", true);
@@ -327,7 +303,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "\tfor &GXUnitTestCase in &GXUnitSuite.TestCases\r\n";
             procSource += "\r\n";
-            procSource += "\t\tSetGXUnitSession('CurrentTest',&GXUnitTestCase.ToXml())\r\n";
+            procSource += "\t\tGXUnit_SetSession('CurrentTest',&GXUnitTestCase.ToXml())\r\n";
             procSource += "\t\tGXUnit_GetCurrentMillisecs(&StartDateTime, &Milliseconds)\r\n";
             procSource += "\r\n";
             procSource += "\t\t&testPgmName = &GXUnitTestCase.TestName.Trim()\r\n";
@@ -335,7 +311,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "\t\t//At This point in the Session we have the &GXUnitSuiteTestCase Assert Portion Saved\r\n";
             procSource += "\t\t//So let's retrieve it...\r\n";
-            procSource += "\t\tGetGXUnitSession('CurrentTest', &SessionValue)\r\n";
+            procSource += "\t\tGXUnit_GetSession('CurrentTest', &SessionValue)\r\n";
             procSource += "\t\t&ExecutedGXUnitTestCase.FromXml(&SessionValue)\r\n";
             procSource += "\r\n";
             procSource += "\t\tif &ExecutedGXUnitTestCase.TestName = &testPgmName\r\n";
@@ -347,7 +323,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "\t\t\t//Exeption\r\n";
             procSource += "\t\t\t&GXUnitAssert = new()\r\n";
-            procSource += "\t\t\t&GXUnitAssert.ObtainedValue = 'EXCEPTION'\r\n";
+            procSource += "\t\t\t&GXUnitAssert.Result = 'EXCEPTION'\r\n";
             procSource += "\t\t\t&GXUnitTestCase.Asserts.Add(&GXUnitAssert)\r\n";
             procSource += "\t\tendif\r\n";
             procSource += "\r\n";
@@ -355,6 +331,16 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "endfor\r\n";
             procSource += "\r\n";
+            procSource += "\r\n";
+            procSource += "//Now Evaluate the test-result based on its asserts\r\n";
+            procSource += "&FoundFailFlag = false\r\n";
+            procSource += "for &GXUnitAssert in &GXUnitTestCase.Asserts\r\n";
+            procSource += "\tif &GXUnitAssert.Result = 'EXCEPTION' or & GXUnitAssert.Result = 'FAIL'\r\n";
+            procSource += "\t\t&GXUnitTestCase.TestResult = 'FAIL'\r\n";
+            procSource += "\t\t&FoundFailFlag = true\r\n";
+            procSource += "\t\texit\r\n";
+            procSource += "\tendif\r\n";
+            procSource += "endfor\r\n";
             procSource += "\r\n";
             procSource += "//Now load the SDT for Output\r\n";
             procSource += "&OutputGXUnitSuite = new()\r\n";
@@ -378,9 +364,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return true;
         }
 
-        private bool CreateSetGXUnitSession()
+        private bool CreateGXUnit_SetSession()
         {
-            String nombre = "SetGXUnitSession";
+            String nombre = "GXUnit_SetSession";
             String procRules = "parm(in:&Key, in:&Value);";
 
             LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
@@ -412,9 +398,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return true;
         }
 
-        private bool CreateGetGXUnitSession()
+        private bool CreateGXUnit_GetSession()
         {
-            String nombre = "GetGXUnitSession";
+            String nombre = "GXUnit_GetSession";
             String procRules = "parm(in:&Key, out:&Value);";
 
             LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
@@ -441,7 +427,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&Value = &XmlReader.Value\r\n";
             procSource += "&XmlReader.Close()\r\n";
 
-            Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            Procedimiento p = new Procedimiento(nombre, procSource, procRules, Constants.GXUNIT_FOLDER, variables, propiedades);
 
             KBProcedureHandler m = new KBProcedureHandler();
             m.CrearProcedimiento(p, true);
@@ -450,22 +436,26 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         }
 
         private bool CreateSDTGXUnitAssert()
-        {
-            gxuSDTItem item = new gxuSDTItem("ObtainedValue", Constants.Tipo.VARCHAR, 4);
-            LinkedList<gxuSDTItem> listaitem = new LinkedList<gxuSDTItem>();
-            listaitem.AddFirst(item);
-            GxuSDTLevel root = new GxuSDTLevel("ROOT", listaitem, false, new LinkedList<GxuSDTLevel>());
+        { 
+           GxuSDTLevel root = new GxuSDTLevel("ROOT", false);
+
+            //Add Items
+            gxuSDTItem item = new gxuSDTItem("Result", Constants.Tipo.VARCHAR, 40);
+            root.AddItem(item);
+            
+            item = new gxuSDTItem("Variable", Constants.Tipo.VARCHAR, 80);
+            root.AddItem(item);
+
             item = new gxuSDTItem("Obtained", Constants.Tipo.VARCHAR, 9999);
-            listaitem = new LinkedList<gxuSDTItem>();
-            listaitem.AddFirst(item);
+            root.AddItem(item);
+            
             item = new gxuSDTItem("Expected", Constants.Tipo.VARCHAR, 9999);
-            listaitem.AddFirst(item);
-            LinkedList<GxuSDTLevel> niveles = new LinkedList<GxuSDTLevel>();
-            niveles.AddFirst(new GxuSDTLevel("GXUnitAssertInfo", listaitem, true, new LinkedList<GxuSDTLevel>()));
+            root.AddItem(item);
+
             LinkedList<DTPropiedad> prop = new LinkedList<DTPropiedad>();
             DTPropiedad p = new DTPropiedad("ExternalNamespace", "");
             prop.AddFirst(p);
-            SDTipo sdt = new SDTipo("GXUnitAssert", "GXUnit", niveles, root,prop);
+            SDTipo sdt = new SDTipo("GXUnitAssert", Constants.GXUNIT_FOLDER, null, root,prop);
             
             KBSDTHandler m = new KBSDTHandler();
             m.CrearSDT(sdt, true);
@@ -481,6 +471,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             gxuSDTItem item = new gxuSDTItem("TestName", Constants.Tipo.VARCHAR, 40);
             root.AddItem(item);
             item = new gxuSDTItem("TestTimeExecution", Constants.Tipo.NUMERIC, 16);
+            root.AddItem(item);
+            item = new gxuSDTItem("TestResult", Constants.Tipo.VARCHAR, 40);
             root.AddItem(item);
 
             //Add Test-Case Level
@@ -625,8 +617,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             CreateSDTGXUnitTestCase();
             CreateSDTGXUnitSuite();
 
-            CreateGetGXUnitSession();
-            CreateSetGXUnitSession();
+            CreateGXUnit_GetSession();
+            CreateGXUnit_SetSession();
 
             CreateAssertStringEquals();
             CreateAssertNumericEquals();
