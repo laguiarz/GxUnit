@@ -298,7 +298,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "GXUnit_LoadTests(&GXUnitSuiteCollection, &FileName)\r\n";
             procSource += "\r\n";
 
-            procSource += "//Run Tests\r\n";
+            procSource += "/*Run Tests\r\n";
             procSource += "for &GXUnitSuite in &GXUnitSuiteCollection\r\n";
             procSource += "\r\n";
             procSource += "\tfor &GXUnitTestCase in &GXUnitSuite.TestCases\r\n";
@@ -335,7 +335,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "//Now Evaluate the test-result based on its asserts\r\n";
             procSource += "&FoundFailFlag = false\r\n";
             procSource += "for &GXUnitAssert in &GXUnitTestCase.Asserts\r\n";
-            procSource += "\tif &GXUnitAssert.Result = 'EXCEPTION' or & GXUnitAssert.Result = 'FAIL'\r\n";
+            procSource += "\tif &GXUnitAssert.Result = 'EXCEPTION' or &GXUnitAssert.Result = 'FAIL'\r\n";
             procSource += "\t\t&GXUnitTestCase.TestResult = 'FAIL'\r\n";
             procSource += "\t\t&FoundFailFlag = true\r\n";
             procSource += "\t\texit\r\n";
@@ -351,10 +351,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "\r\n";
             procSource += "//Generate Output in root KB folder\r\n";
-            procSource += "&xmlWriter.Open(&FileName)";
-            procSource += "&xmlWriter.WriteRawText(&OutputGXUnitSuite.ToXml())";
-            procSource += "&xmlWriter.Close()";
-
+            procSource += "&xmlWriter.Open(&FileName)\r\n";
+            procSource += "&xmlWriter.WriteRawText(&OutputGXUnitSuite.ToXml())\r\n";
+            procSource += "&xmlWriter.Close()\r\n";
+            procSource += "*/";
 
             Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, properties);
 
