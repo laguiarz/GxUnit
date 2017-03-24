@@ -42,7 +42,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             string kbPath = KBManager.getTargetPath();
             string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
-            XMLName = resultPath + System.DateTime.Now.ToString("R_yyyyMMdd_HHmmss") + ".xml";
+            XMLName = resultPath + System.DateTime.Now.ToString("GXUnitR_yyyyMMdd_HHmmss") + ".xml";
 
             //Check if the file already exists and delete it
             try
@@ -90,6 +90,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             string CurrentSuiteName = "";
             string PreviousSuiteName = "";
+            bool firstFlag = false;
+            bool hasContentFlag = false;
+
             foreach (DTTestCase testcase1 in lista)
             {
 
@@ -104,6 +107,11 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
                             CurrentSuiteName = testcase.GetFolder();
                             if (CurrentSuiteName != PreviousSuiteName)
                             {
+                                if (firstFlag)
+                                    firstFlag = false;
+                                else
+                                    procSource += "&GXUnitSuiteCollection.Add(&GXUnitSuite)\r\n";
+
                                 procSource += "\r\n";
                                 procSource += "&GXUnitSuite = new()\r\n";
                                 procSource += "&GXUnitSuite.SuiteName = '" + CurrentSuiteName + "'\r\n";
@@ -111,16 +119,22 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
                                 PreviousSuiteName = CurrentSuiteName;
                             }
 
+                            hasContentFlag = true;
                             procSource += "&GXUnitTestCase = new()\r\n";
                             procSource += "&GXUnitTestCase.TestName = '" + testcase.GetNombre() + "'\r\n";
                             procSource += "&GXUnitSuite.TestCases.Add(&GXUnitTestCase)\r\n";
-                            procSource += "&GXUnitSuiteCollection.Add(&GXUnitSuite)\r\n";
                             procSource += "\r\n";
 
                         }
 
                     }
                 }
+            }
+
+            if (hasContentFlag)
+            {
+                procSource += "&GXUnitSuiteCollection.Add(&GXUnitSuite)\r\n";
+                procSource += "\r\n";
             }
 
             //Now Create an entry for static-link
