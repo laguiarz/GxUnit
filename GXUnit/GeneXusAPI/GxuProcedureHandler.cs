@@ -62,7 +62,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         proc.Parent = GxuFolderHandler.GetRootFolder(model);
                 }
 
-                //Agrego Variables
+                //Add Variables
                 foreach (GxuVariable var in gxuProcedure.GetVariables())
                 {
                     AddVariable(proc, var);
@@ -180,7 +180,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                 {
                     var.Type = GxHelper.ConvertToGXType(var1.DataType);
                     var.Length = var1.Length;
-                    var.Decimals = var1.Length;
+                    var.Decimals = var1.Decimals;
                     RemoveVariable(proc, var);
                     proc.Variables.Variables.Add(var);
                 }
