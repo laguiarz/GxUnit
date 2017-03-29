@@ -293,7 +293,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "GXUnit_LoadTests(&GXUnitSuiteCollection, &FileName)\r\n";
             procSource += "\r\n";
 
-            procSource += "/*Run Tests\r\n";
+            procSource += "//Run Tests\r\n";
             procSource += "for &GXUnitSuite in &GXUnitSuiteCollection\r\n";
             procSource += "\r\n";
             procSource += "\tfor &GXUnitTestCase in &GXUnitSuite.TestCases\r\n";
@@ -321,21 +321,21 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\t\t\t&GXUnitAssert.Result = 'EXCEPTION'\r\n";
             procSource += "\t\t\t&GXUnitTestCase.Asserts.Add(&GXUnitAssert)\r\n";
             procSource += "\t\tendif\r\n";
+            procSource += "//Now Evaluate the test-result based on its asserts\r\n";
+            procSource += "\t\t&FoundFailFlag = false\r\n";
+            procSource += "\t\tfor &GXUnitAssert in &GXUnitTestCase.Asserts\r\n";
+            procSource += "\t\t\tif &GXUnitAssert.Result = 'EXCEPTION' or &GXUnitAssert.Result = 'FAIL'\r\n";
+            procSource += "\t\t\t\t&GXUnitTestCase.TestResult = 'FAIL'\r\n";
+            procSource += "\t\t\t\t&FoundFailFlag = true\r\n";
+            procSource += "\t\t\t\texit\r\n";
+            procSource += "\t\t\tendif\r\n";
+            procSource += "\t\tendfor\r\n";
+            procSource += "\r\n";
             procSource += "\r\n";
             procSource += "\tendfor\r\n";
             procSource += "\r\n";
             procSource += "endfor\r\n";
             procSource += "\r\n";
-            procSource += "\r\n";
-            procSource += "//Now Evaluate the test-result based on its asserts\r\n";
-            procSource += "&FoundFailFlag = false\r\n";
-            procSource += "for &GXUnitAssert in &GXUnitTestCase.Asserts\r\n";
-            procSource += "\tif &GXUnitAssert.Result = 'EXCEPTION' or &GXUnitAssert.Result = 'FAIL'\r\n";
-            procSource += "\t\t&GXUnitTestCase.TestResult = 'FAIL'\r\n";
-            procSource += "\t\t&FoundFailFlag = true\r\n";
-            procSource += "\t\texit\r\n";
-            procSource += "\tendif\r\n";
-            procSource += "endfor\r\n";
             procSource += "\r\n";
             procSource += "//Now load the SDT for Output\r\n";
             procSource += "&OutputGXUnitSuite = new()\r\n";
@@ -349,7 +349,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&xmlWriter.Open(&FileName)\r\n";
             procSource += "&xmlWriter.WriteRawText(&OutputGXUnitSuite.ToXml())\r\n";
             procSource += "&xmlWriter.Close()\r\n";
-            procSource += "*/";
+            procSource += "//";
 
             GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, properties);
 

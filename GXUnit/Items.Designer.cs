@@ -70,7 +70,7 @@ namespace PGGXUnit.Packages.GXUnit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Re Generate Code.
+        ///   Looks up a localized string similar to Regenerate Code.
         /// </summary>
         public static string AutoGenerate {
             get {
@@ -166,7 +166,7 @@ namespace PGGXUnit.Packages.GXUnit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Generar.
+        ///   Looks up a localized string similar to Generate.
         /// </summary>
         public static string MyFirstCommand {
             get {
@@ -175,7 +175,7 @@ namespace PGGXUnit.Packages.GXUnit {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ejecutar.
+        ///   Looks up a localized string similar to Execute.
         /// </summary>
         public static string MySecondCommand {
             get {
@@ -190,6 +190,15 @@ namespace PGGXUnit.Packages.GXUnit {
             get {
                 object obj = ResourceManager.GetObject("Object", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Results Viewer.
+        /// </summary>
+        public static string seeResults {
+            get {
+                return ResourceManager.GetString("seeResults", resourceCulture);
             }
         }
         

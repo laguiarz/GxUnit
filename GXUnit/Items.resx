@@ -112,12 +112,12 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="document" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\document.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -128,10 +128,10 @@
     <value>Resources\Object.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="MyFirstCommand" xml:space="preserve">
-    <value>Generar</value>
+    <value>Generate</value>
   </data>
   <data name="MySecondCommand" xml:space="preserve">
-    <value>Ejecutar</value>
+    <value>Execute</value>
   </data>
   <data name="EliminarGXUnit" xml:space="preserve">
     <value>Delete GXUnit Objects</value>
@@ -140,7 +140,7 @@
     <value>Create GXUnit Objects</value>
   </data>
   <data name="AutoGenerate" xml:space="preserve">
-    <value>Re Generate Code</value>
+    <value>Regenerate Code</value>
   </data>
   <data name="TestCaseIconMini" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\1297981841_stock_test-mode.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -171,5 +171,8 @@
   </data>
   <data name="GXUnitWindow" xml:space="preserve">
     <value>GXUnit</value>
+  </data>
+  <data name="seeResults" xml:space="preserve">
+    <value>Results Viewer</value>
   </data>
 </root>
