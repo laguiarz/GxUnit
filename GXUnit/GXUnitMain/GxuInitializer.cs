@@ -63,8 +63,6 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             variables.AddFirst(v);
             v = new GxuVariable("SDTAssert", Constants.GxuDataType.SDT, "GXUnitAssert");
             variables.AddFirst(v);
-            v = new GxuVariable("SDTSuite", Constants.GxuDataType.SDT, "GXUnitSuite");
-            variables.AddFirst(v);
             v = new GxuVariable("SessionValue", Constants.GxuDataType.VARCHAR, 9999, 0);
             variables.AddFirst(v);
             v = new GxuVariable("VariableName", Constants.GxuDataType.VARCHAR, 80, 0);
@@ -94,8 +92,6 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             v = new GxuVariable("GXUnitTestCase", "GXUnitTestCase");
             variables.AddFirst(v);
             v = new GxuVariable("SDTAssert", Constants.GxuDataType.SDT, "GXUnitAssert");
-            variables.AddFirst(v);
-            v = new GxuVariable("SDTSuite", Constants.GxuDataType.SDT, "GXUnitSuite");
             variables.AddFirst(v);
             v = new GxuVariable("SessionValue", Constants.GxuDataType.VARCHAR, 9999, 0);
             variables.AddFirst(v);
@@ -315,13 +311,13 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\t\t\t&GXUnitTestCase.TestTimeExecution = GXUnit_GetElapsedMilliseconds(&StartDateTime, &Milliseconds)\r\n";
             procSource += "\r\n";
             procSource += "\t\telse\r\n";
-            procSource += "\r\n";
             procSource += "\t\t\t//Exeption\r\n";
             procSource += "\t\t\t&GXUnitAssert = new()\r\n";
             procSource += "\t\t\t&GXUnitAssert.Result = 'EXCEPTION'\r\n";
             procSource += "\t\t\t&GXUnitTestCase.Asserts.Add(&GXUnitAssert)\r\n";
             procSource += "\t\tendif\r\n";
-            procSource += "//Now Evaluate the test-result based on its asserts\r\n";
+            procSource += "\r\n";
+            procSource += "\t\t//Now Evaluate the test-result based on its asserts\r\n";
             procSource += "\t\t&FoundFailFlag = false\r\n";
             procSource += "\t\tfor &GXUnitAssert in &GXUnitTestCase.Asserts\r\n";
             procSource += "\t\t\tif &GXUnitAssert.Result = 'EXCEPTION' or &GXUnitAssert.Result = 'FAIL'\r\n";
@@ -330,7 +326,6 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\t\t\t\texit\r\n";
             procSource += "\t\t\tendif\r\n";
             procSource += "\t\tendfor\r\n";
-            procSource += "\r\n";
             procSource += "\r\n";
             procSource += "\tendfor\r\n";
             procSource += "\r\n";
