@@ -10,12 +10,12 @@ using PGGXUnit.Packages.GXUnit.GeneXusAPI;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GXUnit")]
-[assembly: AssemblyDescription("sites.google.com/site/proyectogxunit")]
+[assembly: AssemblyTitle("GXUnit 3.0")]
+[assembly: AssemblyDescription("For more information see: http://wiki.genexus.com/commwiki/servlet/wiki?33879,GXUnit3. Source-Code available at https://github.com/laguiarz/GxUnit")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Proyect GXUnit for unit testing in GeneXus")]
+[assembly: AssemblyCompany("GX-Community Project")]
 [assembly: AssemblyProduct("GXUnit")]
-[assembly: AssemblyCopyright("2013")]
+[assembly: AssemblyCopyright("2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -23,12 +23,12 @@ using PGGXUnit.Packages.GXUnit.GeneXusAPI;
 // as a GeneXus Package
 [assembly: PackageAttribute(typeof(PGGXUnit.Packages.GXUnit.GXUnitPackage))]
 
-[assembly: KBObjectsDeclarationAttribute(
-	typeof(TestCase)
-	)]
+//[assembly: KBObjectsDeclarationAttribute(
+//	typeof(TestCase)
+//	)]
 
 [assembly: KBObjectsDeclarationAttribute(
-    typeof(TestSuite)
+    typeof(GxuTestSuite)
     )]
 
 [assembly: KBObjectsDeclarationAttribute(
@@ -55,5 +55,5 @@ using PGGXUnit.Packages.GXUnit.GeneXusAPI;
 //
 // You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("3.1")]
+[assembly: AssemblyFileVersion("3.1")]

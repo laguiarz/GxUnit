@@ -1,65 +1,78 @@
-﻿using System;
+﻿/*
+ * 2017-03-27   LAZ Renamed stuff for language consistency.
+ *                  Changed Get function to get/set properties
+ */
+
+using System;
 
 namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 {
-    class gxuSDTItem
+    class GxuSDTItem
     {
-        private String nombre;
-        private Constants.Tipo tipo;
-        private String tipocompuesto;
-        private int longitud;
+        private String name;
+        private Constants.GxuDataType dataType;
+        private String complexTypeName;
+        private int length;
         private bool isCollection;
 
-        public gxuSDTItem()
+        public GxuSDTItem()
         { 
         }
 
-        public gxuSDTItem(String nombre, Constants.Tipo tipo, int longitud)
+        public GxuSDTItem(String name, Constants.GxuDataType dataType, int length)
         {
-            this.nombre     = nombre;
-            this.tipo       = tipo;
-            this.longitud   = longitud;
+            this.name     = name;
+            this.dataType = dataType;
+            this.length   = length;
         }
 
-        public gxuSDTItem(String nombre, Constants.Tipo tipo, String tipocompuesto)
+        public GxuSDTItem(String name, Constants.GxuDataType dataType, String complexTypeName)
         {
-            this.nombre = nombre;
-            this.tipo = tipo;
-            this.tipocompuesto = tipocompuesto;
+            this.name           = name;
+            this.dataType       = dataType;
+            this.complexTypeName = complexTypeName;
         }
 
-        public gxuSDTItem(String nombre, Constants.Tipo tipo, String tipocompuesto, bool isCollection)
+        public GxuSDTItem(String name, Constants.GxuDataType dataType, String complexTypeName, bool isCollection)
         {
-            this.nombre = nombre;
-            this.tipo = tipo;
-            this.tipocompuesto = tipocompuesto;
+            this.name = name;
+            this.dataType = dataType;
+            this.complexTypeName = complexTypeName;
             this.isCollection = isCollection;
         }
 
-        public String GetNombre()
+        public String Name
         {
-            return this.nombre;
+            get { return name; }
+            set { name = value; }
         }
 
-        public Constants.Tipo GetTipo()
+        public Constants.GxuDataType DataType
         {
-            return this.tipo;
+            get { return dataType; }
+            set { dataType = value; }
         }
 
-        public int GetLongitud()
+       public int Length
         {
-            return this.longitud;
+            get { return length; }
+            set { length = value; }
+
         }
 
-        public String GetTipoCompuesto()
+        public String ComplexTypeName
         {
-            return this.tipocompuesto;
+            get { return complexTypeName; }
+            set { complexTypeName = value; }
         }
 
-        public bool GetIsCollection()
+       public bool IsCollection
         {
-            return this.isCollection;
+            get { return isCollection; }
+            set { isCollection = value; }
+
         }
-        
+
+  
     }
 }

@@ -34,18 +34,18 @@ namespace PGGXUnit.Packages.GXUnit.MSBuildAPI
             }
             else
             {
-                LinkedList<DTTestCase> testCaseList = new LinkedList<DTTestCase>();
-                Folder GXUnitSuitesFolder = KBFolderHandler.GetFolderObject(KB.DesignModel, "GXUnitSuites");
+                LinkedList<GxuTestItem> testCaseList = new LinkedList<GxuTestItem>();
+                Folder GXUnitSuitesFolder = GxuFolderHandler.GetFolderObject(KB.DesignModel, "GXUnitSuites");
                 foreach (KBObject suite in GXUnitSuitesFolder.Objects)
                 {
                     if (suite is Folder)
                     {
-                        testCaseList.AddLast(new DTTestCase(suite.Name, "GXUnitSuites", true));
+                        testCaseList.AddLast(new GxuTestItem(suite.Name, "GXUnitSuites", true));
                         foreach (KBObject testCase in (suite as Folder).Objects)
                         {
                             if (testCase is Procedure)
                             {
-                                testCaseList.AddLast(new DTTestCase(testCase.Name, suite.Name, false));
+                                testCaseList.AddLast(new GxuTestItem(testCase.Name, suite.Name, false));
                             }
                         }
                     }
@@ -53,12 +53,12 @@ namespace PGGXUnit.Packages.GXUnit.MSBuildAPI
 
                 ContextHandler.Model = KB.DesignModel;
 
-                RunnerHandler mr = RunnerHandler.GetInstance();
+                GxuRunner mr = GxuRunner.GetInstance();
                 if (testsSelected(testCaseList))
                 {
                     mr.RegenerateTestLoaderProcedure(testCaseList, out xmlName);
 
-                    Procedure runner = KBProcedureHandler.GetProcedureObject(KB.DesignModel, Constants.RUNNER_PROC);
+                    Procedure runner = GxuProcedureHandler.GetProcedureObject(KB.DesignModel, Constants.RUNNER_PROC);
 
                     if (runner == null)
                     {
@@ -78,12 +78,12 @@ namespace PGGXUnit.Packages.GXUnit.MSBuildAPI
             return isSuccsess;
         }
 
-        private bool testsSelected(LinkedList<DTTestCase> tests)
+        private bool testsSelected(LinkedList<GxuTestItem> tests)
         {
-            foreach (DTTestCase item in tests)
+            foreach (GxuTestItem item in tests)
             {
                 // No es una Suite, es un Test Case
-                if (!item.GetSuite())
+                if (!item.IsSuite)
                 {
                     return true;
                 }

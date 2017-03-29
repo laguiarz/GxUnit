@@ -59,6 +59,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             this.SuitesTree.TabIndex = 1;
             this.SuitesTree.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.SuitesTree_AfterCheck);
             this.SuitesTree.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.SuitesTree_ItemDrag);
+            this.SuitesTree.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.SuitesTree_AfterSelect);
             this.SuitesTree.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.SuitesTree_NodeMouseClick);
             this.SuitesTree.DragDrop += new System.Windows.Forms.DragEventHandler(this.SuitesTree_DragDrop);
             this.SuitesTree.DragEnter += new System.Windows.Forms.DragEventHandler(this.SuitesTree_DragEnter);
@@ -138,11 +139,11 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             this.Controls.Add(this.btnUpdate);
             this.Name = "GXUnitMainWindow";
             this.Size = new System.Drawing.Size(312, 453);
+            this.Load += new System.EventHandler(this.GXUnitMainWindow_Load);
             this.SuitesTreeCMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
-           
         }
 
         #endregion

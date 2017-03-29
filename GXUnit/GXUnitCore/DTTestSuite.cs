@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 {
-    class DTTestSuite : DTObjeto
+    class DTTestSuite : GxuObject
     {
         private String Source;
         private String Folder;
-        private LinkedList<DTVariable> Variables;
+        private LinkedList<GxuVariable> Variables;
         private Type Tipo;
         //        private String ObjectToTest;
 
@@ -20,7 +20,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         //        /// <param name="folder">Folder padre del objeto Gx testable</param>
         //        /// <param name="variables">Variables del objeto Gx testable</param>
 
-        public DTTestSuite (String nombre, String source, String folder, LinkedList<DTVariable> variables, Type tipo) : base(nombre)
+        public DTTestSuite (String nombre, String source, String folder, LinkedList<GxuVariable> variables, Type tipo) : base(nombre)
         {
             Source = source;
             Folder = folder;
@@ -43,7 +43,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return Folder;
         }
 
-        public LinkedList<DTVariable> GetVariables()
+        public LinkedList<GxuVariable> GetVariables()
         {
             return Variables;
         }
@@ -63,7 +63,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             Folder = folder;
         }
 
-        public void SetVariables(LinkedList<DTVariable> vars)
+        public void SetVariables(LinkedList<GxuVariable> vars)
         {
             Variables = vars;
         }

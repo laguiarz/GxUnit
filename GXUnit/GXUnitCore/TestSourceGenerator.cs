@@ -43,10 +43,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             {
                 source = GetSourceForTransaction((DTTransaccion)objectToTest);
             }
-            else if (objectToTest is DTDataProvider)
-            {
-                source = GetSourceForDataProvider((DTDataProvider)objectToTest);
-            }
+            //else if (objectToTest is DTDataProvider)
+            //{
+            //    source = GetSourceForDataProvider((DTDataProvider)objectToTest);
+            //}
             return source;
         }
 
@@ -180,65 +180,65 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             return source;
         }
 
-        private String GetSourceForDataProvider(DTDataProvider objectToTest)
-        {
-            String source = "/* Setup */\r\n\r\n";
-            source += "/* Parameters definition */\r\n";
-            foreach (KBParameterHandler parm in objectToTest.GetParametros())
-            {
-                if (parm.GetTipo() != Constants.PARM_OUT) // Si no es out
-                {
-                    if (parm.isSimple())
-                        source += "&" + parm.GetVariable().Name + " = " + parm.defaultValue() + "\r\n";
-                    else
-                        source += "//&" + parm.GetVariable().Name + " = \r\n";
-                }
-            }
-            source += "\r\n";
-            source += "/* Object call */\r\n";
-            source += objectToTest.GetNombre() + ".Call(";
-            foreach (KBParameterHandler parm in objectToTest.GetParametros())
-            {
-                if (parm.GetEstaEnSignature())
-                    source += "&" + parm.GetVariable().Name + ",";
-            }
-            source = source.Substring(0, source.Length - 1);
-            source += ")\r\n";
+        //private String GetSourceForDataProvider(DTDataProvider objectToTest)
+        //{
+        //    String source = "/* Setup */\r\n\r\n";
+        //    source += "/* Parameters definition */\r\n";
+        //    foreach (KBParameterHandler parm in objectToTest.GetParametros())
+        //    {
+        //        if (parm.GetTipo() != Constants.PARM_OUT) // Si no es out
+        //        {
+        //            if (parm.isSimple())
+        //                source += "&" + parm.GetVariable().Name + " = " + parm.defaultValue() + "\r\n";
+        //            else
+        //                source += "//&" + parm.GetVariable().Name + " = \r\n";
+        //        }
+        //    }
+        //    source += "\r\n";
+        //    source += "/* Object call */\r\n";
+        //    source += objectToTest.GetNombre() + ".Call(";
+        //    foreach (KBParameterHandler parm in objectToTest.GetParametros())
+        //    {
+        //        if (parm.GetEstaEnSignature())
+        //            source += "&" + parm.GetVariable().Name + ",";
+        //    }
+        //    source = source.Substring(0, source.Length - 1);
+        //    source += ")\r\n";
 
-            source += "\r\n";
-            source += "/* Expected values definition */\r\n";
-            foreach (KBParameterHandler parm in KBObjectHandler.GetInstance().GetAtt(objectToTest.GetOutput(), objectToTest.GetTipoOutput()))
-            {
-                String outputVar = objectToTest.GetOutput();
-                if (objectToTest.GetIsCollSDT())
-                    outputVar += Constants.ITEM;
-                if (!objectToTest.GetIsCollOutput() && !objectToTest.GetIsCollSDT())
-                    outputVar += Constants.VALOR_ESPERADO;
-                if (parm.isSimple())
-                    source += "&" + outputVar + "." + parm.GetVarName() + " = " + parm.defaultValue() + "\r\n";
-                else
-                    source += "//&" + outputVar + "." + parm.GetVarName() + " = \r\n";
-            }
-            if (objectToTest.GetIsCollSDT())
-            {
-                String nombre = objectToTest.GetOutput();
-                if (!objectToTest.GetIsCollOutput())
-                    nombre += Constants.VALOR_ESPERADO;
-                source += "&" + nombre + ".Add(&" + objectToTest.GetOutput() + Constants.ITEM + ")\r\n";
-            }
-            if (objectToTest.GetIsCollOutput())
-            {
-                source += "&" + objectToTest.GetOutput() + Constants.VALOR_ESPERADO + ".Add(&" + objectToTest.GetOutput() + ")\r\n";
-            }
+        //    source += "\r\n";
+        //    source += "/* Expected values definition */\r\n";
+        //    foreach (KBParameterHandler parm in KBObjectHandler.GetInstance().GetAtt(objectToTest.GetOutput(), objectToTest.GetTipoOutput()))
+        //    {
+        //        String outputVar = objectToTest.GetOutput();
+        //        if (objectToTest.GetIsCollSDT())
+        //            outputVar += Constants.ITEM;
+        //        if (!objectToTest.GetIsCollOutput() && !objectToTest.GetIsCollSDT())
+        //            outputVar += Constants.VALOR_ESPERADO;
+        //        if (parm.isSimple())
+        //            source += "&" + outputVar + "." + parm.GetVarName() + " = " + parm.defaultValue() + "\r\n";
+        //        else
+        //            source += "//&" + outputVar + "." + parm.GetVarName() + " = \r\n";
+        //    }
+        //    if (objectToTest.GetIsCollSDT())
+        //    {
+        //        String nombre = objectToTest.GetOutput();
+        //        if (!objectToTest.GetIsCollOutput())
+        //            nombre += Constants.VALOR_ESPERADO;
+        //        source += "&" + nombre + ".Add(&" + objectToTest.GetOutput() + Constants.ITEM + ")\r\n";
+        //    }
+        //    if (objectToTest.GetIsCollOutput())
+        //    {
+        //        source += "&" + objectToTest.GetOutput() + Constants.VALOR_ESPERADO + ".Add(&" + objectToTest.GetOutput() + ")\r\n";
+        //    }
 
-            source += "\r\n";
-            source += "/* Assertions */\r\n";
-            source += "&" + Constants.RESULTADO + " = &" + objectToTest.GetOutput() + Constants.RESULTADO + ".ToXML()\r\n";
-            source += "&" + Constants.VALOR_ESPERADO + " = &" + objectToTest.GetOutput() + Constants.VALOR_ESPERADO + ".ToXML()\r\n";
-            source += "AssertStringEquals.Call(&" + Constants.RESULTADO + ", &" + Constants.VALOR_ESPERADO + ")\r\n";
-            source += "\r\n/* Teardown */\r\n";
-            return source;
-        }
+        //    source += "\r\n";
+        //    source += "/* Assertions */\r\n";
+        //    source += "&" + Constants.RESULTADO + " = &" + objectToTest.GetOutput() + Constants.RESULTADO + ".ToXML()\r\n";
+        //    source += "&" + Constants.VALOR_ESPERADO + " = &" + objectToTest.GetOutput() + Constants.VALOR_ESPERADO + ".ToXML()\r\n";
+        //    source += "AssertStringEquals.Call(&" + Constants.RESULTADO + ", &" + Constants.VALOR_ESPERADO + ")\r\n";
+        //    source += "\r\n/* Teardown */\r\n";
+        //    return source;
+        //}
 
     }
 }

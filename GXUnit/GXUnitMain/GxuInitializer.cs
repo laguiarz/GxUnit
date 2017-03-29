@@ -1,25 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using PGGXUnit.Packages.GXUnit.GeneXusAPI;
-using Artech.Genexus.Common.Objects;
-using Artech.Genexus.Common.Parts.SDT;
-using Artech.Architecture.Common.Objects;
-using Artech.Architecture.UI.Framework.Services;
-using Artech.Genexus.Common;
+
 
 namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 {
-    public class GXUnitInialize
+    public class GxuInitializer
     {
 
-        private static GXUnitInialize instance = new GXUnitInialize();
+        private static GxuInitializer instance = new GxuInitializer();
 
-        private GXUnitInialize()
+        private GxuInitializer()
         {
         }
 
-        public static GXUnitInialize GetInstance()
+        public static GxuInitializer GetInstance()
         {
             return instance;
         }
@@ -59,29 +54,29 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             
             String procRules = "Parm(in:&VariableName, in:&ObtainedValue, in:&ExpectedValue);";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("ObtainedValue", Constants.Tipo.NUMERIC, 18, 4);
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("ObtainedValue", Constants.GxuDataType.NUMERIC, 18, 4);
             variables.AddFirst(v);
-            v = new DTVariable("ExpectedValue", Constants.Tipo.NUMERIC, 18, 4);
+            v = new GxuVariable("ExpectedValue", Constants.GxuDataType.NUMERIC, 18, 4);
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitTestCase", "GXUnitTestCase");
+            v = new GxuVariable("GXUnitTestCase", "GXUnitTestCase");
             variables.AddFirst(v);
-            v = new DTVariable("SDTAssert", Constants.Tipo.SDT, "GXUnitAssert");
+            v = new GxuVariable("SDTAssert", Constants.GxuDataType.SDT, "GXUnitAssert");
             variables.AddFirst(v);
-            v = new DTVariable("SDTSuite", Constants.Tipo.SDT, "GXUnitSuite");
+            v = new GxuVariable("SDTSuite", Constants.GxuDataType.SDT, "GXUnitSuite");
             variables.AddFirst(v);
-            v = new DTVariable("SessionValue", Constants.Tipo.VARCHAR, 9999, 0);
+            v = new GxuVariable("SessionValue", Constants.GxuDataType.VARCHAR, 9999, 0);
             variables.AddFirst(v);
-            v = new DTVariable("VariableName", Constants.Tipo.VARCHAR, 80, 0);
+            v = new GxuVariable("VariableName", Constants.GxuDataType.VARCHAR, 80, 0);
             variables.AddFirst(v);
 
-            LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
+            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
 
             String procSource = AssertProcSource();
            
-            Procedimiento p = new Procedimiento(nombre,procSource,procRules,"GXUnit",variables,propiedades);
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(p,true);
+            GxuProcedure p = new GxuProcedure(nombre,procSource,procRules,"GXUnit",variables,propiedades);
+            GxuProcedureHandler m = new GxuProcedureHandler();
+            m.CreateProcedure(p,true);
 
             return true;
         }
@@ -91,30 +86,30 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             String nombre = "GXUnit_AssertStringEquals";
             String procRules = "Parm(in:&VariableName, in:&ObtainedValue, in:&ExpectedValue);";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("ObtainedValue", Constants.Tipo.VARCHAR, 1024, 4);
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("ObtainedValue", Constants.GxuDataType.VARCHAR, 1024, 4);
             variables.AddFirst(v);
-            v = new DTVariable("ExpectedValue", Constants.Tipo.VARCHAR, 1024, 4);
+            v = new GxuVariable("ExpectedValue", Constants.GxuDataType.VARCHAR, 1024, 4);
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitTestCase", "GXUnitTestCase");
+            v = new GxuVariable("GXUnitTestCase", "GXUnitTestCase");
             variables.AddFirst(v);
-            v = new DTVariable("SDTAssert", Constants.Tipo.SDT, "GXUnitAssert");
+            v = new GxuVariable("SDTAssert", Constants.GxuDataType.SDT, "GXUnitAssert");
             variables.AddFirst(v);
-            v = new DTVariable("SDTSuite", Constants.Tipo.SDT, "GXUnitSuite");
+            v = new GxuVariable("SDTSuite", Constants.GxuDataType.SDT, "GXUnitSuite");
             variables.AddFirst(v);
-            v = new DTVariable("SessionValue", Constants.Tipo.VARCHAR, 9999, 0);
+            v = new GxuVariable("SessionValue", Constants.GxuDataType.VARCHAR, 9999, 0);
             variables.AddFirst(v);
-            v = new DTVariable("VariableName", Constants.Tipo.VARCHAR, 80, 0);
+            v = new GxuVariable("VariableName", Constants.GxuDataType.VARCHAR, 80, 0);
             variables.AddFirst(v);
 
-            LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
+            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
 
             String procSource = AssertProcSource();
 
-            Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
             
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(p,true);
+            GxuProcedureHandler m = new GxuProcedureHandler();
+            m.CreateProcedure(p,true);
             
             return true;
         }
@@ -124,14 +119,14 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             String nombre = "GXUnit_GetCurrentMillisecs";
             String procRules = "Parm(out:&DateTime, out:&Milliseconds);";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("DateTime", Constants.Tipo.DATETIME);
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("DateTime", Constants.GxuDataType.DATETIME);
             variables.AddFirst(v);
-            v = new DTVariable("Milliseconds", Constants.Tipo.NUMERIC, 16, 0);
+            v = new GxuVariable("Milliseconds", Constants.GxuDataType.NUMERIC, 16, 0);
             variables.AddFirst(v);
 
-            LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
-            DTPropiedad property = new DTPropiedad("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087");
+            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087");
             propiedades.AddFirst(property);
 
             String procSource = "";
@@ -147,10 +142,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "java [!&milliseconds!] = System.currentTimeMillis();\r\n";
             procSource += "\r\n";
 
-            Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
 
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(p, true);
+            GxuProcedureHandler m = new GxuProcedureHandler();
+            m.CreateProcedure(p, true);
 
             return true;
         }
@@ -160,16 +155,16 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             String nombre = "GXUnit_GetElapsedMilliseconds";
             String procRules = "parm(in:&StartDateTime, in:&StartMilliseconds, 	out:&ElapsedMilliseconds);";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("StartDateTime", Constants.Tipo.DATETIME);
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("StartDateTime", Constants.GxuDataType.DATETIME);
             variables.AddFirst(v);
-            v = new DTVariable("StartMilliseconds", Constants.Tipo.NUMERIC, 16, 0);
+            v = new GxuVariable("StartMilliseconds", Constants.GxuDataType.NUMERIC, 16, 0);
             variables.AddFirst(v);
-            v = new DTVariable("ElapsedMilliseconds", Constants.Tipo.NUMERIC, 16, 0);
+            v = new GxuVariable("ElapsedMilliseconds", Constants.GxuDataType.NUMERIC, 16, 0);
             variables.AddFirst(v);
 
-            LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
-            DTPropiedad property = new DTPropiedad("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087");
+            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087");
             propiedades.AddFirst(property);
 
             String procSource = "";
@@ -185,10 +180,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "csharp  [!&ElapsedMilliseconds!] = (long) ((DateTime.UtcNow - [!&StartDateTime!]).TotalMilliseconds);\r\n";
             procSource += "\r\n";
 
-            Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
 
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(p, true);
+            GxuProcedureHandler m = new GxuProcedureHandler();
+            m.CreateProcedure(p, true);
 
             return true;
         }
@@ -198,19 +193,19 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             String nombre = "GXUnit_LoadTests";
             String procRules = "parm(out:&GXUnitSuiteCollection, out:&ResultFileName);";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("GXUnitSuite", "GXUnitSuite");
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("GXUnitSuite", "GXUnitSuite");
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitSuiteCollection", "GXUnitSuite", true); 
+            v = new GxuVariable("GXUnitSuiteCollection", "GXUnitSuite", true); 
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitSuiteTestCase", "GXUnitSuite.TestCase"); 
+            v = new GxuVariable("GXUnitSuiteTestCase", "GXUnitSuite.TestCase"); 
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitTestCase", "GXUnitTestCase");
+            v = new GxuVariable("GXUnitTestCase", "GXUnitTestCase");
             variables.AddFirst(v);
-            v = new DTVariable("ResultFileName", Constants.Tipo.VARCHAR, 512, 0);
+            v = new GxuVariable("ResultFileName", Constants.GxuDataType.VARCHAR, 512, 0);
             variables.AddFirst(v);
 
-            LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
+            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
 
             String procSource = "";
             procSource += "/*\r\n";
@@ -236,10 +231,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&GXUnitSuiteCollection.Add(&GXUnitSuite)";
             procSource += "";
 
-            Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
 
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(p, true);
+            GxuProcedureHandler m = new GxuProcedureHandler();
+            m.CreateProcedure(p, true);
 
             return true;
         }
@@ -250,40 +245,40 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             String nombre = Constants.RUNNER_PROC; 
             String procRules = "";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("ExecutedGXUnitTestCase", "GXUnitTestCase");
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("ExecutedGXUnitTestCase", "GXUnitTestCase");
             variables.AddFirst(v);
-            v = new DTVariable("FileName", Constants.Tipo.VARCHAR, 512, 0);
+            v = new GxuVariable("FileName", Constants.GxuDataType.VARCHAR, 512, 0);
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitAssert", "GXUnitAssert");
+            v = new GxuVariable("GXUnitAssert", "GXUnitAssert");
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitSuite", "GXUnitSuite");
+            v = new GxuVariable("GXUnitSuite", "GXUnitSuite");
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitSuiteCollection", "GXUnitSuite", true); 
+            v = new GxuVariable("GXUnitSuiteCollection", "GXUnitSuite", true); 
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitTestCase", "GXUnitTestCase");
+            v = new GxuVariable("GXUnitTestCase", "GXUnitTestCase");
             variables.AddFirst(v);
-            v = new DTVariable("Milliseconds", Constants.Tipo.NUMERIC, 16, 0);
+            v = new GxuVariable("Milliseconds", Constants.GxuDataType.NUMERIC, 16, 0);
             variables.AddFirst(v);
-            v = new DTVariable("OutputGXUnitSuite", "GXUnitSuite");
+            v = new GxuVariable("OutputGXUnitSuite", "GXUnitSuite");
             variables.AddFirst(v);
-            v = new DTVariable("SessionValue", Constants.Tipo.VARCHAR, 9999,0);
+            v = new GxuVariable("SessionValue", Constants.GxuDataType.VARCHAR, 9999,0);
             variables.AddFirst(v);
-            v = new DTVariable("StartDateTime", Constants.Tipo.DATETIME);
+            v = new GxuVariable("StartDateTime", Constants.GxuDataType.DATETIME);
             variables.AddFirst(v);
-            v = new DTVariable("TestPgmName", Constants.Tipo.VARCHAR, 128, 0);
+            v = new GxuVariable("TestPgmName", Constants.GxuDataType.VARCHAR, 128, 0);
             variables.AddFirst(v);
-            v = new DTVariable("xmlWriter", "XMLWriter");
+            v = new GxuVariable("xmlWriter", "XMLWriter");
             variables.AddFirst(v);
-            v = new DTVariable("FoundFailFlag", Constants.Tipo.Boolean);
+            v = new GxuVariable("FoundFailFlag", Constants.GxuDataType.Boolean);
             variables.AddFirst(v);
             
 
-            LinkedList<DTPropiedad> properties = new LinkedList<DTPropiedad>();
-            DTPropiedad property = new DTPropiedad("IsMain", true);
+            LinkedList<GxuProperty> properties = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("IsMain", true);
             properties.AddFirst(property);
 
-            property = new DTPropiedad("CALL_PROTOCOL", Artech.Genexus.Common.Properties.PRC.CallProtocol_Values.CommandLine);
+            property = new GxuProperty("CALL_PROTOCOL", Artech.Genexus.Common.Properties.PRC.CallProtocol_Values.CommandLine);
             properties.AddFirst(property);
 
             String procSource = "";
@@ -356,10 +351,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&xmlWriter.Close()\r\n";
             procSource += "*/";
 
-            Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, properties);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, properties);
 
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(p, true);
+            GxuProcedureHandler m = new GxuProcedureHandler();
+            m.CreateProcedure(p, true);
 
             return true;
         }
@@ -369,15 +364,15 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             String nombre = "GXUnit_SetSession";
             String procRules = "parm(in:&Key, in:&Value);";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("Key", Constants.Tipo.VARCHAR, 99999, 0);
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("Key", Constants.GxuDataType.VARCHAR, 99999, 0);
             variables.AddFirst(v);
-            v = new DTVariable("Value", Constants.Tipo.VARCHAR, 99999, 0);
+            v = new GxuVariable("Value", Constants.GxuDataType.VARCHAR, 99999, 0);
             variables.AddFirst(v);
-            v = new DTVariable("XmlWriter", "XmlWriter");
+            v = new GxuVariable("XmlWriter", "XmlWriter");
             variables.AddFirst(v);
             
-            LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
+            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
 
             String procSource = "";
             procSource += "/*\r\n";
@@ -390,10 +385,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 	        procSource += "&XmlWriter.WriteElement(&Key, &Value)\r\n";
             procSource += "&XmlWriter.Close()\r\n";
 
-            Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
 
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(p, true);
+            GxuProcedureHandler m = new GxuProcedureHandler();
+            m.CreateProcedure(p, true);
 
             return true;
         }
@@ -403,15 +398,15 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             String nombre = "GXUnit_GetSession";
             String procRules = "parm(in:&Key, out:&Value);";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("Key", Constants.Tipo.VARCHAR, 99999, 0);
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("Key", Constants.GxuDataType.VARCHAR, 99999, 0);
             variables.AddFirst(v);
-            v = new DTVariable("Value", Constants.Tipo.VARCHAR, 99999, 0);
+            v = new GxuVariable("Value", Constants.GxuDataType.VARCHAR, 99999, 0);
             variables.AddFirst(v);
-            v = new DTVariable("XmlReader", "XmlReader");
+            v = new GxuVariable("XmlReader", "XmlReader");
             variables.AddFirst(v);
 
-            LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
+            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
 
             String procSource = "";
 
@@ -427,10 +422,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&Value = &XmlReader.Value\r\n";
             procSource += "&XmlReader.Close()\r\n";
 
-            Procedimiento p = new Procedimiento(nombre, procSource, procRules, Constants.GXUNIT_FOLDER, variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, Constants.GXUNIT_FOLDER, variables, propiedades);
 
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(p, true);
+            GxuProcedureHandler m = new GxuProcedureHandler();
+            m.CreateProcedure(p, true);
 
             return true;
         }
@@ -440,25 +435,25 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
            GxuSDTLevel root = new GxuSDTLevel("ROOT", false);
 
             //Add Items
-            gxuSDTItem item = new gxuSDTItem("Result", Constants.Tipo.VARCHAR, 40);
+            GxuSDTItem item = new GxuSDTItem("Result", Constants.GxuDataType.VARCHAR, 40);
             root.AddItem(item);
             
-            item = new gxuSDTItem("Variable", Constants.Tipo.VARCHAR, 80);
+            item = new GxuSDTItem("Variable", Constants.GxuDataType.VARCHAR, 80);
             root.AddItem(item);
 
-            item = new gxuSDTItem("Obtained", Constants.Tipo.VARCHAR, 9999);
+            item = new GxuSDTItem("Obtained", Constants.GxuDataType.VARCHAR, 9999);
             root.AddItem(item);
             
-            item = new gxuSDTItem("Expected", Constants.Tipo.VARCHAR, 9999);
+            item = new GxuSDTItem("Expected", Constants.GxuDataType.VARCHAR, 9999);
             root.AddItem(item);
 
-            LinkedList<DTPropiedad> prop = new LinkedList<DTPropiedad>();
-            DTPropiedad p = new DTPropiedad("ExternalNamespace", "");
+            LinkedList<GxuProperty> prop = new LinkedList<GxuProperty>();
+            GxuProperty p = new GxuProperty("ExternalNamespace", "");
             prop.AddFirst(p);
-            SDTipo sdt = new SDTipo("GXUnitAssert", Constants.GXUNIT_FOLDER, null, root,prop);
+            GxuSDT sdt = new GxuSDT("GXUnitAssert", Constants.GXUNIT_FOLDER, null, root,prop);
             
-            KBSDTHandler m = new KBSDTHandler();
-            m.CrearSDT(sdt, true);
+            GxuSDTHandler m = new GxuSDTHandler();
+            m.CreateSDT(sdt, true);
             return true;
         }
 
@@ -468,24 +463,24 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             GxuSDTLevel root = new GxuSDTLevel("ROOT", false);
 
             //Add Items
-            gxuSDTItem item = new gxuSDTItem("TestName", Constants.Tipo.VARCHAR, 40);
+            GxuSDTItem item = new GxuSDTItem("TestName", Constants.GxuDataType.VARCHAR, 40);
             root.AddItem(item);
-            item = new gxuSDTItem("TestTimeExecution", Constants.Tipo.NUMERIC, 16);
+            item = new GxuSDTItem("TestTimeExecution", Constants.GxuDataType.NUMERIC, 16);
             root.AddItem(item);
-            item = new gxuSDTItem("TestResult", Constants.Tipo.VARCHAR, 40);
+            item = new GxuSDTItem("TestResult", Constants.GxuDataType.VARCHAR, 40);
             root.AddItem(item);
 
             //Add Test-Case Level
-            gxuSDTColItem colItem = new gxuSDTColItem("Assert", Constants.Tipo.SDT, "GXUnitAssert");
+            GxuSDTCollectionItem colItem = new GxuSDTCollectionItem("Assert", Constants.GxuDataType.SDT, "GXUnitAssert");
             root.AddCollectionItem(colItem);
 
-            LinkedList<DTPropiedad> prop = new LinkedList<DTPropiedad>();
-            DTPropiedad p = new DTPropiedad("ExternalNamespace", "");
+            LinkedList<GxuProperty> prop = new LinkedList<GxuProperty>();
+            GxuProperty p = new GxuProperty("ExternalNamespace", "");
             prop.AddFirst(p);
-            SDTipo sdt = new SDTipo("GXUnitTestCase", Constants.GXUNIT_FOLDER, null, root,prop);
+            GxuSDT sdt = new GxuSDT("GXUnitTestCase", Constants.GXUNIT_FOLDER, null, root,prop);
 
-            KBSDTHandler m = new KBSDTHandler();
-            m.CrearSDT(sdt, true);
+            GxuSDTHandler m = new GxuSDTHandler();
+            m.CreateSDT(sdt, true);
 
             return true;
         }
@@ -497,37 +492,37 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             GxuSDTLevel root = new GxuSDTLevel("ROOT", false);
 
             //Add Items
-            gxuSDTItem item = new gxuSDTItem("SuiteName", Constants.Tipo.VARCHAR, 40);
+            GxuSDTItem item = new GxuSDTItem("SuiteName", Constants.GxuDataType.VARCHAR, 40);
             root.AddItem(item);
 
             //Add Test-Case Level
-            gxuSDTColItem colItem = new gxuSDTColItem("TestCase", Constants.Tipo.SDT, "GXUnitTestCase");
+            GxuSDTCollectionItem colItem = new GxuSDTCollectionItem("TestCase", Constants.GxuDataType.SDT, "GXUnitTestCase");
             root.AddCollectionItem(colItem);
 
             //Add Suites-Level
-            colItem = new gxuSDTColItem("Suite", Constants.Tipo.SDT, "GXUnitSuite");
+            colItem = new GxuSDTCollectionItem("Suite", Constants.GxuDataType.SDT, "GXUnitSuite");
             root.AddCollectionItem(colItem);
 
-            LinkedList<DTPropiedad> prop = new LinkedList<DTPropiedad>();
-            DTPropiedad p = new DTPropiedad("ExternalNamespace", "");
+            LinkedList<GxuProperty> prop = new LinkedList<GxuProperty>();
+            GxuProperty p = new GxuProperty("ExternalNamespace", "");
             
             prop.AddFirst(p);
-            SDTipo sdt = new SDTipo("GXUnitSuite", Constants.GXUNIT_FOLDER, null, root, prop);
+            GxuSDT sdt = new GxuSDT("GXUnitSuite", Constants.GXUNIT_FOLDER, null, root, prop);
 
-            KBSDTHandler m = new KBSDTHandler();
-            m.CrearSDT(sdt, true);
+            GxuSDTHandler m = new GxuSDTHandler();
+            m.CreateSDT(sdt, true);
 
             return true;
         }
 
         private bool CreateFoldersGXUnit()
         {
-            DTFolder folder1 = new DTFolder(Constants.GXUNIT_FOLDER, "");
-            KBFolderHandler mf = new KBFolderHandler();
-            mf.CrearFolder(folder1, true);
+            GxuFolder folder1 = new GxuFolder(Constants.GXUNIT_FOLDER, "");
+            GxuFolderHandler mf = new GxuFolderHandler();
+            mf.CreateFolder(folder1, true);
 
-            DTFolder GXUnitSuites = new DTFolder(Constants.SUITES_FOLDER, Constants.GXUNIT_FOLDER);
-            mf.CrearFolder(GXUnitSuites, true);
+            GxuFolder GXUnitSuites = new GxuFolder(Constants.SUITES_FOLDER, Constants.GXUNIT_FOLDER);
+            mf.CreateFolder(GXUnitSuites, true);
 
             return true;
         }
@@ -538,33 +533,33 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             String procRules = "parm(in:&Server, in:&Port, in:&UrlBase, in:&GetString, in:&Method, in:&AddString, in:&HeaderName, in:&HeaderValue, out:&HttpStatus, out:&ObtainedValue);";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("AddString", Constants.Tipo.LONGVARCHAR, 2097152, 0);
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("AddString", Constants.GxuDataType.LONGVARCHAR, 2097152, 0);
             variables.AddFirst(v);
-            v = new DTVariable("GetString", Constants.Tipo.CHARACTER, 200, 0);
+            v = new GxuVariable("GetString", Constants.GxuDataType.CHARACTER, 200, 0);
             variables.AddFirst(v);
-            v = new DTVariable("HeaderName", Constants.Tipo.CHARACTER, 80, 0);
+            v = new GxuVariable("HeaderName", Constants.GxuDataType.CHARACTER, 80, 0);
             variables.AddFirst(v);
-            v = new DTVariable("HeaderValue", Constants.Tipo.CHARACTER, 80, 0);
+            v = new GxuVariable("HeaderValue", Constants.GxuDataType.CHARACTER, 80, 0);
             variables.AddFirst(v);
-            v = new DTVariable("HttpClient", Constants.Tipo.SDT, "HttpClient");
+            v = new GxuVariable("HttpClient", Constants.GxuDataType.SDT, "HttpClient");
             variables.AddFirst(v);
-            v = new DTVariable("HttpStatus", Constants.Tipo.NUMERIC, 6, 0);
+            v = new GxuVariable("HttpStatus", Constants.GxuDataType.NUMERIC, 6, 0);
             variables.AddFirst(v);
-            v = new DTVariable("Method", Constants.Tipo.CHARACTER, 15, 0);
+            v = new GxuVariable("Method", Constants.GxuDataType.CHARACTER, 15, 0);
             variables.AddFirst(v);
-            v = new DTVariable("Port", Constants.Tipo.NUMERIC, 6, 0);
+            v = new GxuVariable("Port", Constants.GxuDataType.NUMERIC, 6, 0);
             variables.AddFirst(v);
-            v = new DTVariable("ObtainedValue", Constants.Tipo.LONGVARCHAR, 2097152, 0);
+            v = new GxuVariable("ObtainedValue", Constants.GxuDataType.LONGVARCHAR, 2097152, 0);
             variables.AddFirst(v);
-            v = new DTVariable("Server", Constants.Tipo.CHARACTER, 50, 0);
+            v = new GxuVariable("Server", Constants.GxuDataType.CHARACTER, 50, 0);
             variables.AddFirst(v);
-            v = new DTVariable("Text", Constants.Tipo.CHARACTER, 500, 0);
+            v = new GxuVariable("Text", Constants.GxuDataType.CHARACTER, 500, 0);
             variables.AddFirst(v);
-            v = new DTVariable("UrlBase", Constants.Tipo.CHARACTER, 80, 0);
+            v = new GxuVariable("UrlBase", Constants.GxuDataType.CHARACTER, 80, 0);
             variables.AddFirst(v);
 
-            LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
+            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
 
             String procSource = "";
             procSource += "/*\r\n";
@@ -602,9 +597,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "msg('=============', status)\r\n";
             procSource += "\r\n";
 
-            Procedimiento p = new Procedimiento(nombre, procSource, procRules, "GXUnit", variables, propiedades);
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(p, true);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedureHandler m = new GxuProcedureHandler();
+            m.CreateProcedure(p, true);
 
             return true;
         }

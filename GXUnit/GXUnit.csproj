@@ -112,39 +112,37 @@
     <Compile Include="CommandKeys.cs" />
     <Compile Include="CommandManager.cs" />
     <Compile Include="GeneXusAPI\KBManager.cs" />
-    <Compile Include="GeneXusAPI\KBDataProviderHandler.cs" />
-    <Compile Include="GeneXusAPI\KBTransactionHandler.cs" />
-    <Compile Include="GXUnitCore\gxuSDTColItem.cs" />
-    <Compile Include="GXUnitCore\gxuSDTItem.cs" />
+    <Compile Include="GXUnitCore\GxuHelper.cs" />
+    <Compile Include="GXUnitCore\GxuParm.cs" />
+    <Compile Include="GXUnitCore\GxuSDTCollectionItem.cs" />
+    <Compile Include="GXUnitCore\GxuSDTItem.cs" />
+    <Compile Include="GXUnitUI\GXUnitResultsViewer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="GXUnitUI\GXUnitResultsViewer.Designer.cs">
+      <DependentUpon>GXUnitResultsViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="MSBuildAPI\GenerateGXUnitTests.cs" />
-    <Compile Include="GeneXusAPI\TestCaseDefaultProvider.cs" />
-    <Compile Include="GeneXusAPI\TestSuite.cs" />
+    <Compile Include="GXUnitCore\GxuTestSuite.cs" />
     <Compile Include="GXUnitCore\Constants.cs" />
-    <Compile Include="GXUnitCore\DTAtributo.cs" />
-    <Compile Include="GXUnitCore\DTDataProvider.cs" />
-    <Compile Include="GXUnitCore\DTFolder.cs" />
-    <Compile Include="GXUnitCore\DTObjeto.cs" />
-    <Compile Include="GXUnitCore\DTPropiedad.cs" />
-    <Compile Include="GXUnitCore\DTTestSuite.cs" />
-    <Compile Include="GXUnitCore\DTTransaccion.cs" />
-    <Compile Include="GXUnitCore\DTVariable.cs" />
+    <Compile Include="GXUnitCore\GxuAttribute.cs" />
+    <Compile Include="GXUnitCore\GxuFolder.cs" />
+    <Compile Include="GXUnitCore\GxuObject.cs" />
+    <Compile Include="GXUnitCore\GxuProperty.cs" />
+    <Compile Include="GXUnitCore\GxuVariable.cs" />
     <Compile Include="GeneXusAPI\GxHelper.cs" />
-    <Compile Include="GXUnitCore\GXUnitInialize.cs" />
+    <Compile Include="GXUnitMain\GxuInitializer.cs" />
     <Compile Include="GeneXusAPI\ContextHandler.cs" />
-    <Compile Include="GeneXusAPI\KBFolderHandler.cs" />
+    <Compile Include="GeneXusAPI\GxuFolderHandler.cs" />
     <Compile Include="GeneXusAPI\KBLanguageHandler.cs" />
     <Compile Include="GeneXusAPI\KBObjectHandler.cs" />
-    <Compile Include="GeneXusAPI\KBProcedureHandler.cs" />
-    <Compile Include="GXUnitCore\ManejadorDTTestCase.cs" />
-    <Compile Include="GXUnitCore\RunnerHandler.cs" />
-    <Compile Include="GeneXusAPI\KBSDTHandler.cs" />
-    <Compile Include="GeneXusAPI\KBParameterHandler.cs" />
-    <Compile Include="GXUnitCore\Procedimiento.cs" />
-    <Compile Include="GXUnitCore\SDTipo.cs" />
+    <Compile Include="GeneXusAPI\GxuProcedureHandler.cs" />
+    <Compile Include="GXUnitMain\GxuRunner.cs" />
+    <Compile Include="GeneXusAPI\GxuSDTHandler.cs" />
+    <Compile Include="GXUnitCore\GxuProcedure.cs" />
+    <Compile Include="GXUnitCore\GxuSDT.cs" />
     <Compile Include="GXUnitCore\GxuSDTLevel.cs" />
-    <Compile Include="GXUnitCore\DTTestCase.cs" />
-    <Compile Include="GeneXusAPI\TestCaseManager.cs" />
-    <Compile Include="GXUnitCore\TestSourceGenerator.cs" />
+    <Compile Include="GXUnitCore\GxuTestItem.cs" />
     <Compile Include="GXUnitUI\SelectSuite.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -152,7 +150,6 @@
       <DependentUpon>SelectSuite.cs</DependentUpon>
     </Compile>
     <Compile Include="Package.cs" />
-    <Compile Include="GeneXusAPI\TestCase.cs" />
     <Compile Include="Part.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Items.Designer.cs">
@@ -184,14 +181,16 @@
     <Content Include="Catalog.xml">
       <SubType>Designer</SubType>
     </Content>
-    <None Include="GXUnitCore\TestCaseSourceCall.dkt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Resources\1309738812_adept_update.png" />
     <Content Include="Resources\gxunit.ico" />
     <Content Include="Resources\gxunit.png" />
+    <Content Include="Resources\GXUnitSummary.xsl" />
+    <Content Include="Resources\results.ico" />
+    <Content Include="Resources\results.png" />
     <Content Include="Resources\Update.ico" />
+    <EmbeddedResource Include="GXUnitUI\GXUnitResultsViewer.resx">
+      <DependentUpon>GXUnitResultsViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GXUnitUI\GXUnitMainWindow.resx">
       <DependentUpon>GXUnitMainWindow.cs</DependentUpon>
     </EmbeddedResource>

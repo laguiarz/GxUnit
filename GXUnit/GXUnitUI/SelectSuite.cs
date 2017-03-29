@@ -66,7 +66,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             {
                 try
                 {
-                    TestSuite suite = new TestSuite(textBoxNewSuite.Text, "GXUnitSuites");
+                    GxuTestSuite suite = new GxuTestSuite(textBoxNewSuite.Text, "GXUnitSuites");
                     TreeNode suiteNode = new TreeNode(textBoxNewSuite.Text, 1, 1);
                     suiteNode.Tag = "TestSuite";
 

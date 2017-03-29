@@ -22,37 +22,37 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             return instance;
         }
 
-        public DTTransaccion GetDTTransaccion(String nombre)
-        {
-            DTTransaccion t = null;
-            Transaction trn = GetTransactionObject(ContextHandler.Model, nombre);
-            if (trn != null)
-            {
-                if (!trn.IsBusinessComponent)
-                {
-                    String msg = "The Transaction must be Business Component";
-                    ContextHandler.Message = msg;
-                    return null;
-                }
+        //public DTTransaccion GetDTTransaccion(String nombre)
+        //{
+        //    DTTransaccion t = null;
+        //    Transaction trn = GetTransactionObject(ContextHandler.Model, nombre);
+        //    if (trn != null)
+        //    {
+        //        if (!trn.IsBusinessComponent)
+        //        {
+        //            String msg = "The Transaction must be Business Component";
+        //            ContextHandler.Message = msg;
+        //            return null;
+        //        }
 
-                LinkedList<DTAtributo> atributos = new LinkedList<DTAtributo>();
-                foreach (TransactionAttribute att in trn.Structure.GetAttributes())
-                {
-                    if (att.TableAttribute != null && att.TableAttribute.Table != null /*&& att.TableAttribute.Table.Name.ToLower() == nombre.ToLower()*/)
-                    {
-                        Constants.Tipo tipo = GxHelper.GetInternalType(att.Attribute.Type);
-                        atributos.AddLast(new DTAtributo(att.Name, tipo, att.IsKey, att.IsInferred || att.Attribute.Formula != null));
-                    }
-                }
-                t = new DTTransaccion(nombre, atributos);
-            }
-            else
-            {
-                String msgoutput = "Transaction " + nombre + " does not exists!";
-                GxHelper.WriteOutput(msgoutput);
-            }
-            return t;
-        }
+        //        LinkedList<GxuAttribute> atributos = new LinkedList<GxuAttribute>();
+        //        foreach (TransactionAttribute att in trn.Structure.GetAttributes())
+        //        {
+        //            if (att.TableAttribute != null && att.TableAttribute.Table != null /*&& att.TableAttribute.Table.Name.ToLower() == nombre.ToLower()*/)
+        //            {
+        //                Constants.Tipo tipo = GxHelper.GetInternalType(att.Attribute.Type);
+        //                atributos.AddLast(new GxuAttribute(att.Name, tipo, att.IsKey, att.IsInferred || att.Attribute.Formula != null));
+        //            }
+        //        }
+        //        t = new DTTransaccion(nombre, atributos);
+        //    }
+        //    else
+        //    {
+        //        String msgoutput = "Transaction " + nombre + " does not exists!";
+        //        GxHelper.WriteOutput(msgoutput);
+        //    }
+        //    return t;
+        //}
 
         public Variable GetVariable(String trnName, String attName)
         {
@@ -107,9 +107,9 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             }
         }
 
-        public LinkedList<KBParameterHandler> GetAtt(String bc)
+        public LinkedList<GxuParm> GetAtt(String bc)
         {
-            LinkedList<KBParameterHandler> atributos = new LinkedList<KBParameterHandler>();
+            LinkedList<GxuParm> atributos = new LinkedList<GxuParm>();
             Transaction trn = GetTransactionObject(ContextHandler.Model, bc);
             if (trn != null)
             {
@@ -123,7 +123,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
                         var.Length = att.Attribute.Length;
                         var.Decimals = att.Attribute.Decimals;
                         var.Type = att.Attribute.Type;
-                        atributos.AddLast(new KBParameterHandler(var, Constants.PARM_OUT, false));
+                        atributos.AddLast(new GxuParm(var, Constants.PARM_OUT));
                     }
                 }
             }
