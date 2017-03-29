@@ -33,8 +33,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
                     parametros = ((Procedimiento)oToTest).GetVariablesRules();
                 else if (oToTest is DTTransaccion)
                     parametros = ((DTTransaccion)oToTest).GetVariablesTrn();
-                else if (oToTest is DTDataProvider)
-                    parametros = ((DTDataProvider)oToTest).GetParametros();
+                //else if (oToTest is DTDataProvider)
+                //    parametros = ((DTDataProvider)oToTest).GetParametros();
             }
             else
             {

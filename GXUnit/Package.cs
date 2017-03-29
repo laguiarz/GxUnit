@@ -31,7 +31,8 @@ namespace PGGXUnit.Packages.GXUnit
     {
 
         public static Guid guid = typeof(GXUnitPackage).GUID;
-        public static GXUnitMainWindow GXUnitWindow;
+        public static GXUnitMainWindow gXUnitWindow;
+        public static GXUnitResultsViewer resultViewer;
 
 		public override string Name
 		{
@@ -43,49 +44,11 @@ namespace PGGXUnit.Packages.GXUnit
             base.Initialize(services);
 
             // Adding the Default Test Case Provider
-            DefaultManager.Manager.RegisterDefaultProvider(new TestCaseDefaultProvider());
+          //  DefaultManager.Manager.RegisterDefaultProvider(new TestCaseDefaultProvider());
 
-            LoadCategories();
+           // LoadCategories();
             LoadCommandTargets();
-            LoadObjectTypes();
-        }
-
-
-        public override void PostInitialize()
-        {
-            base.PostInitialize();
-            AddProperty();
-        }
-
-
-        /// <summary>
-        /// Metodo utilitario auxiliar para la creacion de la propiedad "Testeable"
-        /// </summary>
-        private void AddProperty()
-        {
-            string transactionKeyProc = DefinitionsHelper.GetPropertiesDefinitionKey<PGGXUnit.Packages.GXUnit.GeneXusAPI.TestCase>();
-            PropertiesDefinition myDefinitions = CreateMyPropertiesDefinition(transactionKeyProc);
-            AddPropertiesDefinition(transactionKeyProc, myDefinitions);
-        }
-
-        private PropertiesDefinition CreateMyPropertiesDefinition(string objectClass)
-        {
-            PropertiesDefinition myProperties = new PropertiesDefinition(objectClass);
-            myProperties.AddDefinition("TestCase", typeof(bool), false, null);
-            myProperties.AddDefinition("ObjectToTest", typeof(String), "", null);
-            return myProperties;
-        }
-
-        private void LoadCategories()
-        {
-            //Insert all categories here
-            //KBObjectCategoryDescriptor myCategory = new KBObjectCategoryDescriptor(new Guid("ef0f3552-a93d-4f10-9b94-4442e32ea719"), "New Category", Items.Folder);
-            //this.AddCategory(myCategory.Id, myCategory.Name, myCategory.Icon);
-        }
-
-        private void LoadObjectTypes()
-        {
-            this.AddObjectType<TestCase>();
+            //LoadObjectTypes();
         }
 
         private void LoadCommandTargets()
@@ -98,16 +61,17 @@ namespace PGGXUnit.Packages.GXUnit
         {
             base.OnAfterOpenKB(sender, args);
 
-            ContextHandler.Model = KBManager.getModel(args.KnowledgeBase);
+            ContextHandler.Model = KBManager.GetModel(args.KnowledgeBase);
             ContextHandler.KBName = args.KnowledgeBase.Name;
-            ContextHandler.ObjectToTest = "";
+ //           ContextHandler.ObjectToTest = "";
 
-            KBFolderHandler mf = new KBFolderHandler();
+            GxuFolderHandler mf = new GxuFolderHandler();
             Folder folder = mf.GetFolder(Constants.GXUNIT_FOLDER);
             if (folder != null)
             {
                 ContextHandler.GXUnitInitialized = true;
-               // GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().LoadTestTrees();
+                GXUnitMainWindow.getInstance().LoadTestTrees();
+                GXUnitResultsViewer.getInstance().PopulateListBox();
             }
             else
             {
@@ -120,40 +84,103 @@ namespace PGGXUnit.Packages.GXUnit
         {
             GXUnitMainWindow.getInstance().LoadTestTrees();
         }
- 
-        [EventSubscription(UIEvents.AfterCreateKBObject)]
-        public void OnAfterCreateKBObject(object sender, KBObjectEventArgs args)
-        {
-            if (args.KBObject.GetPropertyValue("TestCase") != null && (bool)args.KBObject.GetPropertyValue("TestCase"))
-            {
-                if (!string.IsNullOrEmpty(ContextHandler.ObjectToTest))
-                {
-                    IEnumerator<KBObjectPart> enumerator = args.KBObject.Parts.GetEnumerator();
-                    KBObjectPart part = null;
-                    string source = null;
-                    while (enumerator.MoveNext())
-                    {
-                        part = enumerator.Current;
-                        try
-                        {
-                            source = ((ProcedurePart)(part)).Source;
-                            if (source != null)
-                            {
-                                ((ProcedurePart)(part)).Source = source;
-                                break;
-                            }
 
-                        }
-                        catch (Exception e)
-                        {
-                            GxHelper.WriteOutput(e.Message);
-                        }
-                    }
+        [EventSubscription(ArchitectureEvents.AfterKBObjectImport)]
+        public void OnAfterImport(object sender, EventArgs args)
+        {
+            GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().LoadTestTrees();
+        }
+
+        [EventSubscription(ArchitectureEvents.AfterCloseKB)]
+        public void OnAfterCloseKB(object sender, EventArgs args)
+        {
+            GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().limpiarNodosTest();
+            ContextHandler.GXUnitInitialized = false;
+        }
+
+        public override IToolWindow CreateToolWindow(System.Guid toolWindowId)
+        {
+            if (toolWindowId.Equals(GXUnitMainWindow.guid))
+            {
+                if (gXUnitWindow == null)
+                    gXUnitWindow = GXUnitMainWindow.getInstance();
+                return gXUnitWindow;
+            } else
+            {
+                if (toolWindowId.Equals(GXUnitResultsViewer.guid))
+                {
+                    if (resultViewer == null)
+                        resultViewer = GXUnitResultsViewer.getInstance();
+                    return resultViewer;
                 }
             }
 
-            ContextHandler.ObjectToTest = "";
+            return base.CreateToolWindow(toolWindowId);
         }
+
+        //private void LoadCategories()
+        //{
+        //    //Insert all categories here
+        //    //KBObjectCategoryDescriptor myCategory = new KBObjectCategoryDescriptor(new Guid("ef0f3552-a93d-4f10-9b94-4442e32ea719"), "New Category", Items.Folder);
+        //    //this.AddCategory(myCategory.Id, myCategory.Name, myCategory.Icon);
+        //}      //public override void PostInitialize()
+        //{
+        //    base.PostInitialize();
+        //    AddProperty();
+        //}
+        /// <summary>
+        /// Metodo utilitario auxiliar para la creacion de la propiedad "Testeable"
+        /// </summary>
+        //private void AddProperty()
+        //{
+        //    string transactionKeyProc = DefinitionsHelper.GetPropertiesDefinitionKey<PGGXUnit.Packages.GXUnit.GeneXusAPI.TestCase>();
+        //    PropertiesDefinition myDefinitions = CreateMyPropertiesDefinition(transactionKeyProc);
+        //    AddPropertiesDefinition(transactionKeyProc, myDefinitions);
+        //}
+
+        //private PropertiesDefinition CreateMyPropertiesDefinition(string objectClass)
+        //{
+        //    PropertiesDefinition myProperties = new PropertiesDefinition(objectClass);
+        //    myProperties.AddDefinition("TestCase", typeof(bool), false, null);
+        //    myProperties.AddDefinition("ObjectToTest", typeof(String), "", null);
+        //    return myProperties;
+        //}       //private void LoadObjectTypes()
+        //{
+        //    this.AddObjectType<TestCase>();
+        //}
+        ////[EventSubscription(UIEvents.AfterCreateKBObject)]
+        ////public void OnAfterCreateKBObject(object sender, KBObjectEventArgs args)
+        ////{
+        ////    if (args.KBObject.GetPropertyValue("TestCase") != null && (bool)args.KBObject.GetPropertyValue("TestCase"))
+        ////    {
+        ////        //if (!string.IsNullOrEmpty(ContextHandler.ObjectToTest))
+        ////        //{
+        ////        //    IEnumerator<KBObjectPart> enumerator = args.KBObject.Parts.GetEnumerator();
+        ////        //    KBObjectPart part = null;
+        ////        //    string source = null;
+        ////        //    while (enumerator.MoveNext())
+        ////        //    {
+        ////        //        part = enumerator.Current;
+        ////        //        try
+        ////        //        {
+        ////        //            source = ((ProcedurePart)(part)).Source;
+        ////        //            if (source != null)
+        ////        //            {
+        ////        //                ((ProcedurePart)(part)).Source = source;
+        ////        //                break;
+        ////        //            }
+
+        ////        //        }
+        ////        //        catch (Exception e)
+        ////        //        {
+        ////        //            GxHelper.WriteOutput(e.Message);
+        ////        //        }
+        ////        //    }
+        ////        //}
+        ////    }
+
+        ////    ContextHandler.ObjectToTest = "";
+        ////}
 
 
         //[EventSubscription(GXEvents.AfterBuild)]
@@ -255,29 +282,6 @@ namespace PGGXUnit.Packages.GXUnit
         //    }
         //}
 
-        [EventSubscription(ArchitectureEvents.AfterKBObjectImport)]
-        public void OnAfterImport(object sender, EventArgs args)
-        {
-            GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().LoadTestTrees();
-        }
-        
-        [EventSubscription(ArchitectureEvents.AfterCloseKB)]
-        public void OnAfterCloseKB(object sender, EventArgs args)
-        {
-            GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().limpiarNodosTest();
-            ContextHandler.GXUnitInitialized = false;
-        }
 
-        public override IToolWindow CreateToolWindow(System.Guid toolWindowId)
-        {
-            if (toolWindowId.Equals(GXUnitMainWindow.guid))
-            {
-                if (GXUnitWindow == null)
-                    GXUnitWindow = GXUnitMainWindow.getInstance();
-                return GXUnitWindow;
-            }
-
-            return base.CreateToolWindow(toolWindowId);
-        }
-	}
+    }
 }

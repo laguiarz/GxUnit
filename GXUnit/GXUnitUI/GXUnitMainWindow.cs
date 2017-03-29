@@ -69,7 +69,6 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             {
                 // Clearing Menu Options
                 this.SuitesTreeCMenu.Items.Clear();
-                this.SuitesTreeCMenu.Items.Add(this.nuevoTestCaseToolStripMenuItem);
                 this.SuitesTreeCMenu.Items.Add(this.nuevoToolStripMenuItem);
                 instance.auxNode = null;
             }
@@ -83,7 +82,6 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 {
                     // Clearing Menu Options
                     this.SuitesTreeCMenu.Items.Clear();
-                    this.SuitesTreeCMenu.Items.Add(this.nuevoTestCaseToolStripMenuItem);
                     this.SuitesTreeCMenu.Items.Add(this.nuevoToolStripMenuItem);
                     instance.auxNode = null;
                 }
@@ -160,7 +158,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 
             TreeNode node = instance.auxNode;
             instance.auxNode = null;
-            TestSuite suite;
+            GxuTestSuite suite;
             string suiteName = InputBox.Show("Please enter the Test Suite Name", "Name:");
             if (!suiteName.Equals(""))
             {
@@ -172,14 +170,14 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                     if (node != null)
                     {
                         parentFolder = node.Text;
-                        suite = new TestSuite(suiteName, parentFolder);
+                        suite = new GxuTestSuite(suiteName, parentFolder);
                         node.Nodes.Insert(SuitesTree.Nodes.Count, suiteNode);
                         node.Expand();
                         node.TreeView.SelectedNode = null;
                     }
                     else
                     {
-                        suite = new TestSuite(suiteName, parentFolder);
+                        suite = new GxuTestSuite(suiteName, parentFolder);
                         SuitesTree.Nodes.Insert(SuitesTree.Nodes.Count, suiteNode);
                     }
 
@@ -205,7 +203,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             {
                 if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    GXUnitInialize i = GXUnitInialize.GetInstance();
+                    GxuInitializer i = GxuInitializer.GetInstance();
                     i.InitializeGXUnit();
                     ContextHandler.GXUnitInitialized = true;
                     NuevaSuite();
@@ -223,7 +221,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             {
                 if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    GXUnitInialize i = GXUnitInialize.GetInstance();
+                    GxuInitializer i = GxuInitializer.GetInstance();
                     i.InitializeGXUnit();
                     ContextHandler.GXUnitInitialized = true;
                     NuevoTC();
@@ -242,44 +240,44 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             Folder f = null;
             if (auxNode == null)
             {
-                f = KBFolderHandler.GetFolderObject(kbmodel, "GXUnitSuites");
+                f = GxuFolderHandler.GetFolderObject(kbmodel, "GXUnitSuites");
             }
             else
             {
-                f = KBFolderHandler.GetFolderObject(kbmodel, auxNode.Text);
+                f = GxuFolderHandler.GetFolderObject(kbmodel, auxNode.Text);
             }
 #if GXTILO
-          //  CreateObjectOptions options = new CreateObjectOptions();
-            //options.Folder = f;
-           // KBObject o = UIServices.NewObjectDialog.CreateObject(options);
+            CreateObjectOptions options = new CreateObjectOptions();
+            options.Folder = f;
+            KBObject o = UIServices.NewObjectDialog.CreateObject(options);
 #else
             KBObject o = UIServices.NewObjectDialog.CreateObject(f);
 #endif
         }
 
-        public void agregarTestCase(TestCase test, string nodeName)
-        {
-            String testName = test.Name;
-            TreeNode testNode = new TreeNode(testName, 0, 0);
+        //public void agregarTestCase(TestCase test, string nodeName)
+        //{
+        //    String testName = test.Name;
+        //    TreeNode testNode = new TreeNode(testName, 0, 0);
 
-            testNode.Tag = "TestCase";
-            testNode.Name = test.Name;
+        //    testNode.Tag = "TestCase";
+        //    testNode.Name = test.Name;
 
-            if ((auxNode == null) || (auxNode.Name != nodeName))
-            {
-                auxNode = buscarNodo(nodeName, SuitesTree.Nodes);
-            }
-            if (auxNode != null)
-            {
-                if (!auxNode.Nodes.ContainsKey(testName))
-                    auxNode.Nodes.Add(testNode);
+        //    if ((auxNode == null) || (auxNode.Name != nodeName))
+        //    {
+        //        auxNode = buscarNodo(nodeName, SuitesTree.Nodes);
+        //    }
+        //    if (auxNode != null)
+        //    {
+        //        if (!auxNode.Nodes.ContainsKey(testName))
+        //            auxNode.Nodes.Add(testNode);
 
-                auxNode.Expand();
-                auxNode.TreeView.SelectedNode = auxNode;
-                auxNode = null;
-                SuitesTree.Invalidate();
-            }
-        }
+        //        auxNode.Expand();
+        //        auxNode.TreeView.SelectedNode = auxNode;
+        //        auxNode = null;
+        //        SuitesTree.Invalidate();
+        //    }
+        //}
 
         private TreeNode buscarNodo(string nodeName, TreeNodeCollection colection)
         {
@@ -315,16 +313,22 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             }
             else
             {
-                if (((string)(instance.auxNode.Tag)).Equals("TestCase"))
-                    o.Delete();
-                else
-                    borrarSuite(o);
+                DialogResult dr = MessageBox.Show("This will delete you folder and any test procedures in it, are you sure?", "Please Confirm", MessageBoxButtons.YesNo);
+                if (dr == DialogResult.Yes)
+                {
+                    if (((string)(instance.auxNode.Tag)).Equals("TestCase"))
+                        o.Delete();
+                    else
+                        borrarSuite(o);
 
-                SuitesTree.Nodes.Remove(instance.auxNode);
-                instance.auxNode = null;
-                SuitesTree.Invalidate();
+                    SuitesTree.Nodes.Remove(instance.auxNode);
+                    instance.auxNode = null;
+                    SuitesTree.Invalidate();
+                }
             }
         }
+
+
 
         private void checkSelectAll_Click(object sender, EventArgs e)
         {
@@ -436,7 +440,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 {
                     if (MessageBox.Show("Create GXUnit Objects?", "Confirm", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
-                        GXUnitInialize i = GXUnitInialize.GetInstance();
+                        GxuInitializer i = GxuInitializer.GetInstance();
                         i.InitializeGXUnit();
                         ContextHandler.GXUnitInitialized = true;
                         Test();
@@ -457,12 +461,11 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
         private void Test()
         {
             //Make Sure Folder for Output Exists
-            string kbPath = KBManager.getTargetPath();
-            string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
+            string resultPath = GxuHelper.GetResultsPath();
             DirectoryInfo di = Directory.CreateDirectory(resultPath);
 
-            RunnerHandler runnherHandler = RunnerHandler.GetInstance();
-            LinkedList<DTTestCase> tests = generarTestsSeleccionados();
+            GxuRunner runnherHandler = GxuRunner.GetInstance();
+            LinkedList<GxuTestItem> tests = generarTestsSeleccionados();
             if (testsSelected(tests))
             {
                 if (testsSaved(tests))
@@ -470,7 +473,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                     string XMLPath;
 
                     runnherHandler.RegenerateTestLoaderProcedure(tests, out XMLPath);
-                     KBLanguageHandler.SetLenguajeModelo();
+                     KBLanguageHandler.SetModelLanguage();
 
                     ////si hay que forzar la generacion del runner solo lo genero(no lo ejecuto, se ejecuta en el evento after build)
                     //if (KBLanguageHandler.Lenguaje == Artech.Genexus.Common.Entities.GeneratorType.CSharpWeb)
@@ -530,12 +533,12 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
         //    }
         //}
 
-        private bool testsSelected(LinkedList<DTTestCase> tests)
+        private bool testsSelected(LinkedList<GxuTestItem> tests)
         {
-            foreach (DTTestCase item in tests)
+            foreach (GxuTestItem item in tests)
             {
                 // No es una Suite, es un Test Case
-                if (!item.GetSuite())
+                if (!item.IsSuite)
                 {
                     return true;
                 }
@@ -543,13 +546,13 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             return false;
         }
 
-        private bool testsSaved(LinkedList<DTTestCase> tests)
+        private bool testsSaved(LinkedList<GxuTestItem> tests)
         {
-            foreach (DTTestCase item in tests)
+            foreach (GxuTestItem item in tests)
             {
-                if (!item.GetSuite())
+                if (!item.IsSuite)
                 {
-                    Procedure proc = KBProcedureHandler.GetProcedureObject(ContextHandler.Model, item.GetNombre());
+                    Procedure proc = GxuProcedureHandler.GetProcedureObject(ContextHandler.Model, item.Name);
                     if (proc == null)
                     {
                         return false;
@@ -559,14 +562,14 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             return true;
         }
 
-        private LinkedList<DTTestCase> generarTestsSeleccionados()
+        private LinkedList<GxuTestItem> generarTestsSeleccionados()
         {
-            LinkedList<DTTestCase> Tests = new LinkedList<DTTestCase>();
+            LinkedList<GxuTestItem> Tests = new LinkedList<GxuTestItem>();
             agregarTestCasesSeleccionados(Tests, SuitesTree.Nodes);
             return Tests;
         }
 
-        private void agregarTestCasesSeleccionados(LinkedList<DTTestCase> lista, TreeNodeCollection nodes)
+        private void agregarTestCasesSeleccionados(LinkedList<GxuTestItem> lista, TreeNodeCollection nodes)
         {
             String parentname;
             foreach (TreeNode n in nodes)
@@ -579,10 +582,10 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 if (n.Checked)
                 {
                     if (((string)(n.Tag)).Equals("TestCase"))
-                        lista.AddLast(new DTTestCase(n.Text,parentname,false));
+                        lista.AddLast(new GxuTestItem(n.Text,parentname,false));
 
                     if (((string)(n.Tag)).Equals("TestSuite"))
-                        lista.AddLast(new DTTestCase(n.Text,parentname,true));
+                        lista.AddLast(new GxuTestItem(n.Text,parentname,true));
                 }
                 
                 agregarTestCasesSeleccionados(lista, n.Nodes);
@@ -636,7 +639,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                 int count = 0;
                 TreeNode auxNode = null;
 
-                KBFolderHandler mf = new KBFolderHandler();
+                GxuFolderHandler mf = new GxuFolderHandler();
                 Folder folder = mf.GetFolder("GXUnitSuites");
                 if (folder != null)
                 {
@@ -700,15 +703,22 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
         private void borrarSuite(KBObject o)
         {
             Folder folder = ((Folder)o);
-            foreach (Folder f in folder.SubFolders)
+            try
             {
-                borrarSuite(f);
+                foreach (Folder f in folder.SubFolders)
+                {
+                    borrarSuite(f);
+                }
+                foreach (KBObject obj in folder.Objects)
+                {
+                    obj.Delete();
+                }
+                folder.Delete();
             }
-            foreach (KBObject obj in folder.Objects)
+            catch (Exception e)
             {
-                obj.Delete();
+                GxHelper.WriteOutput(e.Message);
             }
-            folder.Delete();
         }
 
 
@@ -766,7 +776,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                     try
                     {
                         KBModel model = ContextHandler.Model;
-                        Folder DestinationFolder = KBFolderHandler.GetFolderObject(model, targetNode.Text);
+                        Folder DestinationFolder = GxuFolderHandler.GetFolderObject(model, targetNode.Text);
 
                         KBObject obj = KBObjectHandler.GetInstance().GetKBObject(draggedNode.Text);
                         obj.Parent = DestinationFolder;
@@ -799,6 +809,16 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
             if (node2.Parent == null) return false;
             if (node2.Parent.Equals(node1)) return true;
             return ContainsNode(node1, node2.Parent);
+        }
+
+        private void SuitesTree_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+
+        private void GXUnitMainWindow_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

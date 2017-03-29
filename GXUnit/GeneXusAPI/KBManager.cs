@@ -12,19 +12,26 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
     public class KBManager
     {
 
-        public static GxModel getTargetModel()
+        public static GxModel GetTargetModel()
         {
-            IKBService kbserv = UIServices.KB;
-            return getTargetModel(kbserv.CurrentKB).GetAs<GxModel>();
+            try
+            {
+                IKBService kbserv = UIServices.KB;
+                return GetTargetModel(kbserv.CurrentKB).GetAs<GxModel>();
+            } catch (Exception e)
+            {
+                GxHelper.WriteOutput("Could not retrieve TargetModel " + e.Message);
+                return null;
+            }
         }
 
-        public static GxModel getModel()
+        public static GxModel GetModel()
         {
             IKBService kbserv = UIServices.KB;
-            return getModel(kbserv.CurrentKB).GetAs<GxModel>();
+            return GetModel(kbserv.CurrentKB).GetAs<GxModel>();
         }
 
-        public static KBModel getModel(KnowledgeBase kb)
+        public static KBModel GetModel(KnowledgeBase kb)
         {
             // Esto depende de la version de la BL de GeneXus.
 #if GXEV1
@@ -36,7 +43,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 #endif
         }
 
-        public static KBModel getTargetModel(KnowledgeBase kb)
+        public static KBModel GetTargetModel(KnowledgeBase kb)
         {
             // Esto depende de la version de la BL de GeneXus.
 #if GXEV1
@@ -44,13 +51,16 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             return kb.WorkingEnvironment.TargetModel;
 #else
             // Para Ev2 y Tilo:
-            return kb.DesignModel.Environment.TargetModel;
+            if (kb == null)
+            { return null; }
+            else
+            { return kb.DesignModel.Environment.TargetModel; }
 #endif
         }
 
         public static String GetUrlToRun(String objName)
         {
-            GxModel gxModel = getModel();
+            GxModel gxModel = GetModel();
 
             if (gxModel != null)
             {
@@ -104,9 +114,9 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 #endif
         }
 
-        public static string getTargetPath()
+        public static string GetTargetPath()
         {
-            GxModel model = KBManager.getTargetModel();
+            GxModel model = KBManager.GetTargetModel();
 
             string targetPath;
 

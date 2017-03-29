@@ -4,32 +4,32 @@ using System.Collections.Generic;
 
 namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 {
-    class DTTransaccion : DTObjeto
+    class DTTransaccion : GxuObject
     {
-        private LinkedList<DTAtributo> atributos;
+        private LinkedList<GxuAttribute> atributos;
 
-        public DTTransaccion(String nombre, LinkedList<DTAtributo> atributos)
+        public DTTransaccion(String nombre, LinkedList<GxuAttribute> atributos)
             : base (nombre)
         {
             this.atributos = atributos;
         }
         
-        public LinkedList<KBParameterHandler> GetVariablesTrn()
+        public LinkedList<GxuParm> GetVariablesTrn()
         {
-            LinkedList<KBParameterHandler> variables = new LinkedList<KBParameterHandler>();
-            foreach (DTAtributo att in atributos)
-                variables.AddLast(new KBParameterHandler(this.GetNombre(), att.GetNombre(), Constants.PARM_INOUT, att.GetEsClave(), att.GetEsSoloLectura()));
-            variables.AddLast(new KBParameterHandler(this.GetNombre(), this.GetNombre(), Constants.PARM_INOUT, Constants.Estructurado.BC, false, false));
-            variables.AddLast(new KBParameterHandler("Messages", "Messages", Constants.PARM_INOUT, Constants.Estructurado.SDT, false, false));
-            variables.AddLast(new KBParameterHandler("Message", "Messages.Message", Constants.PARM_INOUT, Constants.Estructurado.SDT, false, false));
+            LinkedList<GxuParm> variables = new LinkedList<GxuParm>();
+            foreach (GxuAttribute att in atributos)
+                variables.AddLast(new GxuParm(this.Name, att.Name, Constants.PARM_INOUT, att.IsKey, att.IsReadOnly));
+            variables.AddLast(new GxuParm(this.Name, this.Name, Constants.PARM_INOUT, Constants.Estructurado.BC, false));
+            variables.AddLast(new GxuParm("Messages", "Messages", Constants.PARM_INOUT, Constants.Estructurado.SDT, false));
+            variables.AddLast(new GxuParm("Message", "Messages.Message", Constants.PARM_INOUT, Constants.Estructurado.SDT, false));
             return variables;
         }
 
-        public LinkedList<KBParameterHandler> GetAttTrn()
+        public LinkedList<GxuParm> GetAttTrn()
         {
-            LinkedList<KBParameterHandler> variables = new LinkedList<KBParameterHandler>();
-            foreach (DTAtributo att in atributos)
-                variables.AddLast(new KBParameterHandler(this.GetNombre(), att.GetNombre(), Constants.PARM_INOUT, att.GetEsClave(), att.GetEsSoloLectura()));
+            LinkedList<GxuParm> variables = new LinkedList<GxuParm>();
+            foreach (GxuAttribute att in atributos)
+                variables.AddLast(new GxuParm(this.Name, att.Name, Constants.PARM_INOUT, att.IsKey, att.IsReadOnly));
             return variables;
         }
     }

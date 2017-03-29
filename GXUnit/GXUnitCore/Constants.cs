@@ -10,7 +10,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
         public enum Estructurado {BC, SDT};
 
-        public enum Tipo { Boolean, CHARACTER, DATE, DATETIME, BC, BC_LEVEL, EXTERNAL_OBJECT, SDT, INT, LONGVARCHAR, NUMERIC, VARCHAR };
+        public enum GxuDataType { Boolean, CHARACTER, DATE, DATETIME, BC, BC_LEVEL, EXTERNAL_OBJECT, SDT, INT, LONGVARCHAR, NUMERIC, VARCHAR };
 
         public const String RESULTADO = "Result";
         public const String VALOR_ESPERADO = "Expected";
@@ -18,10 +18,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
         public const String GXUNIT_FOLDER = "GXUnit";
         public const String SUITES_FOLDER = "GXUnitSuites";
-     //   public const String carpetaResults = "GXUnitResults";
 
         public const String ABOUT = "Proyecto GXUnit\r\nNicolás Carro\r\nMarcos Olivera\r\nJuan Pablo Goyení\r\n2010 - 2011\r\n" +
-                                    "Resumed by Laura Aguiar 2017\r\n";
+                                    "GUnit 3.* - Resumed by Laura Aguiar 2017\r\n";
 
         public const String RESULT_PATH = "\\GXUnitResults\\";
 

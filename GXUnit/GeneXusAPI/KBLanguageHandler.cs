@@ -17,10 +17,10 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
             private set { }
         }
         
-        public static void SetLenguajeModelo()
+        public static void SetModelLanguage()
         {
             //We want the generator for the model we are generating right now
-            GxModel gxModel = KBManager.getTargetModel();
+            GxModel gxModel = KBManager.GetTargetModel();
 
             if (gxModel != null)
             {
@@ -30,7 +30,7 @@ namespace PGGXUnit.Packages.GXUnit.GeneXusAPI
 
         public static String GetWebRoot()
         {
-            GxModel gxModel = KBManager.getTargetModel();
+            GxModel gxModel = KBManager.GetTargetModel();
             if (gxModel != null)
             {
                 switch ((GeneratorType)gxModel.Environment.Generator)

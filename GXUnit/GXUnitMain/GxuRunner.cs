@@ -6,16 +6,15 @@ using System.IO;
 
 namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 {
-    public class RunnerHandler
+    public class GxuRunner
     {
-        private static RunnerHandler instance = new RunnerHandler();
-        private const String Folder = Constants.GXUNIT_FOLDER;
-
-        private RunnerHandler()
+        private static GxuRunner instance = new GxuRunner();
+   
+        private GxuRunner()
         {
         }
 
-        public static RunnerHandler GetInstance()
+        public static GxuRunner GetInstance()
         {
             return instance;
         }
@@ -37,17 +36,16 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         //}
 
        
-        public bool RegenerateTestLoaderProcedure(LinkedList<DTTestCase> lista, out string XMLName)
+        public bool RegenerateTestLoaderProcedure(LinkedList<GxuTestItem> selectedTestCases, out string XMLName)
         {
 
-            string kbPath = KBManager.getTargetPath();
-            string resultPath = kbPath.Trim() + Constants.RESULT_PATH;
+            string resultPath = GxuHelper.GetResultsPath();
             XMLName = resultPath + "GXUnitR_" + System.DateTime.Now.ToString("yyyyMMdd_HHmmss") + ".xml";
 
             //Check if the file already exists and delete it
             try
             {
-                string targetPath = KBManager.getTargetPath();
+                string targetPath = KBManager.GetTargetPath();
                 targetPath = Path.Combine(targetPath, XMLName);
                 if (File.Exists(targetPath) )
                 {
@@ -63,17 +61,17 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             String procName = "GXUnit_LoadTests";
             String procRules = "parm(out:&GXUnitSuiteCollection, out:&ResultFileName);";
 
-            LinkedList<DTVariable> variables = new LinkedList<DTVariable>();
-            DTVariable v = new DTVariable("GXUnitSuite", "GXUnitSuite");
+            LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
+            GxuVariable v = new GxuVariable("GXUnitSuite", "GXUnitSuite");
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitSuiteCollection", "GXUnitSuite", true);
+            v = new GxuVariable("GXUnitSuiteCollection", "GXUnitSuite", true);
             variables.AddFirst(v);
-            v = new DTVariable("GXUnitTestCase", "GXUnitTestCase");
+            v = new GxuVariable("GXUnitTestCase", "GXUnitTestCase");
             variables.AddFirst(v);
-            v = new DTVariable("ResultFileName", Constants.Tipo.VARCHAR, 512, 0);
+            v = new GxuVariable("ResultFileName", Constants.GxuDataType.VARCHAR, 512, 0);
             variables.AddFirst(v);
 
-            LinkedList<DTPropiedad> propiedades = new LinkedList<DTPropiedad>();
+            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
 
             String procSource = "";
             procSource += "/*\r\n";
@@ -93,18 +91,18 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             bool firstFlag = true;
             bool hasContentFlag = false;
 
-            foreach (DTTestCase testcase1 in lista)
+            foreach (GxuTestItem testcase1 in selectedTestCases)
             {
 
-                if (testcase1.GetSuite())
+                if (testcase1.IsSuite)
                 {
-                    foreach (DTTestCase testcase in lista)
+                    foreach (GxuTestItem testcase in selectedTestCases)
                     {
-                        //si es un suite, recorro todos los test case hijos
-                        if ((testcase.GetSuite() == false) && (testcase.GetFolder().Equals(testcase1.GetNombre())))
+                        //if it is a suite, it goes through all children test-cases
+                        if ((testcase.IsSuite == false) && (testcase.Folder.Equals(testcase1.Name)))
                         {
 
-                            CurrentSuiteName = testcase.GetFolder();
+                            CurrentSuiteName = testcase.Folder;
                             if (CurrentSuiteName != PreviousSuiteName)
                             {
                                 if (firstFlag)
@@ -121,7 +119,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
                             hasContentFlag = true;
                             procSource += "&GXUnitTestCase = new()\r\n";
-                            procSource += "&GXUnitTestCase.TestName = '" + testcase.GetNombre() + "'\r\n";
+                            procSource += "&GXUnitTestCase.TestName = '" + testcase.Name + "'\r\n";
                             procSource += "&GXUnitSuite.TestCases.Add(&GXUnitTestCase)\r\n";
                             procSource += "\r\n";
 
@@ -138,20 +136,20 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             }
 
             //Now Create an entry for static-link
-            foreach (DTTestCase testcase1 in lista)
+            foreach (GxuTestItem testcase1 in selectedTestCases)
             {
-                if (testcase1.GetSuite())
+                if (testcase1.IsSuite)
                 {
                     procSource += "\r\n";
                     procSource += "//Add Calls for Static-Link\r\n";
                     procSource += "if false\r\n";
-                    foreach (DTTestCase testcase in lista)
+                    foreach (GxuTestItem testcase in selectedTestCases)
                     {
                         //si es un suite, recorro todos los test case hijos
-                        if ((testcase.GetSuite() == false) && (testcase.GetFolder().Equals(testcase1.GetNombre())))
+                        if ((testcase.IsSuite == false) && (testcase.Folder.Equals(testcase1.Name)))
                         {
 
-                            procSource += '\t' + testcase.GetNombre() + "()\r\n";
+                            procSource += '\t' + testcase.Name + "()\r\n";
                         }
 
                     }
@@ -161,9 +159,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             procSource += "";
 
-            Procedimiento proc = new Procedimiento(procName, procSource, procRules, Folder, variables, propiedades);
-            KBProcedureHandler m = new KBProcedureHandler();
-            m.CrearProcedimiento(proc, true);
+            GxuProcedure proc = new GxuProcedure(procName, procSource, procRules, Constants.GXUNIT_FOLDER, variables, propiedades);
+            GxuProcedureHandler procHandler = new GxuProcedureHandler();
+            procHandler.CreateProcedure(proc, true);
 
             return true;
 
@@ -173,23 +171,20 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         {
             try
             {
-                KBProcedureHandler m = new KBProcedureHandler();
-                m.RunProcedimiento(Constants.RUNNER_PROC);
-                ContextHandler.Execute = true;
+                GxuProcedureHandler m = new GxuProcedureHandler();
+                m.Run(Constants.RUNNER_PROC);
             }
             catch (Exception e)
             {
-                String msgoutput = e.Message;
-                GxHelper.WriteOutput(msgoutput);
+                GxHelper.WriteOutput(e.Message);
             }
             return true;
         }
 
         public bool RebuildRunner()
         {
-            KBProcedureHandler procHandler = new KBProcedureHandler();
-            procHandler.GenerarProcedimiento(Constants.RUNNER_PROC.Trim());
-            ContextHandler.Execute = true;
+            GxuProcedureHandler procHandler = new GxuProcedureHandler();
+            procHandler.Build(Constants.RUNNER_PROC.Trim());
             return true;
         }
 
