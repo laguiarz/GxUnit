@@ -1,20 +1,20 @@
-﻿using Artech.Architecture.Common.Objects;
+﻿/*
+ 2017-04-19 LAZ Added Linq to sort files in folder by date-desc @PopulateListBox
+ */
+
 using Artech.Architecture.UI.Framework.Packages;
 using Artech.Architecture.UI.Framework.Services;
 using Artech.Common.Framework.Selection;
 using Artech.FrameworkDE;
-using Artech.Genexus.Common.Objects;
 using PGGXUnit.Packages.GXUnit.GeneXusAPI;
 using PGGXUnit.Packages.GXUnit.GXUnitCore;
 using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Xsl;
+using System.Linq;
 
 namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 {
@@ -97,6 +97,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
 
         public void PopulateListBox()
         {
+
             try
             {
                 if (UIServices.KB.CurrentKB != null)
@@ -104,7 +105,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                     string path = GxuHelper.GetResultsPath();
                     string fileType = "*.xml";
                     DirectoryInfo dinfo = new DirectoryInfo(path);
-                    FileInfo[] Files = dinfo.GetFiles(fileType);
+                    FileInfo[] files = dinfo.GetFiles(fileType).OrderByDescending(p => p.CreationTime).ToArray(); ;
 
                     listView1.Items.Clear();
                     listView1.Columns.Clear();
@@ -112,14 +113,12 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitUI
                     listView1.View = View.Details;
                     listView1.Columns.Add("Result File");
 
-                    foreach (FileInfo file in Files)
+                    foreach (FileInfo file in files)
                     {
 
                         listView1.Items.Add(file.Name);
                     }
-                   //lsb.AutoResizeColumns(ColumnHeaderAutoResizeStyle.ColumnContent);
                     listView1.Columns[0].Width = listView1.Width -4;
-                    // lsb.Columns[0].AutoResize(CmnHeaderAutoResizeStyle.ColumnContent);
 
                 }
             }

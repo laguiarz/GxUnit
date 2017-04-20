@@ -163,7 +163,6 @@
     <Compile Include="GXUnitUI\GXUnitMainWindow.designer.cs">
       <DependentUpon>GXUnitMainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="Resultado.cs" />
     <Compile Include="Utils\AboutBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -244,12 +243,15 @@
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
+       Other similar extension points exist, see Microsoft.Common.targets.-->
   <Target Name="BeforeBuild">
+    <Message Text="GX_SDK_DIR is $(GX_SDK_DIR)" />
+    <Message Text="GX_PROGRAM_DIR is $(GX_PROGRAM_DIR)" />
+    <Message Text="TargetDir is $(TargetDir)" />
+    <Message Text="TargetFileName is $(TargetFileName)" />
   </Target>
   <Target Name="AfterBuild">
   </Target>
-  -->
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetDir)$(TargetFileName)" "$(GX_PROGRAM_DIR)\Packages" /q /Y
 if exist "$(TargetDir)$(TargetName).pdb" xcopy "$(TargetDir)$(TargetName).pdb" 

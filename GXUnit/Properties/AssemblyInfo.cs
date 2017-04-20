@@ -31,9 +31,9 @@ using PGGXUnit.Packages.GXUnit.GeneXusAPI;
     typeof(GxuTestSuite)
     )]
 
-[assembly: KBObjectsDeclarationAttribute(
-    typeof(Resultado)
-    )]
+//[assembly: KBObjectsDeclarationAttribute(
+//    typeof(Resultado)
+//    )]
 
 [assembly: KBObjectPartsDeclarationAttribute(
     typeof(ResultadoPart)
