@@ -20,7 +20,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         }
 
 
-        private string AssertProcSource()
+        private string AssertProcSource(bool stringConvert)
         {
             String procSource = "";
 
@@ -29,7 +29,28 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "Created Automatically by GXUnit\r\n";
             procSource += "*/\r\n";
-            procSource += "\r\n";
+        //    procSource += "\r\n";
+
+            if (stringConvert)
+            {
+                procSource += "//Remove characters that make the XML fail (as these values are stored in an xml in session)\r\n"; 
+                procSource += "&ExpectedValue = &inExpectedValue.Replace('í','i')\r\n"; 
+                procSource += "&ExpectedValue = &ExpectedValue.Replace('á','a')\r\n"; 
+                procSource += "&ExpectedValue = &ExpectedValue.Replace('é','e')\r\n"; 
+                procSource += "&ExpectedValue = &ExpectedValue.Replace('ó','o')\r\n"; 
+                procSource += "&ExpectedValue = &ExpectedValue.Replace('ú','u')\r\n";
+                procSource += "&ExpectedValue = &ExpectedValue.Replace('ñ','n')\r\n";
+                procSource += "\r\n";
+                procSource += "&ObtainedValue = &inObtainedValue.Replace('í','i')\r\n"; 
+                procSource += "&ObtainedValue = &ObtainedValue.Replace('á','a')\r\n"; 
+                procSource += "&ObtainedValue = &ObtainedValue.Replace('é','e')\r\n"; 
+                procSource += "&ObtainedValue = &ObtainedValue.Replace('ó','o')\r\n"; 
+                procSource += "&ObtainedValue = &ObtainedValue.Replace('ú','u')\r\n";
+                procSource += "&ObtainedValue = &ObtainedValue.Replace('ñ','n')\r\n";
+                procSource += "\r\n";
+
+            }
+
             procSource += "&SDTAssert = new()\r\n";
             procSource += "&SDTAssert.Variable = &VariableName\r\n";
             procSource += "&SDTAssert.Expected = trim(&ExpectedValue.ToString())\r\n";
@@ -45,12 +66,13 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&GXUnitTestCase.Asserts.Add(&SDTAssert)\r\n";
             procSource += "GXUnit_SetSession('CurrentTest', &GXUnitTestCase.ToXml() )\r\n";
             procSource += "\r\n";
+         //   procSource += "*/\r\n";
 
             return procSource;
         }
         private bool CreateAssertNumericEquals()
         {
-            String nombre = "GXUnit_AssertNumericEquals";
+            String procName = "GXUnit_AssertNumericEquals";
             
             String procRules = "Parm(in:&VariableName, in:&ObtainedValue, in:&ExpectedValue);";
 
@@ -68,11 +90,13 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             v = new GxuVariable("VariableName", Constants.GxuDataType.VARCHAR, 80, 0);
             variables.AddFirst(v);
 
-            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
+            LinkedList<GxuProperty> properties = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087 spc0217");
+            properties.AddFirst(property);
 
-            String procSource = AssertProcSource();
+            String procSource = AssertProcSource(false);
            
-            GxuProcedure p = new GxuProcedure(nombre,procSource,procRules,"GXUnit",variables,propiedades);
+            GxuProcedure p = new GxuProcedure(procName, procSource, procRules, "GXUnit", variables, properties);
             GxuProcedureHandler m = new GxuProcedureHandler();
             m.CreateProcedure(p,true);
 
@@ -82,12 +106,17 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
         private bool CreateAssertStringEquals()
         {
             String nombre = "GXUnit_AssertStringEquals";
-            String procRules = "Parm(in:&VariableName, in:&ObtainedValue, in:&ExpectedValue);";
+            String procRules = "Parm(in:&VariableName, in:&inObtainedValue, in:&inExpectedValue);";
 
             LinkedList<GxuVariable> variables = new LinkedList<GxuVariable>();
-            GxuVariable v = new GxuVariable("ObtainedValue", Constants.GxuDataType.VARCHAR, 1024, 4);
+            GxuVariable v;
+            v = new GxuVariable("ObtainedValue", Constants.GxuDataType.VARCHAR, 1024, 0);
             variables.AddFirst(v);
-            v = new GxuVariable("ExpectedValue", Constants.GxuDataType.VARCHAR, 1024, 4);
+            v = new GxuVariable("ExpectedValue", Constants.GxuDataType.VARCHAR, 1024, 0);
+            variables.AddFirst(v);
+            v = new GxuVariable("inObtainedValue", Constants.GxuDataType.VARCHAR, 1024, 0);
+            variables.AddFirst(v);
+            v = new GxuVariable("inExpectedValue", Constants.GxuDataType.VARCHAR, 1024, 0);
             variables.AddFirst(v);
             v = new GxuVariable("GXUnitTestCase", "GXUnitTestCase");
             variables.AddFirst(v);
@@ -98,11 +127,13 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             v = new GxuVariable("VariableName", Constants.GxuDataType.VARCHAR, 80, 0);
             variables.AddFirst(v);
 
-            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
+            LinkedList<GxuProperty> properties = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0217");
+            properties.AddFirst(property);
 
-            String procSource = AssertProcSource();
+            String procSource = AssertProcSource(true);
 
-            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, properties);
             
             GxuProcedureHandler m = new GxuProcedureHandler();
             m.CreateProcedure(p,true);
@@ -122,7 +153,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             variables.AddFirst(v);
 
             LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
-            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087");
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087 spc0217");
             propiedades.AddFirst(property);
 
             String procSource = "";
@@ -159,9 +190,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             v = new GxuVariable("ElapsedMilliseconds", Constants.GxuDataType.NUMERIC, 16, 0);
             variables.AddFirst(v);
 
-            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
-            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087");
-            propiedades.AddFirst(property);
+            LinkedList<GxuProperty> properties = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087 spc0217");
+            properties.AddFirst(property);
 
             String procSource = "";
             procSource += "/*\r\n";
@@ -176,7 +207,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "csharp  [!&ElapsedMilliseconds!] = (long) ((DateTime.UtcNow - [!&StartDateTime!]).TotalMilliseconds);\r\n";
             procSource += "\r\n";
 
-            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, properties);
 
             GxuProcedureHandler m = new GxuProcedureHandler();
             m.CreateProcedure(p, true);
@@ -201,7 +232,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             v = new GxuVariable("ResultFileName", Constants.GxuDataType.VARCHAR, 512, 0);
             variables.AddFirst(v);
 
-            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
+            LinkedList<GxuProperty> properties = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0217");
+            properties.AddFirst(property);
 
             String procSource = "";
             procSource += "/*\r\n";
@@ -227,7 +260,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&GXUnitSuiteCollection.Add(&GXUnitSuite)";
             procSource += "";
 
-            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, properties);
 
             GxuProcedureHandler m = new GxuProcedureHandler();
             m.CreateProcedure(p, true);
@@ -273,8 +306,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             LinkedList<GxuProperty> properties = new LinkedList<GxuProperty>();
             GxuProperty property = new GxuProperty("IsMain", true);
             properties.AddFirst(property);
-
             property = new GxuProperty("CALL_PROTOCOL", Artech.Genexus.Common.Properties.PRC.CallProtocol_Values.CommandLine);
+            properties.AddFirst(property);
+            property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0217");
             properties.AddFirst(property);
 
             String procSource = "";
@@ -283,6 +317,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "Created Automatically by GXUnit\r\n";
             procSource += "*/\r\n";
+ //           procSource += "\r\n";
             procSource += "\r\n";
 
             procSource += "//Load Tests to Run\r\n";
@@ -307,7 +342,14 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "\t\tif &ExecutedGXUnitTestCase.TestName = &testPgmName\r\n";
             procSource += "\r\n";
-            procSource += "\t\t\t&GXUnitTestCase.Asserts = &ExecutedGXUnitTestCase.Asserts.Clone()\r\n";
+
+            procSource += "\t\t\t//--> this does not work in java: &GXUnitTestCase.Asserts = &ExecutedGXUnitTestCase.Asserts.Clone()\r\n";
+            procSource += "\t\t\t&GXUnitTestCase.Asserts.Clear()\r\n";
+            procSource += "\t\t\tfor &GXUnitAssert in &GXUnitTestCase.Asserts\r\n";
+            procSource += "\t\t\t\t&GXUnitTestCase.Asserts.Add(&auxGXUnitAssert)\r\n";
+            procSource += "\t\t\tendfor\r\n";
+            procSource += "\r\n";
+
             procSource += "\t\t\t&GXUnitTestCase.TestTimeExecution = GXUnit_GetElapsedMilliseconds(&StartDateTime, &Milliseconds)\r\n";
             procSource += "\r\n";
             procSource += "\t\telse\r\n";
@@ -345,6 +387,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&xmlWriter.WriteRawText(&OutputGXUnitSuite.ToXml())\r\n";
             procSource += "&xmlWriter.Close()\r\n";
             procSource += "//";
+ //           procSource += "*/";
+
 
             GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, properties);
 
@@ -367,7 +411,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             v = new GxuVariable("XmlWriter", "XmlWriter");
             variables.AddFirst(v);
             
-            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
+            LinkedList<GxuProperty> properties = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0217");
+            properties.AddFirst(property);
 
             String procSource = "";
             procSource += "/*\r\n";
@@ -380,7 +426,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 	        procSource += "&XmlWriter.WriteElement(&Key, &Value)\r\n";
             procSource += "&XmlWriter.Close()\r\n";
 
-            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, properties);
 
             GxuProcedureHandler m = new GxuProcedureHandler();
             m.CreateProcedure(p, true);
@@ -401,7 +447,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             v = new GxuVariable("XmlReader", "XmlReader");
             variables.AddFirst(v);
 
-            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
+            LinkedList<GxuProperty> properties = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0217");
+            properties.AddFirst(property);
 
             String procSource = "";
 
@@ -417,7 +465,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "&Value = &XmlReader.Value\r\n";
             procSource += "&XmlReader.Close()\r\n";
 
-            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, Constants.GXUNIT_FOLDER, variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, Constants.GXUNIT_FOLDER, variables, properties);
 
             GxuProcedureHandler m = new GxuProcedureHandler();
             m.CreateProcedure(p, true);
@@ -554,7 +602,9 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             v = new GxuVariable("UrlBase", Constants.GxuDataType.CHARACTER, 80, 0);
             variables.AddFirst(v);
 
-            LinkedList<GxuProperty> propiedades = new LinkedList<GxuProperty>();
+            LinkedList<GxuProperty> properties = new LinkedList<GxuProperty>();
+            GxuProperty property = new GxuProperty("SPC_WARNINGS_DISABLED", "spc0096 spc0107 spc0142 spc0087 spc0217");
+            properties.AddFirst(property);
 
             String procSource = "";
             procSource += "/*\r\n";
@@ -592,7 +642,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "msg('=============', status)\r\n";
             procSource += "\r\n";
 
-            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, propiedades);
+            GxuProcedure p = new GxuProcedure(nombre, procSource, procRules, "GXUnit", variables, properties);
             GxuProcedureHandler m = new GxuProcedureHandler();
             m.CreateProcedure(p, true);
 
@@ -620,6 +670,8 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             CreateRESTInvoker();
             GXUnit.GXUnitUI.GXUnitMainWindow.getInstance().LoadTestTrees();
+
+            GxHelper.WriteOutput("GXUnit Initialization Complete");
             return true;
         }
 
