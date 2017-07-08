@@ -329,7 +329,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "\tfor &GXUnitTestCase in &GXUnitSuite.TestCases\r\n";
             procSource += "\r\n";
-            procSource += "\t\tGXUnit_SetSession('CurrentTest',&GXUnitTestCase.ToXml())\r\n";
+            procSource += "\t\tGXUnit_SetSession(!'CurrentTest',&GXUnitTestCase.ToXml())\r\n";
             procSource += "\t\tGXUnit_GetCurrentMillisecs(&StartDateTime, &Milliseconds)\r\n";
             procSource += "\r\n";
             procSource += "\t\t&testPgmName = &GXUnitTestCase.TestName.Trim()\r\n";
@@ -337,7 +337,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "\t\t//At This point in the Session we have the &GXUnitSuiteTestCase Assert Portion Saved\r\n";
             procSource += "\t\t//So let's retrieve it...\r\n";
-            procSource += "\t\tGXUnit_GetSession('CurrentTest', &SessionValue)\r\n";
+            procSource += "\t\tGXUnit_GetSession(!'CurrentTest', &SessionValue)\r\n";
             procSource += "\t\t&ExecutedGXUnitTestCase.FromXml(&SessionValue)\r\n";
             procSource += "\r\n";
             procSource += "\t\tif &ExecutedGXUnitTestCase.TestName = &testPgmName\r\n";
@@ -345,7 +345,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
 
             procSource += "\t\t\t//--> this does not work in java: &GXUnitTestCase.Asserts = &ExecutedGXUnitTestCase.Asserts.Clone()\r\n";
             procSource += "\t\t\t&GXUnitTestCase.Asserts.Clear()\r\n";
-            procSource += "\t\t\tfor &GXUnitAssert in &GXUnitTestCase.Asserts\r\n";
+            procSource += "\t\t\tfor &auxGXUnitAssert in &ExecutedGXUnitTestCase.Asserts\r\n";
             procSource += "\t\t\t\t&GXUnitTestCase.Asserts.Add(&auxGXUnitAssert)\r\n";
             procSource += "\t\t\tendfor\r\n";
             procSource += "\r\n";
@@ -355,15 +355,15 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\t\telse\r\n";
             procSource += "\t\t\t//Exeption\r\n";
             procSource += "\t\t\t&GXUnitAssert = new()\r\n";
-            procSource += "\t\t\t&GXUnitAssert.Result = 'EXCEPTION'\r\n";
+            procSource += "\t\t\t&GXUnitAssert.Result = !'EXCEPTION'\r\n";
             procSource += "\t\t\t&GXUnitTestCase.Asserts.Add(&GXUnitAssert)\r\n";
             procSource += "\t\tendif\r\n";
             procSource += "\r\n";
             procSource += "\t\t//Now Evaluate the test-result based on its asserts\r\n";
             procSource += "\t\t&FoundFailFlag = false\r\n";
             procSource += "\t\tfor &GXUnitAssert in &GXUnitTestCase.Asserts\r\n";
-            procSource += "\t\t\tif &GXUnitAssert.Result = 'EXCEPTION' or &GXUnitAssert.Result = 'FAIL'\r\n";
-            procSource += "\t\t\t\t&GXUnitTestCase.TestResult = 'FAIL'\r\n";
+            procSource += "\t\t\tif &GXUnitAssert.Result = !'EXCEPTION' or &GXUnitAssert.Result = !'FAIL'\r\n";
+            procSource += "\t\t\t\t&GXUnitTestCase.TestResult = !'FAIL'\r\n";
             procSource += "\t\t\t\t&FoundFailFlag = true\r\n";
             procSource += "\t\t\t\texit\r\n";
             procSource += "\t\t\tendif\r\n";
@@ -376,7 +376,7 @@ namespace PGGXUnit.Packages.GXUnit.GXUnitCore
             procSource += "\r\n";
             procSource += "//Now load the SDT for Output\r\n";
             procSource += "&OutputGXUnitSuite = new()\r\n";
-            procSource += "&OutputGXUnitSuite.SuiteName = 'GXUnitSuites'\r\n";
+            procSource += "&OutputGXUnitSuite.SuiteName = !'GXUnitSuites'\r\n";
             procSource += "for &GXUnitSuite in &GXUnitSuiteCollection\r\n";
             procSource += "\t&OutputGXUnitSuite.Suites.Add( &GXUnitSuite.Clone() )\r\n";
             procSource += "endfor\r\n";
